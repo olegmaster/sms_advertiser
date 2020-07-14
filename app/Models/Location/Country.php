@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models\Location;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Domain extends Model
+class Country extends Model
 {
     //
 }
