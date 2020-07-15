@@ -15,6 +15,7 @@ class CreateSimcardGroupsTable extends Migration
     {
         Schema::create('simcard_groups', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->timestamps();
         });
     }

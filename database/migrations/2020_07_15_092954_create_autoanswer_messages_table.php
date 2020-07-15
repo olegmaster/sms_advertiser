@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUnsubscribedRecipientLogsTable extends Migration
+class CreateAutoanswerMessagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateUnsubscribedRecipientLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('unsubscribed_recipient_logs', function (Blueprint $table) {
+        Schema::create('autoanswer_messages', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('thematics_id');
+            $table->tinyInteger('type');
+            $table->unsignedBigInteger('message_id');
             $table->unsignedBigInteger('advertising_campaign_task_id');
-            $table->unsignedBigInteger('target_contact_id');
             $table->timestamps();
+
+            $table->foreign('advertising_campaign_task_id')->references('id')->on('advertising_campaign_tasks');
         });
     }
 
@@ -29,6 +31,6 @@ class CreateUnsubscribedRecipientLogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('unsubscribed_recipient_logs');
+        Schema::dropIfExists('autoanswer_messages');
     }
 }

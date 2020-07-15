@@ -15,6 +15,10 @@ class CreateBoardsTable extends Migration
     {
         Schema::create('boards', function (Blueprint $table) {
             $table->id();
+            $table->string('name', 100);
+            $table->string('uid_name', 45);
+            $table->string('filter_table_name');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

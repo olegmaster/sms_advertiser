@@ -15,7 +15,15 @@ class CreateSmsMmsSettingsTable extends Migration
     {
         Schema::create('sms_mms_settings', function (Blueprint $table) {
             $table->id();
+            $table->tinyInteger('type');
+            $table->boolean('use_one_link_for_all');
+            $table->string('add_link');
+            $table->boolean('include_name_for_all');
+            $table->text('media_files');
+            $table->unsignedBigInteger('advertising_campaign_task_id');
             $table->timestamps();
+
+            $table->foreign('advertising_campaign_task_id')->references('id')->on('advertising_campaign_tasks');
         });
     }
 

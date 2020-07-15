@@ -20,7 +20,8 @@ class CreateDomainsTable extends Migration
             $table->smallInteger('frozen_hours_count');
             $table->integer('distribution_limit');
             $table->boolean('is_frozen');
-            $table->timestamp('frozen_at');
+            $table->timestamp('frozen_at', 0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

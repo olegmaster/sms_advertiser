@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBoardOtomotoFiltersTable extends Migration
+class CreateBoardOlxFiltersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,17 @@ class CreateBoardOtomotoFiltersTable extends Migration
      */
     public function up()
     {
-        Schema::create('board_otomoto_filters', function (Blueprint $table) {
+        Schema::create('board_olx_filters', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('city_id');
             $table->unsignedBigInteger('region_id');
             $table->unsignedBigInteger('target_task_id');
+            $table->text('key_words');
             $table->integer('price_from');
             $table->integer('price_to');
-            $table->integer('auto_type_id');
-            $table->integer('auto_brand_id');
-            $table->integer('year_from');
-            $table->integer('year_to');
-            $table->integer('mileage_from');
-            $table->integer('mileage_to');
-            $table->tinyInteger('offer_type');
+            $table->unsignedBigInteger('subcategory_id');
+            $table->integer('location_distance');
             $table->boolean('is_ready_to_bargain');
 
             $table->timestamps();
@@ -42,6 +38,6 @@ class CreateBoardOtomotoFiltersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('board_otomoto_filters');
+        Schema::dropIfExists('board_olx_filters');
     }
 }

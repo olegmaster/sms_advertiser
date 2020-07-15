@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAdvertisingCampaignTasksTable extends Migration
+class CreateSimcardOperatorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class CreateAdvertisingCampaignTasksTable extends Migration
      */
     public function up()
     {
-        Schema::create('advertising_campaign_tasks', function (Blueprint $table) {
+        Schema::create('simcard_operators', function (Blueprint $table) {
             $table->id();
+            $table->string('name', 45);
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ class CreateAdvertisingCampaignTasksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('advertising_campaign_tasks');
+        Schema::dropIfExists('simcard_operators');
     }
 }

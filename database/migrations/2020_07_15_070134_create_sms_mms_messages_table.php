@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVoiceSettingsTable extends Migration
+class CreateSmsMmsMessagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,18 @@ class CreateVoiceSettingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('voice_settings', function (Blueprint $table) {
+        Schema::create('sms_mms_messages', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('send_conditions');
-            $table->tinyInteger('send_type');
-            $table->string('sms_text');
+            $table->tinyInteger('message_type');
+            $table->tinyInteger('destination_type');
+            $table->string('text', 320);
             $table->string('add_link');
-            $table->text('media_files');
+            $table->tinyInteger('include_name');
+            $table->unsignedBigInteger('parent_id');
+            $table->smallInteger('sort_order');
             $table->unsignedBigInteger('advertising_campaign_task_id');
-            $table->timestamps();
 
-            $table->foreign('advertising_campaign_task_id')->references('id')->on('advertising_campaign_tasks');
+            $table->timestamps();
         });
     }
 
@@ -34,6 +35,6 @@ class CreateVoiceSettingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('voice_settings');
+        Schema::dropIfExists('sms_mms_messages');
     }
 }

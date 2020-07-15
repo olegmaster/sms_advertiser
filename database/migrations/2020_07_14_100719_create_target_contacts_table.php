@@ -15,7 +15,13 @@ class CreateTargetContactsTable extends Migration
     {
         Schema::create('target_contacts', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->unsignedBigInteger('phone');
+            $table->unsignedBigInteger('city_id');
+            $table->unsignedBigInteger('target_audience_id');
             $table->timestamps();
+
+            $table->foreign('target_audience_id')->references('id')->on('target_audiences');
         });
     }
 
