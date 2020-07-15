@@ -15,6 +15,13 @@ class CreateIncomingCallsTable extends Migration
     {
         Schema::create('incoming_calls', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('our_phone');
+            $table->unsignedBigInteger('phone');
+            $table->tinyInteger('job_done');
+            $table->unsignedBigInteger('job_done_by');
+            $table->string('comment');
+            $table->unsignedBigInteger('comment_by');
+            $table->string('type');
             $table->timestamps();
         });
     }

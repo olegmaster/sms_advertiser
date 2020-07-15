@@ -15,7 +15,12 @@ class CreateSimbankToAdvertisingCampaignsTable extends Migration
     {
         Schema::create('simbank_to_advertising_campaigns', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('simbank_id');
+            $table->unsignedBigInteger('advertising_campaign_task_id');
             $table->timestamps();
+
+            $table->foreign('simbank_id')->references('id')->on('simbanks');
+            $table->foreign('advertising_campaign_task_id', 'simbank_to_ac_ac_task_id_foreign')->references('id')->on('advertising_campaign_tasks');
         });
     }
 
