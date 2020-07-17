@@ -16,7 +16,7 @@ class SimcardGroupsSeeder extends Seeder
         $items = [];
         for ($i = 0; $i < config('seed.simcardGroupsCount'); $i++) {
             $items[] = [
-                'name' => $faker->word,
+                'name' => 'simcard group ' . $faker->word,
                 'all_clicks_count' => rand(1000, 5000),
                 'all_sent_sms_count' => rand(1000, 5000),
                 'all_sent_voice_call_count' => rand(1000, 5000),

@@ -13,5 +13,8 @@ return [
     'simcardOperatorsCount' => 4,
     'simcardsCount' => '400',
 
+    // advertising campaigns
+
+    'advertisingCampaignsCount' => 5,
 
 ];

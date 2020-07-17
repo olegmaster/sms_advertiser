@@ -15,7 +15,7 @@ class SimcardOperatorSeeder extends Seeder
         $items = [];
         for ($i = 0; $i < config('seed.simcardOperatorsCount'); $i++) {
             $items[] = [
-                'name' => $faker->word,
+                'name' => 'simcard operator ' . $faker->word,
                 'created_at' => \Illuminate\Support\Carbon::now()->toDateTimeString(),
                 'updated_at' => \Illuminate\Support\Carbon::now()->toDateTimeString(),
             ];

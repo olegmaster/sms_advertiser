@@ -16,7 +16,7 @@ class SimbankSeeder extends Seeder
         $items = [];
         for ($i = 0; $i < config('seed.simbanksCount'); $i++) {
             $items[] = [
-                'name' => $faker->word,
+                'name' => 'simbank ' . $faker->word,
                 'capacity' => rand(config('seed.simbankCapasityMin'), config('seed.simbankCapasityMax')),
                 'all_sent_sms_count' => rand(1000, 5000),
                 'all_sent_mms_count' => rand(1000, 5000),

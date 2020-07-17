@@ -14,11 +14,11 @@ class ThematicsSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
         $items = [];
-        for ($i = 0; $i < config('seed.thematicsSeedCount'); $i++) {
+        for ($i = 0; $i < config('seed.thematicsCount'); $i++) {
             $items[] = [
-                'name' => $faker->word,
+                'name' => 'thematic ' . $faker->word,
                 'status' => rand(0, 1),
-                'user_id' => rand(1, 20),
+                'user_id' => rand(1, config('seed.usersCount')),
                 'created_at' => \Illuminate\Support\Carbon::now()->toDateTimeString(),
                 'updated_at' => \Illuminate\Support\Carbon::now()->toDateTimeString(),
             ];
