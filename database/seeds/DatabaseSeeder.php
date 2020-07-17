@@ -11,9 +11,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        // Locations seeding
         $this->call(CountrySeeder::class);
         $this->call(RegionSeeder::class);
         $this->call(CitySeeder::class);
+
+
+        // Users seeding
+        $this->call(PermissionsSeeder::class);
+        //factory(\App\Models\User::class, 15)->create();
+
 //        factory(\App\Models\AdvertisingCampaign\Simcard::class, 100)->create();
 //        factory(\App\Models\DomainsRedirects\Domain::class, 50)->create();
     }

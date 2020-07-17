@@ -18,16 +18,13 @@ class CreateBoardOlxFiltersTable extends Migration
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('city_id');
             $table->unsignedBigInteger('region_id');
-            $table->unsignedBigInteger('target_task_id');
             $table->text('key_words');
             $table->integer('price_from');
             $table->integer('price_to');
             $table->unsignedBigInteger('subcategory_id');
             $table->integer('location_distance');
             $table->boolean('is_ready_to_bargain');
-
             $table->timestamps();
-
         });
     }
 

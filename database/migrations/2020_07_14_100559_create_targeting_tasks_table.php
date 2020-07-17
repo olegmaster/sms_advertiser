@@ -30,7 +30,7 @@ class CreateTargetingTasksTable extends Migration
             $table->unsignedBigInteger('board_olx_filter_id');
             $table->unsignedBigInteger('board_otomoto_filter_id');
             $table->softDeletes();
-            $table->integer('dd');
+
             $table->timestamps();
 
             $table->foreign('target_audience_id')->references('id')->on('target_audiences');

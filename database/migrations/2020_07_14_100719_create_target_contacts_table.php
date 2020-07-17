@@ -17,10 +17,15 @@ class CreateTargetContactsTable extends Migration
             $table->id();
             $table->string('name');
             $table->unsignedBigInteger('phone');
+            $table->string('phone_str', 15);
             $table->unsignedBigInteger('city_id');
+            $table->unsignedBigInteger('region_id');
+            $table->unsignedBigInteger('country_id');
+            $table->unsignedBigInteger('board_id');
             $table->unsignedBigInteger('target_audience_id');
             $table->timestamps();
 
+            $table->foreign('board_id')->references('id')->on('target_audiences');
             $table->foreign('target_audience_id')->references('id')->on('target_audiences');
         });
     }

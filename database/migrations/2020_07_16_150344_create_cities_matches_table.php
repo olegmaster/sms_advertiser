@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDomainSettingsTable extends Migration
+class CreateCitiesMatchesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class CreateDomainSettingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('domain_settings', function (Blueprint $table) {
+        Schema::create('cities_matches', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('board_id');
+            $table->unsignedBigInteger('our_city_id');
+            $table->unsignedBigInteger('board_city_id');
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ class CreateDomainSettingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('domain_settings');
+        Schema::dropIfExists('cities_matches');
     }
 }

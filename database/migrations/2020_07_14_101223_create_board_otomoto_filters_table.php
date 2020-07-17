@@ -18,7 +18,6 @@ class CreateBoardOtomotoFiltersTable extends Migration
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('city_id');
             $table->unsignedBigInteger('region_id');
-            $table->unsignedBigInteger('target_task_id');
             $table->integer('price_from');
             $table->integer('price_to');
             $table->integer('auto_type_id');
@@ -31,7 +30,6 @@ class CreateBoardOtomotoFiltersTable extends Migration
             $table->boolean('is_ready_to_bargain');
 
             $table->timestamps();
-
         });
     }
 

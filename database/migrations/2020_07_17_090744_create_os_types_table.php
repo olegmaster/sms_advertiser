@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSimbanksTable extends Migration
+class CreateOsTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,9 @@ class CreateSimbanksTable extends Migration
      */
     public function up()
     {
-        Schema::create('simbanks', function (Blueprint $table) {
+        Schema::create('os_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('capacity');
-            $table->integer('all_sent_sms_count');
-            $table->integer('all_sent_mms_count');
-            $table->integer('all_sent_voice_call_count');
-            $table->tinyInteger('status');
-            $table->unsignedBigInteger('countries_id');
             $table->timestamps();
         });
     }
@@ -33,6 +27,6 @@ class CreateSimbanksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('simbanks');
+        Schema::dropIfExists('os_types');
     }
 }

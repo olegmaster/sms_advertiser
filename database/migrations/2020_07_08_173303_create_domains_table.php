@@ -19,7 +19,7 @@ class CreateDomainsTable extends Migration
             $table->boolean('is_banned');
             $table->tinyInteger('status');
             $table->boolean('is_frozen');
-            $table->timestamp('frozen_at')->default(\Illuminate\Support\Facades\DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('frozen_on')->default(\Illuminate\Support\Facades\DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('freeze_hours');
             $table->integer('spam_limit');
             $table->integer('current_send_count');

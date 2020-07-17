@@ -26,7 +26,7 @@ class CreateAdvertisingCampaignTasksTable extends Migration
             $table->string('stop_comment');
             $table->tinyInteger('is_deleted');
             $table->tinyInteger('is_archived');
-                $table->timestamp('start_date')->default(\Illuminate\Support\Facades\DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('start_date')->default(\Illuminate\Support\Facades\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('finish_date')->default(\Illuminate\Support\Facades\DB::raw('CURRENT_TIMESTAMP'));
             $table->boolean('send_sms_mms');
             $table->boolean('send_voice');
