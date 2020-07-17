@@ -19,6 +19,15 @@ class DatabaseSeeder extends Seeder
 
         // Users seeding
         $this->call(PermissionsSeeder::class);
+
+        // related with simcards
+        $this->call(SimbankSeeder::class);
+        $this->call(SimcardGroupsSeeder::class);
+        $this->call(SimcardOperatorSeeder::class);
+        $this->call(SimcardSeeder::class);
+
+
+
         //factory(\App\Models\User::class, 15)->create();
 
 //        factory(\App\Models\AdvertisingCampaign\Simcard::class, 100)->create();

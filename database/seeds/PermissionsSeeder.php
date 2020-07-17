@@ -14,16 +14,20 @@ class PermissionsSeeder extends Seeder
      */
     public function run()
     {
+        $faker = Faker\Factory::create();
+
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         // create permissions
+        // it need to be updated in the future
+        // in the access control development stage
         Permission::create(['name' => 'edit articles']);
         Permission::create(['name' => 'delete articles']);
         Permission::create(['name' => 'publish articles']);
         Permission::create(['name' => 'unpublish articles']);
 
-        // create roles and assign existing permissions
-        $role1 = Role::create(['name' => 'writer']);
+        // create roles and give permissions to them
+        $role1 = Role::create(['name' => 'user']);
         $role1->givePermissionTo('edit articles');
         $role1->givePermissionTo('delete articles');
 
@@ -31,26 +35,37 @@ class PermissionsSeeder extends Seeder
         $role2->givePermissionTo('publish articles');
         $role2->givePermissionTo('unpublish articles');
 
-        $role3 = Role::create(['name' => 'super-admin']);
-        // gets all permissions via Gate::before rule; see AuthServiceProvider
+        $role3 = Role::create(['name' => 'manager']);
+        $role3->givePermissionTo('edit articles');
+        $role3->givePermissionTo('delete articles');
 
-        // create demo users
-        $user = Factory(\App\Models\User::class)->create([
-            'name' => 'Example User',
-            'email' => 'test@example.com',
-        ]);
-        $user->assignRole($role1);
+        $role4 = Role::create(['name' => 'moderator']);
+        $role4->givePermissionTo('edit articles');
+        $role4->givePermissionTo('delete articles');
 
-        $user = Factory(\App\Models\User::class)->create([
-            'name' => 'Example Admin User',
-            'email' => 'admin@example.com',
-        ]);
-        $user->assignRole($role2);
+        $role5 = Role::create(['name' => 'simbank']);
+        $role5->givePermissionTo('edit articles');
+        $role5->givePermissionTo('delete articles');
 
-        $user = Factory(\App\Models\User::class)->create([
-            'name' => 'Example Super-Admin User',
-            'email' => 'superadmin@example.com',
-        ]);
-        $user->assignRole($role3);
+        // we have fixed 5 roles now
+        $roles = [$role1, $role2, $role3, $role4, $role5];
+
+        // index in $roles array
+        // we want to have users with all diapason roles
+        // so we assign roles to the users one by one
+        $roleIndex = 0;
+        for($i = 0; $i < config('seed.usersCount'); $i ++){
+            $user = Factory(\App\Models\User::class)->create([
+                'name' => $faker->firstName,
+                'email' => $faker->email,
+            ]);
+
+            $user->assignRole($roles[$roleIndex]);
+
+            // we have only 5 roles, so need to reset couter
+            if($roleIndex == 4){
+                $roleIndex = 0;
+            }
+        }
     }
 }

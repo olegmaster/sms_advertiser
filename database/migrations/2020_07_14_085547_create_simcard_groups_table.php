@@ -17,8 +17,8 @@ class CreateSimcardGroupsTable extends Migration
             $table->id();
             $table->string('name');
             $table->integer('all_clicks_count')->default(0);
-            $table->integer('all_send_sms_count')->default(0);
-            $table->integer('all_send_voice_call_count')->default(0);
+            $table->integer('all_sent_sms_count')->default(0);
+            $table->integer('all_sent_voice_call_count')->default(0);
             $table->boolean('is_used_on_spam')->default(0);
             $table->tinyInteger('status');
             $table->unsignedBigInteger('countries_id');
