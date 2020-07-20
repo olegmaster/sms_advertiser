@@ -18,6 +18,7 @@ class CreateBoardsTable extends Migration
             $table->string('name', 100);
             $table->string('uid_name', 45);
             $table->string('filter_table_name');
+            $table->string('offers_table_name');
             $table->tinyInteger('status');
             $table->tinyInteger('checking_state');
             $table->timestamp('last_check_at');

@@ -17,7 +17,7 @@ class CreateAutoanswerMessagesTable extends Migration
             $table->id();
             $table->tinyInteger('type');
             $table->tinyInteger('send_sms');
-            $table->unsignedBigInteger('message_id');
+            $table->unsignedBigInteger('sms_mms_message_id');
             $table->unsignedBigInteger('advertising_campaign_task_id');
             $table->timestamps();
 
