@@ -20,3 +20,17 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+$groupData = [
+    'namespace' => 'Settings\Thematics',
+    'prefix' => 'settings'
+];
+
+Route::group($groupData, function () {
+
+    // Settings thematics
+    Route::resource('thematics', 'ThematicsController')
+        ->names('settings.thematics');
+
+
+});
