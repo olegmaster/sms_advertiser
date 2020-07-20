@@ -17,12 +17,11 @@ class CreateVoiceSettingsTable extends Migration
             $table->id();
             $table->tinyInteger('send_conditions');
             $table->tinyInteger('send_type');
-            $table->string('sms_text');
-            $table->string('add_link');
-            $table->text('media_files');
             $table->unsignedBigInteger('advertising_campaign_task_id');
+            $table->unsignedBigInteger('sms_mms_messages_id');
             $table->timestamps();
 
+            $table->foreign('sms_mms_messages_id')->references('id')->on('sms_mms_messages');
             $table->foreign('advertising_campaign_task_id')->references('id')->on('advertising_campaign_tasks');
         });
     }
