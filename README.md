@@ -1,11 +1,3 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
-
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
 
 ## Установка
 
@@ -13,9 +5,25 @@
 2. php artisan key:generate
 3. php artisan migrate
 4. php artisan db:seed
+5. npm install
 
 ## Создание билда 
 1. npm run prod
+
+## Структура файловой системы
+- /resources/views/spa.blade.php - файл в котором харнится шаблон для SPA.
+- /resources/js/app.js - входная точка в проект.
+- /resources/js/App.vue - входная точка в проект, отрисовка всех шаблонов. Корневой компонент!
+- /resources/js/bootstrap.js - загрузка и инициализация параметров.
+- /resources/js/components - папка где хранятся страницы сайта, модальные окна и.т.д. в виде компонентов.
+- /resources/js/components/common - папка где хранятся общедоступные компоненты. Это может быть какие то модальные окна общего назначения или что то другое.
+- /resources/js/components/pages - папка где хранятся страницы сайта в виде компонентов.
+- /resources/js/components/[назване папки]/modals - папка где хранятся модальные окна.
+- /resources/js/router/index.js - РОУТЕРЫ VUE ! Маршрутизация!
+- /resources/js/Layout/Components - составные компоненты которые образуют всю страницу такие как футер, хидер, сайтбар итд!
+- /resources/js/Layout/Components/Sidebar.vue - САЙДБАР, а если по русски то это левое меню в шаблоне!
+- /resources/js/Layout/Wrappers - шаблоны для VUE
+
 
 ## Используем 
 1. Шаблон - https://demo.dashboardpack.com/architectui-html-pro/

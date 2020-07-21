@@ -12,6 +12,7 @@
                 <slot></slot>
             </div>
             <transition name="fade" mode="out-in" appear>
+                <v-btn @click=""></v-btn>
                 <Footer/>
             </transition>
         </div>
