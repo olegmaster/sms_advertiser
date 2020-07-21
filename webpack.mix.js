@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+var webpack = require('webpack');
 
 /*
  |--------------------------------------------------------------------------
@@ -11,5 +12,28 @@ const mix = require('laravel-mix');
  |
  */
 
+// Override mix internal webpack output configuration
+mix.config.webpackConfig.output = {
+    chunkFilename: 'js/[name].bundle.js',
+    publicPath: '/',
+};
+
+
+mix.webpackConfig({
+    plugins: [
+        // To strip all locales except “en”
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+    ],
+    // Other config goes here
+    resolve: {
+        alias: {
+            "@": path.resolve(
+                __dirname,
+                "resources/js"
+            )
+        }
+    }
+});
+
 mix.js('resources/js/app.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css');
+    .sass('resources/js/assets/base.scss', 'public/css/app.css');

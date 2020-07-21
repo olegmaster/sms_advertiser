@@ -19,14 +19,42 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+//Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+/*
+const app = new Vue({
+    el: '#app',
+});
+*/
+
+import Vue from 'vue';
+import './plugins/vuetify';
+import router from './router';
+
+import BootstrapVue from "bootstrap-vue";
+
+import App from './App.vue';
+
+import Default from './Layout/Wrappers/baseLayout.vue';
+import Pages from './Layout/Wrappers/pagesLayout.vue';
+import Apps from './Layout/Wrappers/appLayout.vue';
+
+Vue.config.productionTip = false;
+
+Vue.use(BootstrapVue);
+
+Vue.component('default-layout', Default);
+Vue.component('userpages-layout', Pages);
+Vue.component('apps-layout', Apps);
 
 const app = new Vue({
     el: '#app',
+    router,
+    template: '<App/>',
+    components: { App }
 });
