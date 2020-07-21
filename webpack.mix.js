@@ -22,7 +22,7 @@ mix.config.webpackConfig.output = {
 mix.webpackConfig({
     plugins: [
         // To strip all locales except “en”
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+        //new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
     ],
     // Other config goes here
     resolve: {
@@ -36,4 +36,4 @@ mix.webpackConfig({
 });
 
 mix.js('resources/js/app.js', 'public/js')
-    .sass('resources/js/assets/base.scss', 'public/css/app.css');
+    ;//.sass('resources/js/assets/base.scss', 'public/css/app.css');

@@ -14,6 +14,9 @@
 3. php artisan migrate
 4. php artisan db:seed
 
+## Создание билда 
+1. npm run prod
+
 ## Используем 
 1. Шаблон - https://demo.dashboardpack.com/architectui-html-pro/
 
