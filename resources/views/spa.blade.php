@@ -10,7 +10,7 @@
     <app></app>
 </div>
 
-<link rel="stylesheet" type="text/css" href="{{ mix('dist/css/base.css') }}">
-<script src="{{ mix('dist/js/app.js') }}"></script>
+<link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
+<script src="{{ mix('js/app.js') }}"></script>
 </body>
 </html>
