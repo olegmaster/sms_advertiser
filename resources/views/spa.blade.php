@@ -7,11 +7,13 @@
     <link rel=icon href=favicon.ico>
     <title>Vue SPA Demo</title>
     <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
+    <link rel=stylesheet href="{{ mix('css/app.css') }}">
 </head>
 <body>
 <div id="app">
     <app></app>
 </div>
+
 
 
 <script src="{{ mix('js/app.js') }}"></script>

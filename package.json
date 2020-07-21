@@ -8,9 +8,9 @@
         "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --disable-host-check --config=node_modules/laravel-mix/setup/webpack.config.js",
         "prod": "npm run production",
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "serve": "vue-cli-service serve",
-        "build": "vue-cli-service build",
-        "lint": "vue-cli-service lint"
+        "serve": "vue-cli-service serve resources/js/app.js",
+        "build": "vue-cli-service build --dest public resources/js/app.js",
+        "lint": "vue-cli-service lint resources/js/app.js"
     },
     "devDependencies": {
         "@vue/cli-plugin-babel": "^3.6.0",
