@@ -17,3 +17,23 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+/**
+ * API Routes
+ */
+Route::namespace('Api')
+    ->group( ['prefix' => 'api'],function () {
+
+        //Используют аутентификацию
+        Route::group(['middleware' => 'auth:api', 'prefix' => 'settings'], function () {
+            Route::get('ppc', function (){
+
+            });
+        });
+
+        //Без аутентификацию
+        Route::group(['namespace' => 'Settings', 'prefix' => 'settings'], function () {
+            Route::get('proxies', 'ProxiesController@index' );
+        });
+});
