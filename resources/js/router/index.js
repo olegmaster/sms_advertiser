@@ -68,6 +68,84 @@ export default new Router({
             path: '/incoming-calls/',
             name: 'incoming-calls',
             component: () => import('../components/pages/IncomingCalls/Index.vue'),
+        },
+
+        // База сообщений -> sms
+        {
+            path: '/messages/sms/',
+            name: 'messages-sms',
+            component: () => import('../components/pages/Messages/SmsMessages.vue'),
+        },
+
+        // База сообщений -> mms
+        {
+            path: '/messages/mms/',
+            name: 'messages-mms',
+            component: () => import('../components/pages/Messages/MmsMessages.vue'),
+        },
+
+        // База сообщений -> voice
+        {
+            path: '/messages/voice/',
+            name: 'messages-voice',
+            component: () => import('../components/pages/Messages/VoiceMessages.vue'),
+        },
+
+        // Спам лист
+        {
+            path: '/unsubscribed-recipients/',
+            name: 'unsubscribed-recipients',
+            component: () => import('../components/pages/UnsubscribedRecipients/Index.vue'),
+        },
+
+        // Спам лист
+        {
+            path: '/favorites/',
+            name: 'favorites',
+            component: () => import('../components/pages/Favorites/Index.vue'),
+        },
+
+        // Настройки -> Тематика
+        {
+            path: '/settings/thematics/',
+            name: 'settings-thematics',
+            component: () => import('../components/pages/Settings/Thematics/Index.vue'),
+        },
+
+        // Настройки -> Симбанки
+        {
+            path: '/settings/sim-banks/',
+            name: 'settings-sim-banks',
+            component: () => import('../components/pages/Settings/SimBanks/Index.vue'),
+        },
+
+        // Настройки -> Симкарты
+        {
+            path: '/settings/sim-cards/',
+            name: 'settings-sim-cards',
+            component: () => import('../components/pages/Settings/SimCards/Index.vue'),
+        },
+
+        // Настройки -> Прокси сервера
+        {
+            path: '/settings/proxies/',
+            name: 'settings-proxies',
+            component: () => import('../components/pages/Settings/Proxies/Index.vue'),
+        },
+
+        // Настройки -> Домены и редиректы
+        {
+            path: '/settings/domens-redirects/',
+            name: 'settings-domens-redirects',
+            component: () => import('../components/pages/Settings/DomensRedirects/Index.vue'),
+        },
+
+        // Настройки -> Профили
+        {
+            path: '/settings/profiles/',
+            name: 'settings-profiles',
+            component: () => import('../components/pages/Settings/Profiles/Index.vue'),
         }
+
     ]
 })
