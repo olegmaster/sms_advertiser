@@ -26,14 +26,18 @@ Route::namespace('Api')
     ->group( ['prefix' => 'api'],function () {
 
         //Используют аутентификацию
+        //Соответсвует урл /api/settings
         Route::group(['middleware' => 'auth:api', 'prefix' => 'settings'], function () {
+            //Соответсвует урл /api/settings/ppc
             Route::get('ppc', function (){
 
             });
         });
 
         //Без аутентификацию
+        //Соответсвует урл /api/settings/
         Route::group(['namespace' => 'Settings', 'prefix' => 'settings'], function () {
+            //Соответсвует урл /api/settings/proxies
             Route::get('proxies', 'ProxiesController@index' );
         });
 });
