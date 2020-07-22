@@ -22,8 +22,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 /**
  * API Routes
  */
-Route::namespace('Api')
-    ->group( ['prefix' => 'api'],function () {
+
+//Соответсвует урл /api/
+Route::group( ['namespace' => 'Api', 'prefix' => 'api'],function () {
 
         //Используют аутентификацию
         //Соответсвует урл /api/settings
