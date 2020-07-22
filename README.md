@@ -29,6 +29,37 @@
 ## Используем 
 1. Шаблон - https://demo.dashboardpack.com/architectui-html-pro/
 
+## Соглашение по схеме работы с ветками
+Есть 2 ветки: master и dev
+Правило: когда начинаем работу над какой либо фичей мы всегда ветвимся из ветки дев!!! А не от мастера!!!
+
+Схема работы такая, 
+1) Получаем последние обновы из репы
+git pull origin dev
+
+2) Создаём новую ветку из ветки дев (авто переключается на созданную ветку)
+git checkout -b NOVAYA_VETKA dev
+
+3) Поработав на своей ветке и завершив работу  делаем коммит 
+git commit -a -m "New feature finished"
+
+4) Делаем слияние нашей ветки с веткой дев!
+git checkout dev
+git merge --no-ff NOVAYA_VETKA
+
+5) Берем последние обновы из репы и если есть конфликты то решаем их
+git pull origin dev
+
+6) Отправляем наши обновы на репу в ветку дев 
+git push origin dev
+
+Слияние ветки dev с веткой master делает только тот человек который занимается сервером! 
+При этом он, слияние делает не на сервере а у себя на компе!!! Это очень важно ибо если при слиянии будут конфликты то легче их решить на своем компе нежели на сервере куда люди заходят и могут увидеть ошибки вызванные в результате слияния.
+А потом уже пушить результат слияния на репу, а на сервере обновление происходит уже из репы!!!
+
+
+
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
