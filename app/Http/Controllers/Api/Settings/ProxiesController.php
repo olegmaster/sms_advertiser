@@ -11,7 +11,8 @@ namespace App\Http\Controllers\Api\Settings;
 use App\Http\Controllers\Controller,
     Illuminate\Http\Request,
     Illuminate\Http\Response,
-    Illuminate\Database\Eloquent\Model;
+    Illuminate\Database\Eloquent\Model,
+    App\Models\Settings\Proxies\Proxies;
 
 
 class ProxiesController extends Controller
@@ -29,6 +30,7 @@ class ProxiesController extends Controller
      */
     public function index()
     {
-        return response()->json('Привет всем!');
+        $proxies = Proxies::all();
+        return response()->json($proxies);
     }
 }
