@@ -2,7 +2,7 @@
   <div>
     <page-title :heading=heading :subheading=subheading :icon=icon></page-title>
     <span>
-      {{text}}
+      {{text}}fwefefwefwefwegwegwegwegwe dfwefwegege
     </span>
 
   </div>

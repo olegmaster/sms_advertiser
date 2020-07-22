@@ -31,6 +31,13 @@ class ProxiesController extends Controller
     public function index()
     {
         $proxies = Proxies::all();
-        return response()->json($proxies);
+        $return = array();
+        $return['status'] = 'ok';
+        $return['data'] = array(
+            'stat' => [],
+            'items' => $proxies
+        );
+
+        return response()->json($return);
     }
 }

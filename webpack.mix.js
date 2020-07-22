@@ -12,6 +12,7 @@ var webpack = require('webpack');
  |
  */
 
+
 // Override mix internal webpack output configuration
 mix.config.webpackConfig.output = {
     chunkFilename: 'js/[name].bundle.js',
