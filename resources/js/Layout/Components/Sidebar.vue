@@ -115,7 +115,85 @@
                         title: 'Входящие вызовы',
                         href: '/incoming-calls/',
                         icon: 'pe-7s-call',
-                    }
+                    },
+                    {
+                        header: true,
+                        title: 'База сообщений',
+                    },
+                    {
+                        title: 'База сообщений',
+                        icon: 'pe-7s-news-paper',
+                        child: [
+                            {
+                                href: '/messages/sms/',
+                                title: 'SMS сообщения',
+                            },
+                            {
+                                href: '/messages/mms/',
+                                title: 'MMS сообщения',
+                            },
+                            {
+                                href: '/messages/voice/',
+                                title: 'Голосовые сообщения',
+                            }
+                        ]
+                    },
+                    {
+                        header: true,
+                        title: 'Спам лист',
+                    },
+                    {
+                        title: 'Спам лист',
+                        href: '/unsubscribed-recipients/',
+                        icon: 'pe-7s-call',
+                    },
+                    {
+                        header: true,
+                        title: 'Избранное',
+                    },
+                    {
+                        title: 'Избранное',
+                        href: '/favorites/',
+                        icon: 'pe-7s-call',
+                    },
+
+
+                    {
+                        header: true,
+                        title: 'Настройки',
+                    },
+                    {
+                        title: 'Настройки',
+                        icon: 'pe-7s-news-paper',
+                        child: [
+                            {
+                                href: '/settings/thematics/',
+                                title: 'Тематика',
+                            },
+                            {
+                                href: '/settings/sim-banks/',
+                                title: 'Симбанки',
+                            },
+                            {
+                                href: '/settings/sim-cards/',
+                                title: 'Симкарты',
+                            },
+                            {
+                                href: '/settings/proxies/',
+                                title: 'Прокси сервера',
+                            },
+                            {
+                                href: '/settings/domens-redirects/',
+                                title: 'Домены и редиректы',
+                            },
+                            {
+                                href: '/settings/profiles/',
+                                title: 'Профили',
+                            },
+                        ]
+                    },
+
+
                 ],
                 collapsed: true,
 

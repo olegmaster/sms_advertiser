@@ -7,8 +7,9 @@
 4. php artisan db:seed
 5. npm install
 
-## Создание билда 
-1. npm run prod
+## Создание билда и разработка 
+1. npm run prod - создание билда для продакшна
+2. npm run watch-poll - режим разработчика
 
 ## Структура файловой системы
 - /resources/views/spa.blade.php - файл в котором харнится шаблон для SPA.
