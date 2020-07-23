@@ -1,20 +1,20 @@
 <?php
 
 return [
-    'countriesCount' => 3,
-    'usersCount' => 10,
-    'thematicsCount' => 25,
+    'countriesCount' => env('SEED_COUNTRIES_COUT', 3),
+    'usersCount' => env('SEED_USERS_COUNT', 10),
+    'thematicsCount' => env('SEED_THEMATICS_COUNT', 5),
 
     // sim
-    'simbanksCount' => 4,
-    'simbankCapasityMin' => 150,
-    'simbankCapasityMax' => 350,
-    'simcardGroupsCount' => 7,
-    'simcardOperatorsCount' => 4,
-    'simcardsCount' => '400',
+    'simbanksCount' => env('SEED_SIMBANKS_COUNT', 4),
+    'simbankCapasityMin' => env('SEED_SIMBANK_CAPASITY_MIN', 150),
+    'simbankCapasityMax' => env('SEED_SIMBANK_CAPASITY_MAX', 350),
+    'simcardGroupsCount' => env('SEED_SIMCARD_GOUPS_COUNT', 7),
+    'simcardOperatorsCount' => env('SEED_SIMCARD_OPERATORS_COUNT', 4),
+    'simcardsCount' => env('SEED_SIMCARDS_COUNT', 400),
 
     // advertising campaigns
 
-    'advertisingCampaignsCount' => 5,
+    'advertisingCampaignsCount' => env('SEED_ADVERTISING_CAMPAIGNS_COUNT', 5),
 
 ];

@@ -5,7 +5,7 @@
             <!-- Main table element -->
             <b-table show-empty
                      stacked="md"
-                     :items="items"
+                     :items="thematics"
                      :fields="fields"
                      :current-page="currentPage"
                      :per-page="perPage"
@@ -34,9 +34,16 @@
 
 <script>
     export default {
+        props: {
+            thematics: {
+                type: Object,
+            },
+            totalRows: {
+                type: Number
+            }
+        },
         data() {
             return {
-                items: [],
                 fields: [
                     {key: 'id', label: 'ID'},
                     {key: 'name', label: 'Название тематики', sortable: true, 'class': 'text-center'},
@@ -47,7 +54,6 @@
                 ],
                 currentPage: 1,
                 perPage: 5,
-                totalRows: 0,
                 pageOptions: [5, 10, 15],
                 sortBy: null,
                 sortDesc: false,
@@ -57,9 +63,6 @@
             }
         },
 
-        mounted() {
-            this.fetchThematics()
-        },
         computed: {
             sortOptions() {
                 // Create an options list from our fields
@@ -71,13 +74,6 @@
             }
         },
         methods: {
-            fetchThematics(page) {
-                return axios.get('/api/settings/thematics/').then(result => {
-                    console.log(result.data.data)
-                    this.items = result.data.data;
-                    this.totalRows = this.items.length
-                });
-            },
             info(item, index, button) {
                 this.modalInfo.title = `Row index: ${index}`
                 this.modalInfo.content = JSON.stringify(item, null, 2)

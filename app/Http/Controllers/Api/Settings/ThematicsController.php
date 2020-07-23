@@ -3,15 +3,18 @@
 namespace App\Http\Controllers\Api\Settings;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ThematicsCreateRequest;
 use App\Models\AdvertisingCampaign\Thematic;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ThematicsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index()
     {
@@ -25,24 +28,43 @@ class ThematicsController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param ThematicsCreateRequest $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(ThematicsCreateRequest $request)
     {
-        //
+        $data = $request->input();
+        if (!isset($data['status'])) {
+            $data['status'] = 1;
+        }
+        $data['user_id'] = Auth::id() ?? 1;
+        //print_r($data);die;
+
+
+        $item = (new Thematic())->create($data);
+
+        if ($item) {
+            return response()->json(['status' => true, 'data' => [
+                'id' => $item->id,
+                'name' => $item->name,
+                'status' => $item->status,
+                'created_at' => $item->created_at
+            ]]);
+        } else {
+            return response()->json(['status' => false]);
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -53,7 +75,7 @@ class ThematicsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -64,8 +86,8 @@ class ThematicsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -76,7 +98,7 @@ class ThematicsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
