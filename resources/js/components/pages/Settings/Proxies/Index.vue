@@ -14,7 +14,7 @@
                       </b-button>
                   </div>
                   <div class="col-md-auto">
-                      <b-form-select v-model="itemsPerPage" :options="itemsPerPageOptions"></b-form-select>
+                      <b-form-select v-model="itemsPerPage" :options="itemsPerPageOptions" @change="getProxies()"></b-form-select>
                   </div>
               </div>
           </div>
@@ -30,6 +30,8 @@
             </template>
 
           </b-table>
+          <v-pagination v-model="page" :length="6"></v-pagination>
+
       </div>
 
     </b-card>
@@ -77,6 +79,7 @@
         itemsPerPage : 25,
         allSelected: false,
         isLoading: false,
+        page: 1,
     }),
     mounted()
     {
@@ -88,7 +91,8 @@
             let vm = this;
             this.isLoading = true;
             let new_items = [];
-            axios.get('/api/settings/proxies/').then( response => {
+            let url = '/api/settings/proxies/?page=' + this.page + '&itemsPerPage=' + this.itemsPerPage;
+            axios.get(url).then( response => {
               if (response.data.status === 'ok')
               {
                   new_items = response.data.data.items;
