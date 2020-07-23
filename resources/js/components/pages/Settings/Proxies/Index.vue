@@ -14,7 +14,7 @@
                       </b-button>
                   </div>
                   <div class="col-md-auto">
-                      <b-form-select v-model="itemsPerPage" :options="itemsPerPageOptions" @change="getProxies()"></b-form-select>
+                      <b-form-select v-model="itemsPerPage" :options="itemsPerPageOptions" @change="page = 1; getProxies()"></b-form-select>
                   </div>
               </div>
           </div>
@@ -31,8 +31,25 @@
 
           </b-table>
 
-          <v-pagination v-model="page" @input="getProxies()" :length="pagesCount" :total-visible="6"></v-pagination>
-
+          <div class="container-fluid">
+              <div class="row">
+                  <div class="col">
+                      Операции с выбранными
+                      <b-button class="mr-2 mb-2 btn-shadow btn-hover-shine btn-transition" variant="primary" @click="selectAll()">
+                          Выбрать все
+                      </b-button>
+                  </div>
+                  <div class="col-md-auto">
+                      <v-pagination v-model="page" @input="getProxies()" :length="pagesCount" :total-visible="10"></v-pagination>
+                  </div>
+                  <div class="col-md-auto">
+                      <button type="button" class="btn-shadow d-inline-flex align-items-center btn btn-success">
+                          <font-awesome-icon class="mr-2" icon="plus"/>
+                          Добавить прокси
+                      </button>
+                  </div>
+              </div>
+          </div>
       </div>
 
     </b-card>
@@ -45,12 +62,17 @@
   import PageTitle from "../../../../Layout/Components/PageTitle.vue";
   import VueElementLoading from 'vue-element-loading'
   import vSelect from 'vue-select'
+  import {library} from '@fortawesome/fontawesome-svg-core'
+  import { faStar, faPlus } from '@fortawesome/free-solid-svg-icons'
+  import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
+  library.add( faStar, faPlus );
 
   export default {
     components: {
-      PageTitle,
-      VueElementLoading,
-      vSelect
+        PageTitle,
+        VueElementLoading,
+        vSelect,
+        'font-awesome-icon': FontAwesomeIcon,
     },
     data: () => ({
         heading: 'Настройки',
@@ -85,6 +107,9 @@
     }),
     mounted()
     {
+        let itemsPerPage = this.$cookies.get('proxies_list_per_page');
+        if (itemsPerPage && parseInt(itemsPerPage)>0)
+            this.itemsPerPage = itemsPerPage;
         this.getProxies();
     },
     methods: {
@@ -99,7 +124,6 @@
               {
                   new_items = response.data.data.items;
                   this.pagesCount = Math.ceil(response.data.data.stat.itemsCount / this.itemsPerPage);
-                  console.log( this.pagesCount, response.data.data.stat.itemsCount, this.itemsPerPage );
                   for (let i in  new_items )
                     new_items[i].checked = false;
                 vm.items = new_items;
@@ -114,9 +138,13 @@
             this.allSelected = !this.allSelected;
             for (let i in  this.items )
             this.items[i].checked = this.allSelected;
-            console.log(this.allSelected, this.items);
           }
+    },
+    watch: {
+        itemsPerPage : function(val)
+        {
+            this.$cookies.set('proxies_list_per_page', val, '31d');
+        }
     }
-
   }
 </script>

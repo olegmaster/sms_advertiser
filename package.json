@@ -68,6 +68,7 @@
         "vue-chartjs": "^3.4.2",
         "vue-clipboards": "^1.2.4",
         "vue-color": "^2.7.0",
+        "vue-cookies": "^1.7.3",
         "vue-country-flag": "^1.1.0",
         "vue-countup-v2": "^2.0.0",
         "vue-cropperjs": "^3.0.0",
