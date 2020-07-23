@@ -33,7 +33,8 @@ class ProxiesController extends Controller
         $itemsPerPage = $request->has('itemsPerPage') ? $request->get('itemsPerPage') : 25;
         $page = $request->has('page') ? $request->get('page') : 1;
 
-        $proxies = Proxies::offset(($page-1)*$itemsPerPage)->take($itemsPerPage)->get();
+        $proxies = Proxies::addPagination($itemsPerPage, $page)->get();
+
         $return = array();
         $return['status'] = 'ok';
         $return['data'] = array(
