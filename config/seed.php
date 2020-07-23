@@ -3,7 +3,7 @@
 return [
     'countriesCount' => 3,
     'usersCount' => 10,
-    'thematicsCount' => 5,
+    'thematicsCount' => 25,
 
     // sim
     'simbanksCount' => 4,
