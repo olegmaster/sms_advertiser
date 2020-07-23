@@ -14,16 +14,26 @@
                      :sort-desc.sync="sortDesc"
                      :sort-direction="sortDirection"
                      @filtered="onFiltered"
+                     :busy="busyState"
             >
+                <template v-slot:table-busy>
+                    <div class="text-center text-danger my-2">
+                        <b-spinner class="align-middle"></b-spinner>
+                        <strong>Загрузка...</strong>
+                    </div>
+                </template>
                 <template slot="id" slot-scope="row">{{row.id}}</template>
                 <template slot="name" slot-scope="row">{{row.name}}</template>
                 <template slot="created_at" slot-scope="row">{{row.created_at}}</template>
-                <template slot="status" slot-scope="row">{{row.status}}</template>
-                <template slot="actions" slot-scope="row"></template>
+                <template slot="status" slot-scope="row"></template>
+                <template v-slot="actions" slot-scope="row" >
+                    <b-button variant="success">Редактировать</b-button>
+                    <b-button variant="danger">Удалить</b-button>
+                </template>
 
             </b-table>
 
-            <b-row>
+            <b-row v-if="totalRows > perPage">
                 <b-col md="6" class="my-1">
                     <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="currentPage" class="my-0"/>
                 </b-col>
@@ -40,12 +50,15 @@
             },
             totalRows: {
                 type: Number
+            },
+            busyState: {
+                type: Boolean
             }
         },
         data() {
             return {
                 fields: [
-                    {key: 'id', label: 'ID'},
+                    {key: 'id', label: 'ID', variant: 'primary'},
                     {key: 'name', label: 'Название тематики', sortable: true, 'class': 'text-center'},
                     {key: 'created_at', label: 'Дата создания'},
                     {key: 'status', label: 'Активен'},

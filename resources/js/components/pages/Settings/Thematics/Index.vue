@@ -26,7 +26,11 @@
         <page-title :heading=heading :subheading=subheading :icon=icon></page-title>
 
 
-        <ThematicTable v-bind:thematics="thematics" v-bind:totalRows="totalRows" />
+        <ThematicTable
+            v-bind:thematics="thematics"
+            v-bind:totalRows="totalRows"
+            v-bind:busy-state="tableIsBusy"
+        />
         <div>
             <b-card class="main-card mb-3 text-center">
                 <b-button class="mr-2" v-b-modal.add-thematics variant="primary">Добавить тематику</b-button>
@@ -54,6 +58,7 @@
             new_thematics_name: '',
             thematics: [],
             totalRows: 0,
+            tableIsBusy: true,
         }),
         mounted() {
             this.thematics = this.fetchThematics()
@@ -73,10 +78,10 @@
             },
             fetchThematics() {
                 return axios.get('/api/settings/thematics/').then(result => {
-                    console.log(result.data.data)
+
                     this.thematics = result.data.data;
                     this.totalRows = this.thematics.length
-                    console.log(this.totalRows);
+                    this.tableIsBusy = false
                 });
             },
         }
