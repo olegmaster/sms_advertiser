@@ -33,13 +33,13 @@ class ProxiesController extends Controller
         $itemsPerPage = $request->has('itemsPerPage') ? $request->get('itemsPerPage') : 25;
         $page = $request->has('page') ? $request->get('page') : 1;
 
-        $proxies = Proxies::addPagination($itemsPerPage, $page)->get();
-
+        $proxies = Proxies::addPagination($itemsPerPage, $page);
+        $data  = $proxies->get();
         $return = array();
         $return['status'] = 'ok';
         $return['data'] = array(
-            'stat' => ['count' => $proxies->count()],
-            'items' => $proxies->toArray()
+            'stat' => ['itemsCount' => $proxies->count()],
+            'items' => $data->toArray()
         );
 
         return response()->json($return);

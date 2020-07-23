@@ -30,7 +30,8 @@
             </template>
 
           </b-table>
-          <v-pagination v-model="page" :length="6"></v-pagination>
+
+          <v-pagination v-model="page" @input="getProxies()" :length="pagesCount" :total-visible="6"></v-pagination>
 
       </div>
 
@@ -80,6 +81,7 @@
         allSelected: false,
         isLoading: false,
         page: 1,
+        pagesCount :1
     }),
     mounted()
     {
@@ -96,6 +98,8 @@
               if (response.data.status === 'ok')
               {
                   new_items = response.data.data.items;
+                  this.pagesCount = Math.ceil(response.data.data.stat.itemsCount / this.itemsPerPage);
+                  console.log( this.pagesCount, response.data.data.stat.itemsCount, this.itemsPerPage );
                   for (let i in  new_items )
                     new_items[i].checked = false;
                 vm.items = new_items;
