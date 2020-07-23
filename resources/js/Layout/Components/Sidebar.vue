@@ -36,16 +36,12 @@
                 menu: [
                     {
                         header: true,
-                        title: 'Главная',
+                        title: 'Основное меню',
                     },
                     {
                         title: 'Главная',
                         href: '/',
                         icon: 'lnr-apartment',
-                    },
-                    {
-                        header: true,
-                        title: 'Таргетинг',
                     },
                     {
                         title: 'Таргетинг',
@@ -71,10 +67,6 @@
                         ]
                     },
                     {
-                        header: true,
-                        title: 'Рекламные компании',
-                    },
-                    {
                         title: 'Рекламные компании',
                         icon: 'pe-7s-news-paper',
                         child: [
@@ -89,17 +81,9 @@
                         ]
                     },
                     {
-                        header: true,
-                        title: 'Аналитика',
-                    },
-                    {
                         title: 'Аналитика',
                         href: '/analytics/',
                         icon: 'pe-7s-graph2',
-                    },
-                    {
-                        header: true,
-                        title: 'Диалоги SMS и MMS',
                     },
                     {
                         title: 'Диалоги SMS и MMS',
@@ -108,17 +92,9 @@
                     },
 
                     {
-                        header: true,
-                        title: 'Входящие вызовы',
-                    },
-                    {
                         title: 'Входящие вызовы',
                         href: '/incoming-calls/',
                         icon: 'pe-7s-call',
-                    },
-                    {
-                        header: true,
-                        title: 'База сообщений',
                     },
                     {
                         title: 'База сообщений',
@@ -139,17 +115,9 @@
                         ]
                     },
                     {
-                        header: true,
-                        title: 'Спам лист',
-                    },
-                    {
                         title: 'Спам лист',
                         href: '/unsubscribed-recipients/',
                         icon: 'pe-7s-call',
-                    },
-                    {
-                        header: true,
-                        title: 'Избранное',
                     },
                     {
                         title: 'Избранное',
@@ -163,34 +131,34 @@
                         title: 'Настройки',
                     },
                     {
-                        title: 'Настройки',
+                        href: '/settings/thematics/',
+                        title: 'Тематика',
                         icon: 'pe-7s-news-paper',
-                        child: [
-                            {
-                                href: '/settings/thematics/',
-                                title: 'Тематика',
-                            },
-                            {
-                                href: '/settings/sim-banks/',
-                                title: 'Симбанки',
-                            },
-                            {
-                                href: '/settings/sim-cards/',
-                                title: 'Симкарты',
-                            },
-                            {
-                                href: '/settings/proxies/',
-                                title: 'Прокси сервера',
-                            },
-                            {
-                                href: '/settings/domens-redirects/',
-                                title: 'Домены и редиректы',
-                            },
-                            {
-                                href: '/settings/profiles/',
-                                title: 'Профили',
-                            },
-                        ]
+                    },
+                    {
+                        href: '/settings/sim-banks/',
+                        title: 'Симбанки',
+                        icon: 'pe-7s-news-paper',
+                    },
+                    {
+                        href: '/settings/sim-cards/',
+                        title: 'Симкарты',
+                        icon: 'pe-7s-news-paper',
+                    },
+                    {
+                        href: '/settings/proxies/',
+                        title: 'Прокси сервера',
+                        icon: 'pe-7s-news-paper',
+                    },
+                    {
+                        href: '/settings/domens-redirects/',
+                        title: 'Домены и редиректы',
+                        icon: 'pe-7s-news-paper',
+                    },
+                    {
+                        href: '/settings/profiles/',
+                        title: 'Профили',
+                        icon: 'pe-7s-news-paper',
                     },
 
 

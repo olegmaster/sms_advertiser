@@ -38,6 +38,7 @@ import router from './router';
 
 import BootstrapVue from "bootstrap-vue";
 
+
 import App from './App.vue';
 
 import Default from './Layout/Wrappers/baseLayout.vue';
@@ -47,6 +48,7 @@ import Apps from './Layout/Wrappers/appLayout.vue';
 Vue.config.productionTip = false;
 
 Vue.use(BootstrapVue);
+Vue.use(require('vue-cookies'));
 
 Vue.component('default-layout', Default);
 Vue.component('userpages-layout', Pages);

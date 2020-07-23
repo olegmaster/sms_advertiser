@@ -11,7 +11,8 @@ namespace App\Http\Controllers\Api\Settings;
 use App\Http\Controllers\Controller,
     Illuminate\Http\Request,
     Illuminate\Http\Response,
-    Illuminate\Database\Eloquent\Model;
+    Illuminate\Database\Eloquent\Model,
+    App\Models\Settings\Proxies\Proxies;
 
 
 class ProxiesController extends Controller
@@ -27,8 +28,20 @@ class ProxiesController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index( Request $request)
     {
-        return response()->json('Привет всем!');
+        $itemsPerPage = $request->has('itemsPerPage') ? $request->get('itemsPerPage') : 25;
+        $page = $request->has('page') ? $request->get('page') : 1;
+
+        $proxies = Proxies::addPagination($itemsPerPage, $page);
+        $data  = $proxies->get();
+        $return = array();
+        $return['status'] = 'ok';
+        $return['data'] = array(
+            'stat' => ['itemsCount' => $proxies->count()],
+            'items' => $data->toArray()
+        );
+
+        return response()->json($return);
     }
 }
