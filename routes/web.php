@@ -34,6 +34,8 @@ Route::group( ['namespace' => 'Api', 'prefix' => 'api'],function () {
     Route::group(['namespace' => 'Settings', 'prefix' => 'settings'], function () {
         //Соответсвует урл /api/settings/proxies
         Route::get('proxies', 'ProxiesController@index' );
+
+        Route::resource('thematics', 'ThematicsController' );
     });
 });
 
