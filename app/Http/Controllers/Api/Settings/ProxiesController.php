@@ -28,14 +28,17 @@ class ProxiesController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index( Request $request)
     {
-        $proxies = Proxies::all();
+        $itemsPerPage = $request->has('itemsPerPage') ? $request->get('itemsPerPage') : 25;
+        $page = $request->has('page') ? $request->get('page') : 1;
+
+        $proxies = Proxies::offset(($page-1)*$itemsPerPage)->take($itemsPerPage)->get();
         $return = array();
         $return['status'] = 'ok';
         $return['data'] = array(
-            'stat' => [],
-            'items' => $proxies
+            'stat' => ['count' => $proxies->count()],
+            'items' => $proxies->toArray()
         );
 
         return response()->json($return);

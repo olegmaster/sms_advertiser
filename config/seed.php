@@ -17,4 +17,7 @@ return [
 
     'advertisingCampaignsCount' => 5,
 
+    //Settings
+    'proxiesCount' => 250,
+
 ];
