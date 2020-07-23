@@ -9,7 +9,7 @@
           <div class="container-fluid">
               <div class="row">
                   <div class="col">
-                      <b-button class="mr-2 mb-2 btn-shadow btn-hover-shine btn-transition" variant="primary" @click="selectAll()">
+                      <b-button size="sm" class="mr-2 mb-2 btn-shadow btn-hover-shine btn-transition" variant="primary" @click="selectAll()">
                           Выбрать все
                       </b-button>
                   </div>
@@ -34,10 +34,17 @@
           <div class="container-fluid">
               <div class="row">
                   <div class="col">
-                      Операции с выбранными
-                      <b-button class="mr-2 mb-2 btn-shadow btn-hover-shine btn-transition" variant="primary" @click="selectAll()">
-                          Выбрать все
-                      </b-button>
+                      <b-dropdown dropup no-flip text="Операции с выбранными" class="mb-2 mr-2" variant="primary">
+                          <div class="dropdown-menu-header">
+                              <div class="dropdown-menu-header-inner bg-secondary">
+                                  <div class="menu-header-image opacity-5 dd-header-bg-2"></div>
+                                  <div class="menu-header-content"><h6 class="menu-header-title">Операции</h6></div>
+                              </div>
+                          </div>
+                          <button type="button" tabindex="0" class="dropdown-item">Активировать</button>
+                          <button type="button" tabindex="1" class="dropdown-item">Деактивировать</button>
+                          <button type="button" tabindex="2" class="dropdown-item">Проверить</button>
+                      </b-dropdown>
                   </div>
                   <div class="col-md-auto">
                       <v-pagination v-model="page" @input="getProxies()" :length="pagesCount" :total-visible="10"></v-pagination>
