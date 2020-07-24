@@ -22,11 +22,37 @@
           <b-table striped bordered outlined hover fixed :items="items" :fields="fields">
 
             <template v-slot:cell(checkbox_field)="data">
-              <b-form-checkbox v-model="data.item.checked"></b-form-checkbox>
+                <b-form-checkbox v-model="data.item.checked"></b-form-checkbox>
             </template>
 
+            <template v-slot:cell(operations)="data">
+
+                <b-dropdown dropup no-flip text="Действия" class="mb-2 mr-2" variant="primary" block :ref="'dropdown'+data.item.id">
+                    <div class="dropdown-menu-header">
+                        <div class="dropdown-menu-header-inner bg-secondary">
+                            <div class="menu-header-image opacity-5 dd-header-bg-2"></div>
+                            <div class="menu-header-content"><h6 class="menu-header-title">Действия</h6></div>
+                        </div>
+                    </div>
+                    <button type="button" tabindex="0" class="dropdown-item" v-show="data.item.status==0" @click="setProxiesStatus(data.item.id, 1)">Активировать</button>
+                    <button type="button" tabindex="1" class="dropdown-item" v-show="data.item.status==1" @click="setProxiesStatus(data.item.id, 0)">Деактивировать</button>
+                    <button type="button" tabindex="2" class="dropdown-item" v-show="data.item.check_state==0">Проверить</button>
+                </b-dropdown>
+
+            </template>
+
+
             <template v-slot:table-colgroup="scope">
-              <col :style="{ width: '25px'}">
+                <col :style="{ width: '25px'}">
+                <col>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col :style="{ width: '120px'}">
             </template>
 
           </b-table>
@@ -34,15 +60,15 @@
           <div class="container-fluid">
               <div class="row">
                   <div class="col">
-                      <b-dropdown dropup no-flip text="Операции с выбранными" class="mb-2 mr-2" variant="primary">
+                      <b-dropdown dropup no-flip text="Действия над выбранными" class="mb-2 mr-2" variant="primary" ref="dropdown" :disabled="checkedItemsCount==0" >
                           <div class="dropdown-menu-header">
                               <div class="dropdown-menu-header-inner bg-secondary">
                                   <div class="menu-header-image opacity-5 dd-header-bg-2"></div>
-                                  <div class="menu-header-content"><h6 class="menu-header-title">Операции</h6></div>
+                                  <div class="menu-header-content"><h6 class="menu-header-title">Действия</h6></div>
                               </div>
                           </div>
-                          <button type="button" tabindex="0" class="dropdown-item">Активировать</button>
-                          <button type="button" tabindex="1" class="dropdown-item">Деактивировать</button>
+                          <button type="button" tabindex="0" class="dropdown-item" @click="setProxiesStatus(null, 1)">Активировать</button>
+                          <button type="button" tabindex="1" class="dropdown-item" @click="setProxiesStatus(null, 0)">Деактивировать</button>
                           <button type="button" tabindex="2" class="dropdown-item">Проверить</button>
                       </b-dropdown>
                   </div>
@@ -95,6 +121,7 @@
             {key:'status', label:'Активный'},
             {key:'busy_by_task_id', label:'Занят под задание'},
             {key:'is_banned', label:'Забанен'},
+            {key:'operations', label:'Операции'},
         ],
         itemsPerPageOptions: [
             {text: 'Показать по 10',  value: '10'},
@@ -110,24 +137,23 @@
         allSelected: false,
         isLoading: false,
         page: 1,
-        pagesCount :1
+        pagesCount :1,
     }),
-    mounted()
-    {
-        let itemsPerPage = this.$cookies.get('proxies_list_per_page');
-        if (itemsPerPage && parseInt(itemsPerPage)>0)
-            this.itemsPerPage = itemsPerPage;
-        this.getProxies();
+    computed: {
+          checkedItemsCount() {
+              return this.items.filter(v=>v.checked).length;
+          }
     },
     methods: {
         getProxies()
         {
             let vm = this;
+            this.allSelected = false;
             this.isLoading = true;
             let new_items = [];
             let url = '/api/settings/proxies/?page=' + this.page + '&itemsPerPage=' + this.itemsPerPage;
             axios.get(url).then( response => {
-              if (response.data.status === 'ok')
+              if (!response.data.errorCode )
               {
                   new_items = response.data.data.items;
                   this.pagesCount = Math.ceil(response.data.data.stat.itemsCount / this.itemsPerPage);
@@ -139,19 +165,66 @@
             }).catch( responce => {
               vm.isLoading = false;
             });
-          },
-          selectAll()
-          {
+        },
+
+        setProxiesStatus(id = null, status = null)
+        {
+            this.hideDropDown(id);
+            this.isLoading = true;
+            let vm = this;
+            let url;
+            let data = {
+                value:status
+            };
+
+            if (id)
+            {
+                url = '/api/settings/proxies/' + id + '/status/';
+            }
+            else
+                {
+                    url = '/api/settings/proxies/status/';
+                    data.ids = this.items.filter(v=>v.checked).map(v=>v.id);
+                }
+
+            axios.patch(url,data).then( response => {
+                if (!response.data.errorCode )
+                {
+                    this.getProxies();
+                } else
+                    this.isLoading = false;
+            }).catch( responce => {
+                this.isLoading = false;
+            });
+        },
+
+        hideDropDown(id=null)
+        {
+            if (id)
+                this.$refs['dropdown'+id].hide(true);
+            else
+                this.$refs['dropdown'].hide(true);
+        },
+
+        selectAll()
+        {
             this.allSelected = !this.allSelected;
             for (let i in  this.items )
             this.items[i].checked = this.allSelected;
-          }
+        }
     },
     watch: {
         itemsPerPage : function(val)
         {
             this.$cookies.set('proxies_list_per_page', val, '31d');
         }
+    },
+    mounted()
+    {
+      let itemsPerPage = this.$cookies.get('proxies_list_per_page');
+      if (itemsPerPage && parseInt(itemsPerPage)>0)
+          this.itemsPerPage = itemsPerPage;
+      this.getProxies();
     }
   }
 </script>

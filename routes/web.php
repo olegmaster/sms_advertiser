@@ -32,8 +32,16 @@ Route::group( ['namespace' => 'Api', 'prefix' => 'api'],function () {
     //Без аутентификацию
     //Соответсвует урл /api/settings/
     Route::group(['namespace' => 'Settings', 'prefix' => 'settings'], function () {
-        //Соответсвует урл /api/settings/proxies
+
+        //Получение списка проксей /api/settings/proxies/
         Route::get('proxies', 'ProxiesController@index' );
+
+        //Активация деактивация прокси /api/settings/proxies/{id}/status/
+        Route::patch('proxies/{id}/status/', 'ProxiesController@setStatus' )->where('id', '[1-9][0-9]*');
+
+        //Активация деактивация многих проксей /api/settings/proxies/status/
+        Route::patch('proxies/status/', 'ProxiesController@setMultiplyStatuses' );
+
     });
 });
 

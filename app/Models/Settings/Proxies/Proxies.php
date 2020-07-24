@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model,
 class Proxies extends Model
 {
     protected $table = 'proxies';
+    protected $fillable = ['status'];
 
     public function newEloquentBuilder($query)
     {
