@@ -23,7 +23,12 @@
                           <button type="button" tabindex="1" class="dropdown-item" @click="setProxiesStatus(null, 0)">Деактивировать</button>
                           <button type="button" tabindex="2" class="dropdown-item">Проверить</button>
                       </b-dropdown>
-
+                  </div>
+                  <div class="col-md-auto">
+                      <button type="button" v-b-modal.modal-add-proxy class="btn-shadow d-inline-flex align-items-center btn btn-success" >
+                          <font-awesome-icon class="mr-2" icon="plus"/>
+                          Добавить прокси
+                      </button>
                   </div>
                   <div class="col-md-auto">
                       <b-form-select v-model="itemsPerPage" :options="itemsPerPageOptions" @change="page = 1; getProxies()"></b-form-select>
@@ -71,7 +76,7 @@
 
           <div class="container-fluid">
               <div class="row">
-                  <div class="col">
+                  <div class="col-md-auto">
                       <b-dropdown dropup no-flip text="Действия над выбранными" class="mb-2 mr-2" variant="primary" ref="dropdown1" :disabled="checkedItemsCount==0" >
                           <div class="dropdown-menu-header">
                               <div class="dropdown-menu-header-inner bg-secondary">
@@ -85,19 +90,27 @@
                       </b-dropdown>
                   </div>
                   <div class="col-md-auto">
-                      <v-pagination v-model="page" @input="getProxies()" :length="pagesCount" :total-visible="10"></v-pagination>
-                  </div>
-                  <div class="col-md-auto">
-                      <button type="button" class="btn-shadow d-inline-flex align-items-center btn btn-success">
+                      <button type="button" v-b-modal.modal-add-proxy class="btn-shadow d-inline-flex align-items-center btn btn-success">
                           <font-awesome-icon class="mr-2" icon="plus"/>
                           Добавить прокси
                       </button>
+                  </div>
+                  <div class="col">
+
+                  </div>
+
+                  <div class="col-md-auto">
+                      <v-pagination v-model="page" @input="getProxies()" :length="pagesCount" :total-visible="10"></v-pagination>
                   </div>
               </div>
           </div>
       </div>
 
     </b-card>
+
+    <b-modal id="modal-add-proxy" hide-backdrop centered title="Добавить прокси" content-class="shadow">
+      <p class="my-4">Vertically centered modal!</p>
+    </b-modal>
 
   </div>
 </template>
