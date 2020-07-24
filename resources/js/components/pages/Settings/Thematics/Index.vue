@@ -6,9 +6,10 @@
                  title="Создать тематику" onsubmit="alert()">
 
             <div class="d-block text-center">
-                <b-alert v-if="thematic_validation" show variant="primary">{{thematic_validation}}</b-alert>
+                <b-alert v-if="validation_status === 'success'" show variant="success">{{thematic_validation}}</b-alert>
+                <b-alert v-if="validation_status === 'error'" show variant="danger">{{thematic_validation}}</b-alert>
+                <p v-if="!validation_status">Название тематики</p>
 
-                <p v-if="!thematic_validation">Название тематики</p>
                 <b-form-input v-model="new_thematics_name"/>
             </div>
             <template v-slot:modal-footer>
@@ -170,6 +171,7 @@
             totalRows: 0,
             tableIsBusy: true,
             thematic_validation: '',
+            validation_status: '',
             fields: [
                 {key: 'checkbox_field', label: ''},
                 {key: 'id', label: 'ID'},
@@ -201,6 +203,7 @@
             this.thematics = this.fetchThematics();
             this.$root.$on('bv::modal::show', (bvEvent, modalId) => {
                 this.thematic_validation = ''
+                this.validation_status = ''
                 this.new_thematics_name = ''
             })
         },
@@ -209,18 +212,20 @@
                 axios.post('/api/settings/thematics', {
                     name: this.new_thematics_name,
                 }).then(function (response) {
-                    if (response.data.status === 'ok') {
-                        this.new_thematics_name = '';
-                        console.log(response);
+                    if (response.data.status === true) {
                         this.thematics.push(response.data.data)
-
                         this.totalRows += 1;
+                        this.validation_status = 'success'
+
+                    } else {
+                        this.validation_status = 'error'
                     }
+                    console.log(response);
+                    //this.new_thematics_name = '';
                     this.thematic_validation = response.data.message
                 }.bind(this)).catch(function (error) {
-                    this.thematic_validation = error.name
-                    console.log(error);
-
+                    this.thematic_validation = 'Ошибка сервера'
+                    this.validation_status = 'error'
                 }.bind(this))
             },
             fetchThematics() {

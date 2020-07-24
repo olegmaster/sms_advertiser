@@ -50,8 +50,20 @@ class ThematicsController extends Controller
         if (!isset($data['status'])) {
             $data['status'] = 1;
         }
+
         $data['user_id'] = Auth::id() ?? 1;
 
+        if (empty($data['name'])) {
+            return response()->json(['status' => false, 'message' => 'Ошибка, имя пустое']);
+        }
+
+        $item = Thematic::where('name', $data['name'])->get();
+
+       // print_r(count($item) !== 0);die;
+
+        if (count($item) !== 0) {
+            return response()->json(['status' => false, 'message' => 'Такая тематика уже есть']);
+        }
 
         $item = (new Thematic())->create($data);
 
@@ -66,7 +78,7 @@ class ThematicsController extends Controller
 
             ]);
         } else {
-            return response()->json(['status' => false]);
+            return response()->json(['status' => false, 'message' => 'не удалось создать тематику']);
         }
     }
 
