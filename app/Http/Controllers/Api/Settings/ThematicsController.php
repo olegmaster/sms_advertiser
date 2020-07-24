@@ -8,6 +8,7 @@ use App\Models\AdvertisingCampaign\Thematic;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ThematicsController extends Controller
 {
@@ -18,7 +19,12 @@ class ThematicsController extends Controller
      */
     public function index()
     {
-        return response()->json(Thematic::paginate(1000));
+        $result = DB::table('thematics')
+            ->leftJoin('users', 'thematics.user_id', '=', 'users.id')
+            ->select('thematics.*',
+                'users.name as username')
+            ->paginate(10000);
+        return response()->json($result);
     }
 
     /**
@@ -44,7 +50,6 @@ class ThematicsController extends Controller
             $data['status'] = 1;
         }
         $data['user_id'] = Auth::id() ?? 1;
-        //print_r($data);die;
 
 
         $item = (new Thematic())->create($data);
@@ -55,7 +60,10 @@ class ThematicsController extends Controller
                 'name' => $item->name,
                 'status' => $item->status,
                 'created_at' => $item->created_at
-            ]]);
+            ],
+                'message' => 'Тематика создана'
+
+            ]);
         } else {
             return response()->json(['status' => false]);
         }

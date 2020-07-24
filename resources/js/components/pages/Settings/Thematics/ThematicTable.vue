@@ -3,7 +3,7 @@
         <b-card title="" class="main-card mb-4">
 
             <!-- Main table element -->
-            <b-table show-empty
+            <b-table striped hover show-empty bordered
                      stacked="md"
                      :items="thematics"
                      :fields="fields"
@@ -16,6 +16,9 @@
                      @filtered="onFiltered"
                      :busy="busyState"
             >
+                <template v-slot:cell(checkbox_field)="data">
+                    <b-form-checkbox v-model="data.item.checked"></b-form-checkbox>
+                </template>
                 <template v-slot:table-busy>
                     <div class="text-center text-danger my-2">
                         <b-spinner class="align-middle"></b-spinner>
@@ -23,10 +26,11 @@
                     </div>
                 </template>
                 <template slot="id" slot-scope="row">{{row.id}}</template>
-                <template slot="name" slot-scope="row">{{row.name}}</template>
+                <template slot="name" slot-scope="row"><b>{{row.name}}</b></template>
                 <template slot="created_at" slot-scope="row">{{row.created_at}}</template>
-                <template slot="status" slot-scope="row"></template>
-                <template v-slot="actions" slot-scope="row" >
+                <template slot="status" slot-scope="row">Hello World</template>
+                <template slot="username" slot-scope="row">{{row.username}}</template>
+                <template v-slot="actions" slot-scope="row">
                     <b-button variant="success">Редактировать</b-button>
                     <b-button variant="danger">Удалить</b-button>
                 </template>
@@ -58,15 +62,25 @@
         data() {
             return {
                 fields: [
-                    {key: 'id', label: 'ID', variant: 'primary'},
-                    {key: 'name', label: 'Название тематики', sortable: true, 'class': 'text-center'},
+                    {key:'checkbox_field', label:''},
+                    {key: 'id', label: 'ID'},
+                    {
+                        key: 'name',
+                        label: 'Название тематики',
+                        sortable: true,
+                        'class': 'text-center text-uppercase',
+                        variant: 'primary'
+                    },
                     {key: 'created_at', label: 'Дата создания'},
-                    {key: 'status', label: 'Активен'},
-                    {key: 'author', label: 'Автор'},
-                    {key: 'actions', label: 'Операции'},
+                    {
+                        key: 'status', label: 'Активен', formatter: value => {
+                            return value === 1 ? 'Да' : 'Нет'
+                        }
+                    },
+                    {key: 'username', label: 'Автор'},
                 ],
                 currentPage: 1,
-                perPage: 5,
+                perPage: 20,
                 pageOptions: [5, 10, 15],
                 sortBy: null,
                 sortDesc: false,
@@ -84,6 +98,11 @@
                     .map(f => {
                         return {text: f.label, value: f.key}
                     })
+            }
+        },
+        filters: {
+            uppercase(value) {
+                return 33
             }
         },
         methods: {
