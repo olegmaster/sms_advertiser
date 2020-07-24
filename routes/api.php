@@ -35,7 +35,7 @@ Route::group( ['namespace' => 'Api', 'prefix' => 'api'],function () {
             });
         });
 
-        //Без аутентификацию
+        //Без аутентификации
         //Соответсвует урл /api/settings/
         Route::group(['namespace' => 'Settings', 'prefix' => 'settings'], function () {
             //Соответсвует урл /api/settings/proxies

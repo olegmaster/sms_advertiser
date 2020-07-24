@@ -17,4 +17,7 @@ return [
 
     'advertisingCampaignsCount' => env('SEED_ADVERTISING_CAMPAIGNS_COUNT', 5),
 
+    //Settings
+    'proxiesCount' => 250,
+
 ];

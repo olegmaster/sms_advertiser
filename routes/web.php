@@ -43,9 +43,6 @@ Route::group( ['namespace' => 'Api', 'prefix' => 'api'],function () {
 //Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/{any}', 'SpaController@index')->name('spa')->where('any', '.*');;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Auth::routes();
 

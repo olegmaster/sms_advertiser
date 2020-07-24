@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Proxy;
+namespace App\Models\Settings\Proxies;
 
 use Illuminate\Database\Eloquent\Model;
 
