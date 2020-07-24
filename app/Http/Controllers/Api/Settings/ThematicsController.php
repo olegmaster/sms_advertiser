@@ -34,7 +34,8 @@ class ThematicsController extends Controller
      */
     public function create()
     {
-        echo 'create';die;
+        echo 'create';
+        die;
     }
 
     /**
@@ -77,7 +78,8 @@ class ThematicsController extends Controller
      */
     public function show($id)
     {
-        echo 'show';die;
+        echo 'show';
+        die;
     }
 
     /**
@@ -88,7 +90,8 @@ class ThematicsController extends Controller
      */
     public function edit($id)
     {
-        echo 'edit';die;
+        echo 'edit';
+        die;
     }
 
     /**
@@ -119,10 +122,14 @@ class ThematicsController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function destroy($id)
     {
-        echo 'destroy'; die;
+        if (Thematic::destroy($id)) {
+            return response()->json(['status' => true]);
+        } else {
+            return response()->json(['status' => false]);
+        }
     }
 }
