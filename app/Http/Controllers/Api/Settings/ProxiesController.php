@@ -50,6 +50,7 @@ class ProxiesController extends Controller
      * Установка статуса у прокси
      *
      * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function setStatus($id, Request $request)
@@ -82,6 +83,7 @@ class ProxiesController extends Controller
     /**
      * Установка статуса у многих проксей
      *
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function setMultiplyStatuses(Request $request)
@@ -166,10 +168,67 @@ class ProxiesController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
-        //
+        $proxy  = Proxies::find($id);
+
+        $jsonData = json_decode( $request->getContent(), true);
+
+
+        $return = array();
+        $return['errorCode'] = 0;
+        $return['message'] = '';
+        $return['data'] = array(
+        );
+
+        if (!$proxy) {
+            $return['errorCode'] = 1;
+            $return['message'] = 'Обект не найден';
+        }
+
+        if (!$jsonData || !isset($jsonData['value']) ) {
+            $return['errorCode'] = 2;
+            $return['message'] = 'Не пераданны необходимые данные';
+        }
+
+        $proxy->delete();
+
+        return response()->json($return);
+
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function destroyMultiply(Request $request)
+    {
+        $jsonData = json_decode( $request->getContent(), true);
+
+        $return = array();
+        $return['errorCode'] = 0;
+        $return['message'] = '';
+        $return['data'] = array(
+
+        );
+
+        if (!$jsonData || !isset($jsonData['value']) || !isset($jsonData['ids']) || !sizeof($jsonData['ids']) ) {
+            $return['errorCode'] = 2;
+            $return['message'] = 'Не пераданны необходимые данные';
+        }
+
+        Proxies::destroy($jsonData['ids']);
+
+
+        return response()->json($return);
+
+    }
+
+
+
 }

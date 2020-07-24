@@ -29,18 +29,28 @@ Route::group( ['namespace' => 'Api', 'prefix' => 'api'],function () {
         });
     });
 
-    //Без аутентификацию
+    //Без аутентификации
     //Соответсвует урл /api/settings/
     Route::group(['namespace' => 'Settings', 'prefix' => 'settings'], function () {
 
-        //Получение списка проксей /api/settings/proxies/
-        Route::get('proxies', 'ProxiesController@index' );
+        //Работа с проксями
+        Route::group(['prefix' => 'proxies'], function () {
 
-        //Активация деактивация прокси /api/settings/proxies/{id}/status/
-        Route::patch('proxies/{id}/status/', 'ProxiesController@setStatus' )->where('id', '[1-9][0-9]*');
+            //Получение списка проксей /api/settings/proxies/
+            Route::get('/', 'ProxiesController@index' );
 
-        //Активация деактивация многих проксей /api/settings/proxies/status/
-        Route::patch('proxies/status/', 'ProxiesController@setMultiplyStatuses' );
+            //Активация деактивация прокси /api/settings/proxies/{id}/status/
+            Route::patch('/{id}/status/', 'ProxiesController@setStatus' )->where('id', '[1-9][0-9]*');
+
+            //Активация деактивация многих проксей /api/settings/proxies/status/
+            Route::patch('/status/', 'ProxiesController@setMultiplyStatuses' );
+
+            //Удаление прокси /api/settings/proxies/{id}/
+            Route::delete('/{id}/', 'ProxiesController@destroy' )->where('id', '[1-9][0-9]*');
+
+            //Удаление проксей /api/settings/proxies/
+            Route::delete('/', 'ProxiesController@destroyMultiply' );
+        });
 
     });
 });
