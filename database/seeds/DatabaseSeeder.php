@@ -30,6 +30,8 @@ class DatabaseSeeder extends Seeder
         $this->call(ThematicsSeeder::class);
         $this->call(AdvertisingCampaignSeeder::class);
 
+        $this->call(ProxiesSeeder::class);
+
 
 
         //factory(\App\Models\User::class, 15)->create();

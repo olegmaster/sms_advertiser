@@ -52,6 +52,8 @@ Route::group( ['namespace' => 'Api', 'prefix' => 'api'],function () {
             Route::delete('/', 'ProxiesController@destroyMultiply' );
         });
 
+
+        Route::resource('thematics', 'ThematicsController' );
     });
 });
 
