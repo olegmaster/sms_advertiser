@@ -38,18 +38,17 @@
                                     <div class="menu-header-content"><h6 class="menu-header-title">Операции</h6></div>
                                 </div>
                             </div>
-                            <button type="button" tabindex="0" class="dropdown-item">Активировать</button>
+                            <button type="button" tabindex="0" class="dropdown-item" v-on:click="edit('activate')">Активировать</button>
                             <button type="button" tabindex="1" class="dropdown-item">Деактивировать</button>
-                            <button type="button" tabindex="2" class="dropdown-item">Проверить</button>
+                            <button type="button" tabindex="2" class="dropdown-item">Удалить</button>
                         </b-dropdown>
                     </div>
                     <div class="col-md-auto">
-                        <v-pagination v-model="page" @input="getProxies()" :length="pagesCount" :total-visible="10"></v-pagination>
                     </div>
                     <div class="col-md-auto">
                         <button type="button" class="btn-shadow d-inline-flex align-items-center btn btn-success">
                             <font-awesome-icon class="mr-2" icon="plus"/>
-                            Добавить прокси
+                            Добавить тематику
                         </button>
                     </div>
                 </div>
@@ -99,7 +98,7 @@
                 axios.post('/api/settings/thematics', {
                     name: this.new_thematics_name,
                 }).then(function (response) {
-                    if(response.data.status === 'ok') {
+                    if (response.data.status === 'ok') {
                         this.new_thematics_name = '';
                         console.log(response);
                         this.thematics.push(response.data.data)
@@ -116,11 +115,53 @@
             fetchThematics() {
                 return axios.get('/api/settings/thematics/').then(result => {
 
-                    this.thematics = result.data.data;
+                    let gotten_thematics = result.data.data
+
+                    for (let i in gotten_thematics)
+                        gotten_thematics[i].checked = false;
+
+                    this.thematics = gotten_thematics;
+
+                    console.log(this.thematics)
+
                     this.totalRows = this.thematics.length
                     this.tableIsBusy = false
                 });
             },
+            edit(type){
+
+                if(type === 'activate'){
+                    console.log(type)
+                    for (let i in this.thematics){
+                        if(this.thematics[i].checked && this.thematics[i].status === 0){
+                            this.updateItem(this.thematics[i].id, {
+                                'status': 1
+                            })
+                        }
+                    }
+                }
+                if(type === 'deactivate'){
+
+                    for (let i in this.thematics){
+                        if(this.thematics.checked ){
+                            this.updateItem(this.thematics[i].id, {
+                                'status': 0
+                            })
+                        }
+                    }
+                }
+            },
+            updateItem(id, data){
+                return axios.put('/api/settings/thematics/' + id, data).then(result => {
+                    if(result.data.status === 'success') {
+                        for (let i in this.thematics){
+                            if(this.thematics[i].id === id){
+                                this.thematics[i].status = 1
+                            }
+                        }
+                    }
+                });
+            }
         }
     }
 </script>

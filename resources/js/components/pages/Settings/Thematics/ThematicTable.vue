@@ -1,7 +1,18 @@
 <template>
     <div>
         <b-card title="" class="main-card mb-4">
-
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col">
+                        <b-button size="sm" class="mr-2 mb-2 btn-shadow btn-hover-shine btn-transition"
+                                  variant="primary" @click="selectAll()">
+                            Выбрать все
+                        </b-button>
+                    </div>
+                    <div class="col-md-auto">
+                    </div>
+                </div>
+            </div>
             <!-- Main table element -->
             <b-table striped hover show-empty bordered
                      stacked="md"
@@ -39,7 +50,7 @@
 
             <b-row v-if="totalRows > perPage">
                 <b-col md="6" class="my-1">
-                    <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="currentPage" class="my-0"/>
+                    <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="currentPage" v-on:change="unselect" class="my-0" />
                 </b-col>
             </b-row>
         </b-card>
@@ -62,14 +73,13 @@
         data() {
             return {
                 fields: [
-                    {key:'checkbox_field', label:''},
+                    {key: 'checkbox_field', label: ''},
                     {key: 'id', label: 'ID'},
                     {
                         key: 'name',
                         label: 'Название тематики',
                         sortable: true,
-                        'class': 'text-center text-uppercase',
-                        variant: 'primary'
+                        'class': 'text-center font-weight-bold',
                     },
                     {key: 'created_at', label: 'Дата создания'},
                     {
@@ -86,7 +96,8 @@
                 sortDesc: false,
                 sortDirection: 'asc',
                 filter: null,
-                modalInfo: {title: '', content: ''}
+                modalInfo: {title: '', content: ''},
+                allSelected: false,
             }
         },
 
@@ -105,6 +116,7 @@
                 return 33
             }
         },
+
         methods: {
             info(item, index, button) {
                 this.modalInfo.title = `Row index: ${index}`
@@ -119,6 +131,23 @@
                 // Trigger pagination to update the number of buttons/pages due to filtering
                 this.totalRows = filteredItems.length
                 this.currentPage = 1
+            },
+            selectAll() {
+                this.allSelected = !this.allSelected;
+                let start = (this.currentPage - 1) * this.perPage;
+                for (let i in this.thematics)
+                    this.thematics[i].checked = false;
+                for(let i = start; i < start + this.perPage; i++){
+                    this.thematics[i].checked = this.allSelected;
+                }
+
+                console.log(this.thematics)
+            },
+            unselect(){
+                this.allSelected = false;
+                for (let i in this.thematics)
+                    this.thematics[i].checked = false;
+                console.log(22)
             }
         }
     }

@@ -34,7 +34,7 @@ class ThematicsController extends Controller
      */
     public function create()
     {
-
+        echo 'create';die;
     }
 
     /**
@@ -77,7 +77,7 @@ class ThematicsController extends Controller
      */
     public function show($id)
     {
-        //
+        echo 'show';die;
     }
 
     /**
@@ -88,7 +88,7 @@ class ThematicsController extends Controller
      */
     public function edit($id)
     {
-        //
+        echo 'edit';die;
     }
 
     /**
@@ -96,11 +96,23 @@ class ThematicsController extends Controller
      *
      * @param Request $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function update(Request $request, $id)
     {
-        //
+        $item = Thematic::find($id);
+
+        if (empty($item)) {
+            return response()->json(['status' => false]);
+        }
+
+        $data = $request->all();
+        //print_r($data);die;
+        $item
+            ->fill($data)
+            ->save();
+
+        return response()->json(['status' => true]);
     }
 
     /**
@@ -111,6 +123,6 @@ class ThematicsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        echo 'destroy'; die;
     }
 }
