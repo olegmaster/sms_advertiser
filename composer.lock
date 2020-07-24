@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "beec42ec7904f3f0110e8bba63605e33",
+    "content-hash": "deb7b8a007be225c13d6556c51b40c9f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -161,6 +161,48 @@
             ],
             "description": "MySQL Partition extension for Laravel.",
             "time": "2020-06-10T13:22:19+00:00"
+        },
+        {
+            "name": "caouecs/laravel-lang",
+            "version": "7.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/caouecs/Laravel-lang.git",
+                "reference": "fe2872f7c2dd19afb11d83443a81ac9e8e4cb2b8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/caouecs/Laravel-lang/zipball/fe2872f7c2dd19afb11d83443a81ac9e8e4cb2b8",
+                "reference": "fe2872f7c2dd19afb11d83443a81ac9e8e4cb2b8",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*"
+            },
+            "suggest": {
+                "andrey-helldar/laravel-lang-publisher": "Easy installation and update of translation files for your project",
+                "arcanedev/laravel-lang": "Translations manager and checker for Laravel 5",
+                "overtrue/laravel-lang": "Command to add languages in your project"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "caouecs",
+                    "email": "caouecs@caouecs.net"
+                }
+            ],
+            "description": "Languages for Laravel",
+            "keywords": [
+                "lang",
+                "languages",
+                "laravel",
+                "lpm"
+            ],
+            "time": "2020-07-14T08:27:14+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",

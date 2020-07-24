@@ -59,8 +59,6 @@ class ThematicsController extends Controller
 
         $item = Thematic::where('name', $data['name'])->get();
 
-       // print_r(count($item) !== 0);die;
-
         if (count($item) !== 0) {
             return response()->json(['status' => false, 'message' => 'Такая тематика уже есть']);
         }
