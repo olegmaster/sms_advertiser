@@ -12,6 +12,18 @@
                       <b-button size="sm" class="mr-2 mb-2 btn-shadow btn-hover-shine btn-transition" variant="primary" @click="selectAll()">
                           Выбрать все
                       </b-button>
+                      <b-dropdown dropup no-flip text="Действия над выбранными" class="mb-2 mr-2" variant="primary" ref="dropdown0" :disabled="checkedItemsCount==0" >
+                          <div class="dropdown-menu-header">
+                              <div class="dropdown-menu-header-inner bg-secondary">
+                                  <div class="menu-header-image opacity-5 dd-header-bg-2"></div>
+                                  <div class="menu-header-content"><h6 class="menu-header-title">Действия</h6></div>
+                              </div>
+                          </div>
+                          <button type="button" tabindex="0" class="dropdown-item" @click="setProxiesStatus(null, 1)">Активировать</button>
+                          <button type="button" tabindex="1" class="dropdown-item" @click="setProxiesStatus(null, 0)">Деактивировать</button>
+                          <button type="button" tabindex="2" class="dropdown-item">Проверить</button>
+                      </b-dropdown>
+
                   </div>
                   <div class="col-md-auto">
                       <b-form-select v-model="itemsPerPage" :options="itemsPerPageOptions" @change="page = 1; getProxies()"></b-form-select>
@@ -27,7 +39,7 @@
 
             <template v-slot:cell(operations)="data">
 
-                <b-dropdown dropup no-flip text="Действия" class="mb-2 mr-2" variant="primary" block :ref="'dropdown'+data.item.id">
+                <b-dropdown dropup no-flip text="Действия" class="mb-2 mr-2" variant="primary" block :ref="'dropdown_'+data.item.id">
                     <div class="dropdown-menu-header">
                         <div class="dropdown-menu-header-inner bg-secondary">
                             <div class="menu-header-image opacity-5 dd-header-bg-2"></div>
@@ -60,7 +72,7 @@
           <div class="container-fluid">
               <div class="row">
                   <div class="col">
-                      <b-dropdown dropup no-flip text="Действия над выбранными" class="mb-2 mr-2" variant="primary" ref="dropdown" :disabled="checkedItemsCount==0" >
+                      <b-dropdown dropup no-flip text="Действия над выбранными" class="mb-2 mr-2" variant="primary" ref="dropdown1" :disabled="checkedItemsCount==0" >
                           <div class="dropdown-menu-header">
                               <div class="dropdown-menu-header-inner bg-secondary">
                                   <div class="menu-header-image opacity-5 dd-header-bg-2"></div>
@@ -201,9 +213,12 @@
         hideDropDown(id=null)
         {
             if (id)
-                this.$refs['dropdown'+id].hide(true);
-            else
-                this.$refs['dropdown'].hide(true);
+                this.$refs['dropdown_'+id].hide(true);
+            else {
+                this.$refs['dropdown0'].hide(true);
+                this.$refs['dropdown1'].hide(true);
+            }
+
         },
 
         selectAll()
