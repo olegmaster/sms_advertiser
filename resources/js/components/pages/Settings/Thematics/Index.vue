@@ -216,16 +216,25 @@
                         this.thematics.push(response.data.data)
                         this.totalRows += 1;
                         this.validation_status = 'success'
-
+                        this.thematic_validation = response.data.message
                     } else {
                         this.validation_status = 'error'
                     }
                     console.log(response);
-                    //this.new_thematics_name = '';
-                    this.thematic_validation = response.data.message
+
                 }.bind(this)).catch(function (error) {
-                    this.thematic_validation = 'Ошибка сервера'
-                    this.validation_status = 'error'
+                    if(error.response){
+                        // laravel automatically returns errors json with errors
+                        // in the case of validation failed in the object extending Illuminate\Foundation\Http\FormRequest
+                        // we get the errors array from the response
+                        const errors = error.response.data.errors
+                        // we can have errors from different DB table fields
+                        // here we get first error of the first field
+                        this.thematic_validation = errors[Object.keys(errors)[0]][0]
+                        // set validation status for the setting alert type of error or success or other
+                        this.validation_status = 'error'
+                    }
+
                 }.bind(this))
             },
             fetchThematics() {
@@ -238,7 +247,6 @@
                         let dateTime = gotten_thematics[i].created_at.split(' ');
                         gotten_thematics[i].created_at = dateTime[0]
                     }
-
 
                     this.thematics = gotten_thematics;
 
