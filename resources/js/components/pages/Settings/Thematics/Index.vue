@@ -56,6 +56,14 @@
                             </b-dropdown>
                         </div>
                         <div class="col-md-auto">
+                            <b-row v-if="totalRows > perPage">
+                                <b-col md="6" class="my-1">
+                                    <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="currentPage"
+                                                  v-on:change="unselect" class="my-0"/>
+                                </b-col>
+                            </b-row>
+                        </div>
+                        <div class="col-md-auto">
                             <button type="button" v-b-modal.add-thematics
                                     class="btn-shadow d-inline-flex align-items-center btn btn-success">
                                 <font-awesome-icon class="mr-2" icon="plus"/>
@@ -121,6 +129,7 @@
                             </b-dropdown>
 
                         </div>
+
                         <div class="col-md-auto">
                             <button type="button" v-b-modal.add-thematics
                                     class="btn-shadow d-inline-flex align-items-center btn btn-success">

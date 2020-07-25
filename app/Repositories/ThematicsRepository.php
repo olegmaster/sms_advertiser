@@ -4,6 +4,7 @@
 namespace App\Repositories;
 
 use App\Models\AdvertisingCampaign\Thematic as Model;
+use Illuminate\Support\Facades\DB;
 
 class ThematicsRepository extends CoreRepository
 {
@@ -12,12 +13,12 @@ class ThematicsRepository extends CoreRepository
      * @param int|null $pageSize
      * @return mixed
      */
-    public function getAllWithPaginate($pageSize = null)
+    public function getAllWithPaginate(int $pageSize = 10000)
     {
-        $fields = '*';
-
-        return $this->startConditions()
-            ->select($fields)
+        return DB::table('thematics')
+            ->leftJoin('users', 'thematics.user_id', '=', 'users.id')
+            ->select('thematics.*',
+                'users.name as username')
             ->paginate($pageSize);
     }
 

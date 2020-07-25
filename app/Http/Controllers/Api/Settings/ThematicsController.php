@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Settings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ThematicsCreateRequest;
 use App\Models\AdvertisingCampaign\Thematic;
+use App\Repositories\ThematicsRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,15 +16,12 @@ class ThematicsController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param ThematicsRepository $repository
      * @return JsonResponse
      */
-    public function index()
+    public function index(ThematicsRepository $repository)
     {
-        $result = DB::table('thematics')
-            ->leftJoin('users', 'thematics.user_id', '=', 'users.id')
-            ->select('thematics.*',
-                'users.name as username')
-            ->paginate(10000);
+        $result = $repository->getAllWithPaginate();
         return response()->json($result);
     }
 
@@ -47,11 +45,6 @@ class ThematicsController extends Controller
     public function store(ThematicsCreateRequest $request)
     {
         $data = $request->input();
-        if (!isset($data['status'])) {
-            $data['status'] = 1;
-        }
-
-        $data['user_id'] = Auth::id() ?? 1;
 
         $item = (new Thematic())->create($data);
 
@@ -65,7 +58,7 @@ class ThematicsController extends Controller
                 'message' => __('messages.thematics_created')
             ]);
         } else {
-            return response()->json(['status' => false, 'message' => 'не удалось создать тематику']);
+            return response()->json(['status' => false, 'message' => __('messages.thematics_creation_failed')]);
         }
     }
 
@@ -105,7 +98,7 @@ class ThematicsController extends Controller
         $item = Thematic::find($id);
 
         if (empty($item)) {
-            return response()->json(['status' => false]);
+            return response()->json(['status' => false, 'message' => __('messages.thematics_updating_failed')]);
         }
 
         $data = $request->all();
@@ -114,7 +107,7 @@ class ThematicsController extends Controller
             ->fill($data)
             ->save();
 
-        return response()->json(['status' => true]);
+        return response()->json(['status' => true, 'message' => __('messages.thematics_updated_successfully')]);
     }
 
     /**
