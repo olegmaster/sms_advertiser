@@ -3,14 +3,14 @@
     <div>
 
         <b-modal hide-backdrop content-class="shadow" ok-title="Создать" cancel-title="Отмена" id="add-thematics"
-                 title="Создать тематику" onsubmit="alert()">
+                 title="Создать тематику" >
 
             <div class="d-block text-center">
                 <b-alert v-if="validation_status === 'success'" show variant="success">{{thematic_validation}}</b-alert>
                 <b-alert v-if="validation_status === 'error'" show variant="danger">{{thematic_validation}}</b-alert>
-                <p v-if="!validation_status">Название тематики</p>
 
-                <b-form-input v-model="new_thematics_name"/>
+                <h5 v-if="!validation_status">Название тематики</h5>
+                <b-form-input v-model="new_thematics_name" autofocus/>
             </div>
             <template v-slot:modal-footer>
                 <div class="w-100">
