@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\Api\Settings;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\ThematicsCreateRequest;
 use App\Models\AdvertisingCampaign\Thematic;
 use App\Repositories\ThematicsRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
-class ThematicsController extends Controller
+
+class ThematicsController extends BaseController
 {
     /**
      * Display a listing of the resource.
