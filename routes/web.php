@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::group( ['namespace' => 'Api', 'prefix' => 'api'],function () {
 
     //Используют аутентификацию
-    //Соответсвует урл /api/settings
+    // Соответсвует урл /api/settings
     Route::group(['middleware' => 'auth:api', 'namespace' => 'Settings', 'prefix' => 'settings'], function () {
         //Соответсвует урл /api/settings/ppc
         Route::get('ppc', function (){
