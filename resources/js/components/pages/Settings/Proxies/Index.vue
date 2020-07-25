@@ -98,7 +98,7 @@
                       </b-dropdown>
                   </div>
                   <div class="col-md-auto">
-                      <button type="button" v-b-modal.modal-add-proxy class="btn-shadow d-inline-flex align-items-center btn btn-success">
+                      <button type="button" @click="showAddProxiesModal=true" class="btn-shadow d-inline-flex align-items-center btn btn-success">
                           <font-awesome-icon class="mr-2" icon="plus"/>
                           Добавить прокси
                       </button>
@@ -116,14 +116,7 @@
 
     </b-card>
 
-    <b-modal id="modal-add-proxy" hide-backdrop  title="Добавить прокси" >
-      <p class="my-4">Vertically centered modal!</p>
-        <b-form-group label="Individual radios">
-            <b-form-radio v-model="selected" name="some-radios" value="A">Option A</b-form-radio>
-            <b-form-radio v-model="selected" name="some-radios" value="B">Option B</b-form-radio>
-        </b-form-group>
-    </b-modal>
-
+    <add-proxies-modal v-model="showAddProxiesModal"></add-proxies-modal>
 
   </div>
 </template>
