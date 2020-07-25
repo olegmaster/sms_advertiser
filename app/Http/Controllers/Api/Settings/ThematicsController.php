@@ -23,16 +23,6 @@ class ThematicsController extends BaseController
         return response()->json($result);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        echo 'create';
-        die;
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -60,29 +50,6 @@ class ThematicsController extends BaseController
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        echo 'show';
-        die;
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        echo 'edit';
-        die;
-    }
 
     /**
      * Update the specified resource in storage.
