@@ -75,7 +75,8 @@ class ProxiesController extends Controller
             $return['message'] = 'Не пераданны необходимые данные';
         }
 
-        $proxy->update(['status' => $jsonData['value']]);
+        if (!$return['errorCode'])
+            $proxy->update(['status' => $jsonData['value']]);
 
         return response()->json($return);
     }
@@ -102,7 +103,8 @@ class ProxiesController extends Controller
             $return['message'] = 'Не пераданны необходимые данные';
         }
 
-        Proxies::whereIn('id', $jsonData['ids'])->update(array('status' => $jsonData['value']));
+        if (!$return['errorCode'])
+            Proxies::whereIn('id', $jsonData['ids'])->update(array('status' => $jsonData['value']));
 
 
         return response()->json($return);
@@ -112,11 +114,13 @@ class ProxiesController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+
+
     }
 
     /**
@@ -127,7 +131,44 @@ class ProxiesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $jsonData = json_decode( $request->all()['proxies'], true);
+        $return = array();
+        $return['errorCode'] = 0;
+        $return['message'] = '';
+        $dataForInsert = array();
+
+        //Если это из списка
+        if ($jsonData['source_type'] == 1)
+            $proxiesStr = $jsonData['proxies'];
+        else {
+            // Если это из файла
+            $file = $request->file('file');
+            $proxiesStr = file_get_contents($file->getRealPath());
+        }
+        $proxies = array_map('trim', explode("\n", $proxiesStr ));
+
+        foreach ( $proxies as $proxy_str ) {
+            if ( preg_match('`(?:(http|socks4|socks5)://)?(?:([\w_\-][\w\d_\-]*):([\w\-_][\w\d\-_]*)@)?((?:\d{1,3}.){3}.\d{1,3}):(\d{2,5})`si',$proxy_str, $proxy) ) {
+                $dataForInsert[] = array(
+                    'type' => empty($proxy[1]) ? $jsonData['type'] : Proxies::PROXY_TYPES[$proxy[1]],
+                    'ip' => $proxy[4],
+                    'port' => $proxy[5],
+                    'login' => $proxy[2],
+                    'password' => $proxy[3],
+                    'status' => 1,
+                    'is_banned' => 0,
+                    'busy_by_task_id' => 0,
+                    'last_checked_status' => '',
+                    'check_state' => 0
+                );
+            }
+        }
+
+        Proxies::insert($dataForInsert);
+
+        $return['data'] = array(
+        );
+        return response()->json($return);
     }
 
     /**
@@ -161,7 +202,27 @@ class ProxiesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $jsonData = json_decode( $request->getContent(), true);
+
+        $proxy  = Proxies::find($id);
+
+        $return = array();
+        $return['errorCode'] = 0;
+        $return['message'] = '';
+        $return['data'] = array(
+        'json' => $jsonData
+        );
+
+        if (!$proxy) {
+            $return['errorCode'] = 1;
+            $return['message'] = 'Обект не найден';
+        }
+
+        if (!$return['errorCode'])
+            $proxy->update($jsonData);
+
+        return response()->json($return);
+
     }
 
     /**
@@ -194,7 +255,8 @@ class ProxiesController extends Controller
             $return['message'] = 'Не пераданны необходимые данные';
         }
 
-        $proxy->delete();
+        if (!$return['errorCode'])
+            $proxy->delete();
 
         return response()->json($return);
 
@@ -222,7 +284,8 @@ class ProxiesController extends Controller
             $return['message'] = 'Не пераданны необходимые данные';
         }
 
-        Proxies::destroy($jsonData['ids']);
+        if (!$return['errorCode'])
+            Proxies::destroy($jsonData['ids']);
 
 
         return response()->json($return);

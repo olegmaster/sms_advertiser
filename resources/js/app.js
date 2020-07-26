@@ -35,6 +35,8 @@ const app = new Vue({
 import Vue from 'vue';
 import './plugins/vuetify';
 import router from './router';
+import Vuelidate from 'vuelidate'
+
 
 import BootstrapVue from "bootstrap-vue";
 
@@ -47,6 +49,7 @@ import Apps from './Layout/Wrappers/appLayout.vue';
 
 Vue.config.productionTip = false;
 
+Vue.use(Vuelidate);
 Vue.use(BootstrapVue);
 Vue.use(require('vue-cookies'));
 

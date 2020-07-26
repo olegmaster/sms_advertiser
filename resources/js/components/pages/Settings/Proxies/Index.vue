@@ -21,8 +21,8 @@
                           </div>
                           <button type="button" tabindex="0" class="dropdown-item" @click="setProxiesStatus(null, 1)">Активировать</button>
                           <button type="button" tabindex="1" class="dropdown-item" @click="setProxiesStatus(null, 0)">Деактивировать</button>
-                          <button type="button" tabindex="2" class="dropdown-item" @click="onDeleteProxies()">Удалить</button>
                           <button type="button" tabindex="2" class="dropdown-item">Проверить</button>
+                          <button type="button" tabindex="2" class="dropdown-item text-danger" @click="onDeleteProxies()">Удалить</button>
                       </b-dropdown>
                   </div>
                   <div class="col" align="left">
@@ -48,6 +48,16 @@
                 <b-form-checkbox v-model="data.item.checked"></b-form-checkbox>
             </template>
 
+            <template v-slot:cell(status)="data">
+                <div v-show="data.item.status==1" class="text-success">Да</div>
+                <div v-show="data.item.status==0" class="text-danger">Нет</div>
+            </template>
+
+            <template v-slot:cell(is_banned)="data">
+                <div v-show="data.item.is_banned==1" class="text-danger">Да</div>
+                <div v-show="data.item.is_banned==0" class="text-success">Нет</div>
+            </template>
+
             <template v-slot:cell(operations)="data">
 
                 <b-dropdown dropup no-flip text="Действия" class="mb-2 mr-2" variant="primary" block :ref="'dropdown_'+data.item.id">
@@ -59,8 +69,9 @@
                     </div>
                     <button type="button" tabindex="0" class="dropdown-item" v-show="data.item.status==0" @click="setProxiesStatus(data.item.id, 1)">Активировать</button>
                     <button type="button" tabindex="1" class="dropdown-item" v-show="data.item.status==1" @click="setProxiesStatus(data.item.id, 0)">Деактивировать</button>
-                    <button type="button" tabindex="1" class="dropdown-item" @click="onDeleteProxies(data.item.id, 0)">Удалить</button>
                     <button type="button" tabindex="2" class="dropdown-item" v-show="data.item.check_state==0">Проверить</button>
+                    <button type="button" tabindex="1" class="dropdown-item text-primary" @click="onEditProxy(data.item)">Редактировать</button>
+                    <button type="button" tabindex="1" class="dropdown-item text-danger" @click="onDeleteProxies(data.item.id, 0)">Удалить</button>
                 </b-dropdown>
 
             </template>
@@ -68,6 +79,7 @@
 
             <template v-slot:table-colgroup="scope">
                 <col :style="{ width: '25px'}">
+                <col>
                 <col>
                 <col>
                 <col>
@@ -84,6 +96,10 @@
           <div class="container-fluid">
               <div class="row">
                   <div class="col-md-auto">
+                      <b-button size="sm" class="mr-2 mb-2 btn-shadow btn-hover-shine btn-transition" variant="primary" @click="selectAll()">
+                          Выбрать все
+                      </b-button>
+
                       <b-dropdown dropup no-flip text="Действия над выбранными" class="mb-2 mr-2" variant="primary" ref="dropdown1" :disabled="checkedItemsCount==0" >
                           <div class="dropdown-menu-header">
                               <div class="dropdown-menu-header-inner bg-secondary">
@@ -93,12 +109,12 @@
                           </div>
                           <button type="button" tabindex="0" class="dropdown-item" @click="setProxiesStatus(null, 1)">Активировать</button>
                           <button type="button" tabindex="1" class="dropdown-item" @click="setProxiesStatus(null, 0)">Деактивировать</button>
-                          <button type="button" tabindex="2" class="dropdown-item" @click="onDeleteProxies()">Удалить</button>
                           <button type="button" tabindex="2" class="dropdown-item">Проверить</button>
+                          <button type="button" tabindex="2" class="dropdown-item text-danger" @click="onDeleteProxies()">Удалить</button>
                       </b-dropdown>
                   </div>
                   <div class="col-md-auto">
-                      <button type="button" v-b-modal.modal-add-proxy class="btn-shadow d-inline-flex align-items-center btn btn-success">
+                      <button type="button" @click="showAddProxiesModal=true" class="btn-shadow d-inline-flex align-items-center btn btn-success">
                           <font-awesome-icon class="mr-2" icon="plus"/>
                           Добавить прокси
                       </button>
@@ -116,14 +132,8 @@
 
     </b-card>
 
-    <b-modal id="modal-add-proxy" hide-backdrop  title="Добавить прокси" >
-      <p class="my-4">Vertically centered modal!</p>
-        <b-form-group label="Individual radios">
-            <b-form-radio v-model="selected" name="some-radios" value="A">Option A</b-form-radio>
-            <b-form-radio v-model="selected" name="some-radios" value="B">Option B</b-form-radio>
-        </b-form-group>
-    </b-modal>
-
+    <add-proxies-modal v-model="showAddProxiesModal" @add-success="getProxies()"></add-proxies-modal>
+    <edit-proxy-modal v-model="showEditProxyModal" :proxy="proxyToEdit" @edit-success="getProxies()"></edit-proxy-modal>
 
   </div>
 </template>
@@ -138,13 +148,15 @@
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
   library.add( faStar, faPlus );
   import AddProxiesModal from "./modals/AddProxiesModal";
+  import EditProxyModal from "./modals/EditProxyModal";
   export default {
     components: {
         PageTitle,
         VueElementLoading,
         vSelect,
         'font-awesome-icon': FontAwesomeIcon,
-        AddProxiesModal
+        AddProxiesModal,
+        EditProxyModal
     },
     data: () => ({
         heading: 'Настройки',
@@ -156,6 +168,7 @@
             {key:'type', label:'Тип'},
             {key:'ip', label:'IP'},
             {key:'port', label:'Порт'},
+            {key:'login', label:'login'},
             {key:'password', label:'password'},
             {key:'status', label:'Активный'},
             {key:'busy_by_task_id', label:'Занят под задание'},
@@ -178,7 +191,16 @@
         page: 1,
         pagesCount :1,
         itemsTotalCount : 0,
-        showAddProxiesModal: false
+        showAddProxiesModal: false,
+        showEditProxyModal: false,
+        proxyToEdit : {
+            id: null,
+            ip: '',
+            port:'',
+            login: '',
+            password:'',
+            type:0
+        }
     }),
     computed: {
           checkedItemsCount() {
@@ -301,7 +323,8 @@
                 headerClass: 'p-2 border-bottom-0',
                 footerClass: 'p-2 border-top-0',
                 centered: false,
-                hideBackdrop : true
+                hideBackdrop : true,
+                noCloseOnBackdrop: true
             })
                 .then(value => {
                     if ( value )
@@ -311,19 +334,19 @@
 
                 })
         },
-        showMsgBoxTwo() {
-
-        },
-        onDeleteCancel()
+        onEditProxy(proxy)
         {
+            this.proxyToEdit = proxy;/*
+            this.proxyToEdit.id = proxy.id;
+            this.proxyToEdit.ip = proxy.ip;
+            this.proxyToEdit.port = proxy.port;
+            this.proxyToEdit.login = proxy.login;
+            this.proxyToEdit.password = proxy.password;
+            this.proxyToEdit.type = proxy.type; */
 
-        },
-        onDeleteOK()
-        {
-
+            console.log( 'edit', this.proxyToEdit );
+            this.showEditProxyModal = true;
         }
-
-
     },
     watch: {
         itemsPerPage : function(val)
