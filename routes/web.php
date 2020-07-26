@@ -71,17 +71,3 @@ Route::get('/{any}', 'SpaController@index')->name('spa')->where('any', '.*');;
 
 Auth::routes();
 
-
-$groupData = [
-    'namespace' => 'Settings\Thematics',
-    'prefix' => 'settings'
-];
-
-Route::group($groupData, function () {
-
-    // Settings thematics
-    Route::resource('thematics', 'ThematicsController')
-        ->names('settings.thematics');
-
-
-});
