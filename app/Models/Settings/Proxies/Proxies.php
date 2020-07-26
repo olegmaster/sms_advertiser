@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model,
 
 class Proxies extends Model
 {
+    const PROXY_TYPES = array(
+        'http' => 0,
+        'socks4' => 1,
+        'socks5' => 2,
+    );
     protected $table = 'proxies';
     protected $fillable = ['status'];
 

@@ -50,6 +50,10 @@ Route::group( ['namespace' => 'Api', 'prefix' => 'api'],function () {
 
             //Удаление проксей /api/settings/proxies/
             Route::delete('/', 'ProxiesController@destroyMultiply' );
+
+            //Добавление проксей /api/settings/proxies/
+            Route::post('/', 'ProxiesController@create' );
+
         });
 
     });

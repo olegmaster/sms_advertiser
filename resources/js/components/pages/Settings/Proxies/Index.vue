@@ -116,7 +116,7 @@
 
     </b-card>
 
-    <add-proxies-modal v-model="showAddProxiesModal"></add-proxies-modal>
+    <add-proxies-modal v-model="showAddProxiesModal" @add-success="getProxies()"></add-proxies-modal>
 
   </div>
 </template>

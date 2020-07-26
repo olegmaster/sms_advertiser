@@ -1,12 +1,26 @@
 <template>
-    <b-modal v-model="showModal" hide-backdrop  title="Добавить прокси" @show="resetModal" @hidden="resetModal" @ok="handleOk" >
-        <form ref="addProxyModal" @submit.stop.prevent="handleSubmit">
+    <b-modal
+            id="addProxyModal"
+            v-model="showModal"
+            hide-backdrop
+            no-close-on-backdrop
+            title="Добавить прокси"
+            @show="resetModal"
+            @hidden="resetModal"
+            @ok="handleOk"
+            :ok-disabled="isLoading"
+            :cancel-disabled="isLoading"
+            :hide-header-close="isLoading"
+            :no-close-on-esc="isLoading"
+    >
+        <form ref="addProxyForm" @submit.stop.prevent="handleSubmit">
+            <VueElementLoading :active="isLoading" spinner="bar-fade-scale" color="var(--primary)"/>
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-auto">
                         <b-form-group label="Тип прокси">
                             <b-form-radio-group
-                                    v-model="form.type"
+                                    v-model="$v.form.type.$model"
                                     :options="radioOptions1"
                                     name="radios-stacked"
                                     stacked
@@ -16,16 +30,27 @@
                     <div class="col-sm-auto">
                         <b-form-group label="Добавить из:">
                             <b-form-radio-group @change=""
-                                    v-model="form.source_type"
+                                    v-model="$v.form.source_type.$model"
                                     :options="radioOptions2"
                                     name="radios-stacked2"
                                     stacked
                             ></b-form-radio-group>
                         </b-form-group>
                     </div>
-                    <div class="col-sm-auto">
-                        <b-form-group label="Small:" label-for="file-small" label-cols-sm="2" label-size="sm">
-                            <b-form-file id="file-small" size="sm" accept=".txt"></b-form-file>
+                    <div class="col-sm-6">
+                        <b-form-group
+                                :disabled="form.source_type === 1"
+                                invalid-feedback="Выберите файл с расширением txt"
+                                :state="!$v.form.file.$dirty || form.source_type === 1 ? null : !$v.form.file.$invalid"
+                        >
+                            <b-form-file
+                                    v-model="$v.form.file.$model"
+                                    placeholder="Выберите файл"
+                                    browse-text="Обзор"
+                                    size="sm"
+                                    accept=".txt"
+                                    :state="!$v.form.file.$dirty || form.source_type === 1 ? null : !$v.form.file.$invalid"
+                            ></b-form-file>
                         </b-form-group>
                     </div>
                 </div>
@@ -37,11 +62,11 @@
                                 label-for="proxies"
                                 :disabled="form.source_type === 0"
                                 :invalid-feedback="invalidFeedback"
-                                :state="formCheckedFields.proxies"
+                                :state="!$v.form.proxies.$dirty || form.source_type === 0 ? null : !$v.form.proxies.$invalid"
                         >
                             <b-form-textarea
-                                    v-model="form.proxies"
-                                    :state="formCheckedFields.proxies"
+                                    v-model="$v.form.proxies.$model"
+                                    :state="!$v.form.proxies.$dirty || form.source_type === 0 ? null : !$v.form.proxies.$invalid"
                                     id="proxies"
                                     placeholder="Введите прокси, каждая новая прокси с новой строки"
                                     rows="5"
@@ -74,6 +99,16 @@
 <script>
 
   import VueElementLoading from 'vue-element-loading'
+  import { validationMixin } from "vuelidate";
+  import { required, requiredIf, helpers, minLength } from "vuelidate/lib/validators";
+  const validProxyRegExp = new RegExp(/^(?:(http|socks4|socks5):\/\/)?(?:[\w_-][\w\d_-]*:[\w-_][\w\d-_]*@)?(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?):\d{2,5}$/i);
+  const validFileName = new RegExp(/\.txt$/i);
+  const validProxy = (proxy) => validProxyRegExp.test(proxy.trim());
+  const checkProxy = (proxies) =>(proxies.split('\n').map( v => (v.trim().length > 0) ? validProxy(v.trim()) : true )).indexOf(false);
+
+  //Валидаторы
+  const proxyValidator = (proxies) => !helpers.req(proxies) || (checkProxy(proxies) == -1);
+  const fileValidator = (file) => !helpers.req(file) || validFileName.test(file.name);
 
 
 export default {
@@ -85,14 +120,7 @@ export default {
     data: function () {
         return {
             showModal : false,
-            dict : {
-              sample : 'каждый прокси с новой строки<br>' +
-                  '<br>Формат: [ (http|socks4|socks4):// ] [ login:password@ ]IP:PORT' +
-                  'Пример:<br>' +
-                  '1)  http://pasha:pass@192.168.1.12:3128<br>' +
-                  '2)  socks4://pasha:pass@192.168.1.12:1080<br>' +
-                  '3)  socks5://192.168.1.12:1080'
-            },
+            isLoading : false,
             radioOptions1 :[
                 { text: 'HTTP', value: 0 },
                 { text: 'Socks4', value: 1 },
@@ -105,83 +133,97 @@ export default {
             form: {
                 type: 0,
                 source_type : 0,
+                file: null,
                 proxies : ''
-            },
-            formIsCorrect : null,
-            validProxyRegExp : new RegExp(/^(?:(http|socks4|socks5):\/\/)?(?:[\w_-][\w\d_-]*:[\w-_][\w\d-_]*@)?(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?):\d{2,5}$/i),
-            formCheckedFields : {
-                proxies : false
             }
         };
+    },
+    validations: {
+        form: {
+            type: {
+                required
+            },
+            source_type: {
+                required
+            },
+            file: {
+                required : requiredIf(function(){ return this.form.source_type == 0}),
+                fileValidator
+            },
+            proxies: {
+                required : requiredIf(function() { return this.form.source_type == 1}),
+                proxyValidator,
+                minLength: 10
+            }
+        }
     },
     computed: {
         invalidFeedback() {
             if (this.form.source_type != 1 )
-            {
-                this.formCheckedFields.proxies = null;
                 return '';
-            }
 
             if (this.form.proxies.trim().length > 0)
             {
-                let divided = this.form.proxies.split('\n').map( v => (v.trim().length > 0) ? this.checkForValidProxy(v.trim()) : true );
-                let wrongProxyRow = divided.indexOf(false);
-                this.formCheckedFields.proxies = (wrongProxyRow == -1);
-                console.log(this.formCheckedFields.proxies);
-
-                return 'Заполните список прокси в правильном формате' + (wrongProxyRow >= 0 ? ', строка ' + (wrongProxyRow +1 ) : '');
-            } else {
-                //this.formCheckedFields.proxies = false;
+                let wrongProxyRow = checkProxy(this.form.proxies);
+                return 'Заполните список прокси в правильном формате' + (wrongProxyRow >= 0 ? ', ошибка в строке ' + (wrongProxyRow +1 ) : '');
+            } else
                 return 'Заполните список прокси'
-            }
         }
     },
     methods: {
-        formAllFieldsIsValid(){
-            return Object.values(this.formCheckedFields).filter(v=>!v).length == 0;
-        },
-        checkFormValidity()
-        {
-            const valid = this.$refs['addProxyModal'].checkValidity()
-            this.invalidFeedback;
-            this.formIsCorrect = valid && this.formAllFieldsIsValid();
-            console.log(this.formCheckedFields, this.formIsCorrect);
-            return valid
-        },
         resetModal()
         {
+            this.form.type = 0;
+            this.form.source_type = 0;
+            this.form.file = null;
             this.form.proxies = '';
-            this.formCheckedFields.proxies = null;
-            this.formIsCorrect = null
+            this.$v.$reset();
         },
         handleOk(bvModalEvt)
         {
-            // Prevent modal from closing
             bvModalEvt.preventDefault()
-            // Trigger submit handler
             this.handleSubmit()
         },
         handleSubmit()
         {
-            // Exit when the form isn't valid
-            if (!this.checkFormValidity()) {
-                return
+            this.$v.form.$touch();
+            if (this.$v.form.$anyError) {
+                return;
             }
-            // Push the name to submitted names
-            //this.submittedNames.push(this.name)
-            // Hide the modal manually
-            this.$nextTick(() => {
-                this.$bvModal.hide('modal-prevent-closing')
-            })
+
+            this.addProxies();
         },
-        checkForValidProxy(proxy) {
-            return this.validProxyRegExp.test(proxy.trim());
+        addProxies()
+        {
+            let vm = this;
+            this.isLoading = true;
+            let formData = new FormData();
+            if ( !this.form.source_type )
+                formData.append('file', this.form.file, this.form.file.name );
+            formData.append('proxies', JSON.stringify(this.form) );
+
+            let url = '/api/settings/proxies/';
+            axios.post(url, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then( response => {
+                if (!response.data.errorCode )
+                {
+                    this.$emit('add-success');
+                }
+                vm.isLoading = false;
+                this.showModal = false;
+            }).catch( responce => {
+                vm.isLoading = false;
+            });
         }
     },
     watch: {
         value: function (val) {
             this.showModal = val;
             this.$emit('input', val );
+
         },
         showModal: function (val) {
             this.$emit('input', val );
