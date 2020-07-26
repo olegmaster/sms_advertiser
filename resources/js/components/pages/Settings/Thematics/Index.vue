@@ -89,7 +89,7 @@
                     <template v-slot:cell(checkbox_field)="data">
                         <b-form-checkbox v-model="data.item.checked"></b-form-checkbox>
                     </template>
-                    <template v-slot:table-busy>
+                    <template slot:table-busy>
                         <div class="text-center text-danger my-2">
                             <b-spinner class="align-middle"></b-spinner>
                             <strong>Загрузка...</strong>
@@ -100,7 +100,7 @@
                     <template slot="created_at" slot-scope="row">{{row.created_at}}</template>
                     <template slot="status" slot-scope="row">Hello World</template>
                     <template slot="username" slot-scope="row">{{row.username}}</template>
-                    <template v-slot="actions" slot-scope="row">
+                    <template slot="actions" slot-scope="row">
                         <b-button variant="success">Редактировать</b-button>
                         <b-button variant="danger">Удалить</b-button>
                     </template>
