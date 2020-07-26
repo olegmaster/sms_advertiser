@@ -75,7 +75,8 @@ class ProxiesController extends Controller
             $return['message'] = 'Не пераданны необходимые данные';
         }
 
-        $proxy->update(['status' => $jsonData['value']]);
+        if (!$return['errorCode'])
+            $proxy->update(['status' => $jsonData['value']]);
 
         return response()->json($return);
     }
@@ -102,7 +103,8 @@ class ProxiesController extends Controller
             $return['message'] = 'Не пераданны необходимые данные';
         }
 
-        Proxies::whereIn('id', $jsonData['ids'])->update(array('status' => $jsonData['value']));
+        if (!$return['errorCode'])
+            Proxies::whereIn('id', $jsonData['ids'])->update(array('status' => $jsonData['value']));
 
 
         return response()->json($return);
@@ -216,7 +218,8 @@ class ProxiesController extends Controller
             $return['message'] = 'Обект не найден';
         }
 
-        $proxy->update($jsonData);
+        if (!$return['errorCode'])
+            $proxy->update($jsonData);
 
         return response()->json($return);
 
@@ -252,7 +255,8 @@ class ProxiesController extends Controller
             $return['message'] = 'Не пераданны необходимые данные';
         }
 
-        $proxy->delete();
+        if (!$return['errorCode'])
+            $proxy->delete();
 
         return response()->json($return);
 
@@ -280,7 +284,8 @@ class ProxiesController extends Controller
             $return['message'] = 'Не пераданны необходимые данные';
         }
 
-        Proxies::destroy($jsonData['ids']);
+        if (!$return['errorCode'])
+            Proxies::destroy($jsonData['ids']);
 
 
         return response()->json($return);
