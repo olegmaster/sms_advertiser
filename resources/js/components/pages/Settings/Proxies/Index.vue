@@ -70,7 +70,7 @@
                     <button type="button" tabindex="0" class="dropdown-item" v-show="data.item.status==0" @click="setProxiesStatus(data.item.id, 1)">Активировать</button>
                     <button type="button" tabindex="1" class="dropdown-item" v-show="data.item.status==1" @click="setProxiesStatus(data.item.id, 0)">Деактивировать</button>
                     <button type="button" tabindex="2" class="dropdown-item" v-show="data.item.check_state==0">Проверить</button>
-                    <button type="button" tabindex="1" class="dropdown-item text-primary" @click="onEditProxy(data.item.id, 0)">Редактировать</button>
+                    <button type="button" tabindex="1" class="dropdown-item text-primary" @click="onEditProxy(data.item)">Редактировать</button>
                     <button type="button" tabindex="1" class="dropdown-item text-danger" @click="onDeleteProxies(data.item.id, 0)">Удалить</button>
                 </b-dropdown>
 
@@ -133,6 +133,7 @@
     </b-card>
 
     <add-proxies-modal v-model="showAddProxiesModal" @add-success="getProxies()"></add-proxies-modal>
+    <edit-proxy-modal v-model="showEditProxyModal" :proxy="proxyToEdit" @edit-success="getProxies()"></edit-proxy-modal>
 
   </div>
 </template>
@@ -147,13 +148,15 @@
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
   library.add( faStar, faPlus );
   import AddProxiesModal from "./modals/AddProxiesModal";
+  import EditProxyModal from "./modals/EditProxyModal";
   export default {
     components: {
         PageTitle,
         VueElementLoading,
         vSelect,
         'font-awesome-icon': FontAwesomeIcon,
-        AddProxiesModal
+        AddProxiesModal,
+        EditProxyModal
     },
     data: () => ({
         heading: 'Настройки',
@@ -188,7 +191,16 @@
         page: 1,
         pagesCount :1,
         itemsTotalCount : 0,
-        showAddProxiesModal: false
+        showAddProxiesModal: false,
+        showEditProxyModal: false,
+        proxyToEdit : {
+            id: null,
+            ip: '',
+            port:'',
+            login: '',
+            password:'',
+            type:0
+        }
     }),
     computed: {
           checkedItemsCount() {
@@ -322,19 +334,19 @@
 
                 })
         },
-        showMsgBoxTwo() {
-
-        },
-        onDeleteCancel()
+        onEditProxy(proxy)
         {
+            this.proxyToEdit = proxy;/*
+            this.proxyToEdit.id = proxy.id;
+            this.proxyToEdit.ip = proxy.ip;
+            this.proxyToEdit.port = proxy.port;
+            this.proxyToEdit.login = proxy.login;
+            this.proxyToEdit.password = proxy.password;
+            this.proxyToEdit.type = proxy.type; */
 
-        },
-        onDeleteOK()
-        {
-
+            console.log( 'edit', this.proxyToEdit );
+            this.showEditProxyModal = true;
         }
-
-
     },
     watch: {
         itemsPerPage : function(val)

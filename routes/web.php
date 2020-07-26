@@ -52,7 +52,10 @@ Route::group( ['namespace' => 'Api', 'prefix' => 'api'],function () {
             Route::delete('/', 'ProxiesController@destroyMultiply' );
 
             //Добавление проксей /api/settings/proxies/
-            Route::post('/', 'ProxiesController@create' );
+            Route::post('/', 'ProxiesController@store' );
+
+            //Обновление прокси /api/settings/proxies/{id}/
+            Route::put('/{id}/', 'ProxiesController@update' )->where('id', '[1-9][0-9]*');
 
         });
 

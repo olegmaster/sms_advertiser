@@ -13,7 +13,7 @@ class Proxies extends Model
         'socks5' => 2,
     );
     protected $table = 'proxies';
-    protected $fillable = ['status'];
+    protected $fillable = ['ip', 'port', 'login', 'password', 'type', 'status'];
 
     public function newEloquentBuilder($query)
     {

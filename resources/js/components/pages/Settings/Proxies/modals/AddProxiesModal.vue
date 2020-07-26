@@ -1,6 +1,5 @@
 <template>
     <b-modal
-            id="addProxyModal"
             v-model="showModal"
             hide-backdrop
             no-close-on-backdrop
@@ -13,7 +12,7 @@
             :hide-header-close="isLoading"
             :no-close-on-esc="isLoading"
     >
-        <form ref="addProxyForm" @submit.stop.prevent="handleSubmit">
+        <form @submit.stop.prevent="handleSubmit">
             <VueElementLoading :active="isLoading" spinner="bar-fade-scale" color="var(--primary)"/>
             <div class="container-fluid">
                 <div class="row">
