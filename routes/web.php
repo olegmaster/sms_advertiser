@@ -53,7 +53,9 @@ Route::group( ['namespace' => 'Api', 'prefix' => 'api'],function () {
         });
 
 
-        Route::resource('thematics', 'ThematicsController' );
+        Route::resource('thematics', 'ThematicsController' )
+            ->except(['create', 'show', 'edit'])
+            ->names('api.settings.thematics');;
     });
 });
 

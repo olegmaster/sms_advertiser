@@ -1,32 +1,36 @@
 <?php
 
-namespace App\Http\Controllers\Settings\Thematics;
+namespace App\Http\Controllers\Api\Settings;
 
-use App\Repositories\ThematicsRepository;
+use App\Http\Controllers\Controller;
+use App\Repositories\DomainsRedirectsRepository;
 use Illuminate\Http\Request;
 
-class ThematicsController extends BaseController
+class DomainsRedirectsController extends Controller
 {
-    /**
-     * @var ThematicsRepository
-     */
-    private $thematicsRepository;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->thematicsRepository = app(ThematicsRepository::class);
-    }
-
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param DomainsRedirectsRepository $domainsRedirectsRepository
+     * @param int $itemsPerPage
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(DomainsRedirectsRepository $domainsRedirectsRepository, $itemsPerPage = 25)
     {
-        $paginator = $this->thematicsRepository->getAllWithPaginate(5);
-        return view('settings.thematics.index', compact('paginator'));
+
+        $data = $domainsRedirectsRepository->getAllWithPaginate($itemsPerPage);
+
+        dd($data);
+
+        $return = [];
+        $return['errorCode'] = 0;
+        $return['message'] = '';
+        $return['data'] = array(
+            'stat' => ['itemsCount' => $data->count()],
+            'items' => $data->toArray()
+        );
+
+        return response()->json($return);
     }
 
     /**
@@ -42,7 +46,7 @@ class ThematicsController extends BaseController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -53,7 +57,7 @@ class ThematicsController extends BaseController
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -64,7 +68,7 @@ class ThematicsController extends BaseController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -75,8 +79,8 @@ class ThematicsController extends BaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -87,7 +91,7 @@ class ThematicsController extends BaseController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
