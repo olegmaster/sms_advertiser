@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::group( ['namespace' => 'Api', 'prefix' => 'api'],function () {
 
     //Используют аутентификацию
-    //Соответсвует урл /api/settings
+    // Соответсвует урл /api/settings
     Route::group(['middleware' => 'auth:api', 'namespace' => 'Settings', 'prefix' => 'settings'], function () {
         //Соответсвует урл /api/settings/ppc
         Route::get('ppc', function (){
@@ -59,6 +59,8 @@ Route::group( ['namespace' => 'Api', 'prefix' => 'api'],function () {
 
         });
 
+
+        Route::resource('thematics', 'ThematicsController' );
     });
 });
 
@@ -69,3 +71,17 @@ Route::get('/{any}', 'SpaController@index')->name('spa')->where('any', '.*');;
 
 Auth::routes();
 
+
+$groupData = [
+    'namespace' => 'Settings\Thematics',
+    'prefix' => 'settings'
+];
+
+Route::group($groupData, function () {
+
+    // Settings thematics
+    Route::resource('thematics', 'ThematicsController')
+        ->names('settings.thematics');
+
+
+});
