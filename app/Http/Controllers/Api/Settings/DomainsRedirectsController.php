@@ -15,19 +15,18 @@ class DomainsRedirectsController extends Controller
      * @param int $itemsPerPage
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(DomainsRedirectsRepository $domainsRedirectsRepository, $itemsPerPage = 25)
+    public function index(DomainsRedirectsRepository $domainsRedirectsRepository, Request $request)
     {
+        $itemsPerPage = $request->has('itemsPerPage') ? $request->get('itemsPerPage') : 25;
 
         $data = $domainsRedirectsRepository->getAllWithPaginate($itemsPerPage);
-
-        dd($data);
 
         $return = [];
         $return['errorCode'] = 0;
         $return['message'] = '';
         $return['data'] = array(
-            'stat' => ['itemsCount' => $data->count()],
-            'items' => $data->toArray()
+            'stat' => ['itemsCount' => $data->total()],
+            'items' => $data->items()
         );
 
         return response()->json($return);

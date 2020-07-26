@@ -20,11 +20,10 @@ class DomainsRedirectsRepository extends CoreRepository
      */
     public function getAllWithPaginate(int $perPage = 25)
     {
-        return DB::table('thematics')
-            ->leftJoin('users', 'thematics.user_id', '=', 'users.id')
-            ->select('thematics.*',
-                'users.name as username')
+        $result = DB::table('domains')
+            ->select('domains.*')
             ->paginate($perPage);
+        return $result;
     }
 
     protected function getModelClass()

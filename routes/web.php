@@ -55,7 +55,11 @@ Route::group( ['namespace' => 'Api', 'prefix' => 'api'],function () {
 
         Route::resource('thematics', 'ThematicsController' )
             ->except(['create', 'show', 'edit'])
-            ->names('api.settings.thematics');;
+            ->names('api.settings.thematics');
+
+        Route::resource('domains', 'DomainsRedirectsController' )
+            ->except(['create', 'show', 'edit'])
+            ->names('api.settings.domains');
     });
 });
 
@@ -66,17 +70,3 @@ Route::get('/{any}', 'SpaController@index')->name('spa')->where('any', '.*');;
 
 Auth::routes();
 
-
-$groupData = [
-    'namespace' => 'Settings\Thematics',
-    'prefix' => 'settings'
-];
-
-Route::group($groupData, function () {
-
-    // Settings thematics
-    Route::resource('thematics', 'ThematicsController')
-        ->names('settings.thematics');
-
-
-});
