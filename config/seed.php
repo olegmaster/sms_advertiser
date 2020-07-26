@@ -19,5 +19,6 @@ return [
 
     //Settings
     'proxiesCount' => 250,
+    'domainsCount' => env('SEED_DOMAINS_COUNT', 100),
 
 ];

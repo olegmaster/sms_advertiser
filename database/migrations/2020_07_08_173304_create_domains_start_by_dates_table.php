@@ -13,7 +13,7 @@ class CreateDomainsStartByDatesTable extends Migration
      */
     public function up()
     {
-        Schema::create('domains_start_by_dates', function (Blueprint $table) {
+        Schema::create('domains_stat_by_dates', function (Blueprint $table) {
             $table->id();
             $table->timestamp('date');
             $table->tinyInteger('day');
@@ -35,6 +35,6 @@ class CreateDomainsStartByDatesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('domains_start_by_dates');
+        Schema::dropIfExists('domains_stat_by_dates');
     }
 }

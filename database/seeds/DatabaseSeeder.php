@@ -32,6 +32,9 @@ class DatabaseSeeder extends Seeder
 
         $this->call(ProxiesSeeder::class);
 
+        // settings
+        $this->call(RedirectDomainSeeder::class);
+
 
 
         //factory(\App\Models\User::class, 15)->create();
