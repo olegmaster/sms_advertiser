@@ -14,7 +14,15 @@
             </div>
             <template v-slot:modal-footer>
                 <div class="w-100">
-                    <b-button
+                    <b-button v-if="validation_status === 'success'"
+                        variant="primary"
+                        size="sm"
+                        class="float-right"
+                        @click="closeCreateThematicsModal"
+                    >
+                        Закрыть
+                    </b-button>
+                    <b-button v-if="validation_status !== 'success'"
                         variant="primary"
                         size="sm"
                         class="float-right"
@@ -226,6 +234,9 @@
                         this.totalRows += 1;
                         this.validation_status = 'success'
                         this.thematic_validation = response.data.message
+                        setTimeout(() => {
+                            this.$bvModal.hide('add-thematics');
+                        }, 5000)
                     } else {
                         this.validation_status = 'error'
                     }
@@ -356,6 +367,9 @@
                 for (let i in this.thematics)
                     this.thematics[i].checked = false;
                 console.log(22)
+            },
+            closeCreateThematicsModal(){
+                this.$bvModal.hide('add-thematics')
             }
         }
     }
