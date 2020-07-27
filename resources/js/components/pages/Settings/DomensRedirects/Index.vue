@@ -19,10 +19,13 @@
                                         <div class="menu-header-content"><h6 class="menu-header-title">Действия</h6></div>
                                     </div>
                                 </div>
-                                <button type="button" tabindex="0" class="dropdown-item" @click="setProxiesStatus(null, 1)">Активировать</button>
-                                <button type="button" tabindex="1" class="dropdown-item" @click="setProxiesStatus(null, 0)">Деактивировать</button>
-                                <button type="button" tabindex="2" class="dropdown-item" @click="onDeleteProxies()">Удалить</button>
-                                <button type="button" tabindex="2" class="dropdown-item">Проверить</button>
+                                <button type="button" tabindex="0" class="dropdown-item" @click="activateDomain(null, 1)">Активировать</button>
+                                <button type="button" tabindex="1" class="dropdown-item" @click="activateDomain(null, 0)">Деактивировать</button>
+                                <button type="button" tabindex="2" class="dropdown-item" @click="banDomain(null, 1)">Забанить</button>
+                                <button type="button" tabindex="0" class="dropdown-item" @click="banDomain(null, 0)">Разбанить</button>
+                                <button type="button" tabindex="1" class="dropdown-item" @click="freezeDomain(null, 1)">Заморозить</button>
+                                <button type="button" tabindex="2" class="dropdown-item" @click="freezeDomain(null, 0)">Разморозить</button>
+                                <button type="button" tabindex="2" class="dropdown-item" @click="deleteDomain(null)">Удалить</button>
                             </b-dropdown>
                         </div>
                         <div class="col" align="left">
@@ -31,13 +34,13 @@
                             </div>
                         </div>
                         <div class="col-md-auto">
-                            <button type="button" @click="showAddProxiesModal=true" class="btn-shadow d-inline-flex align-items-center btn btn-success" >
+                            <button type="button" @click="showAddDomainModal=true" class="btn-shadow d-inline-flex align-items-center btn btn-success" >
                                 <font-awesome-icon class="mr-2" icon="plus"/>
-                                Добавить прокси
+                                Добавить домен
                             </button>
                         </div>
                         <div class="col-md-auto">
-                            <b-form-select v-model="itemsPerPage" :options="itemsPerPageOptions" @change="page = 1; getProxies()"></b-form-select>
+                            <b-form-select v-model="itemsPerPage" :options="itemsPerPageOptions" @change="page = 1; getDomains()"></b-form-select>
                         </div>
                     </div>
                 </div>
@@ -48,19 +51,43 @@
                         <b-form-checkbox v-model="data.item.checked"></b-form-checkbox>
                     </template>
 
+                    <template v-slot:cell(is_banned)="data">
+                        <div v-show="data.item.is_banned==1" class="text-success">Да</div>
+                        <div v-show="data.item.is_banned==0" class="text-danger">Нет</div>
+                    </template>
+
+                    <template v-slot:cell(status)="data">
+                        <div v-show="data.item.status==1" class="text-success">Да</div>
+                        <div v-show="data.item.status==0" class="text-danger">Нет</div>
+                    </template>
+
+                    <template v-slot:cell(is_frozen)="data">
+                        <div v-show="data.item.is_frozen==1" class="text-success">Да</div>
+                        <div v-show="data.item.is_frozen==0" class="text-danger">Нет</div>
+                    </template>
+
+                    <template v-slot:cell(frozen_on)="data">
+                        <div v-show="data.item.is_frozen==1" >{{data.item.frozen_on}}</div>
+                    </template>
+
+
                     <template v-slot:cell(operations)="data">
 
-                        <b-dropdown dropup no-flip text="Действия" class="mb-2 mr-2" variant="primary" block :ref="'dropdown_'+data.item.id">
+                        <b-dropdown dropup no-flip text="Действия" class="mb-2 mr-2" variant="primary" ref="dropdown0" >
                             <div class="dropdown-menu-header">
                                 <div class="dropdown-menu-header-inner bg-secondary">
                                     <div class="menu-header-image opacity-5 dd-header-bg-2"></div>
                                     <div class="menu-header-content"><h6 class="menu-header-title">Действия</h6></div>
                                 </div>
                             </div>
-                            <button type="button" tabindex="0" class="dropdown-item" v-show="data.item.status==0" @click="setProxiesStatus(data.item.id, 1)">Активировать</button>
-                            <button type="button" tabindex="1" class="dropdown-item" v-show="data.item.status==1" @click="setProxiesStatus(data.item.id, 0)">Деактивировать</button>
-                            <button type="button" tabindex="1" class="dropdown-item" @click="onDeleteProxies(data.item.id, 0)">Удалить</button>
-                            <button type="button" tabindex="2" class="dropdown-item" v-show="data.item.check_state==0">Проверить</button>
+                            <button type="button" tabindex="0" class="dropdown-item" @click="activateDomain(null, 1)">Активировать</button>
+                            <button type="button" tabindex="1" class="dropdown-item" @click="activateDomain(null, 0)">Деактивировать</button>
+                            <button type="button" tabindex="2" class="dropdown-item" @click="banDomain(null, 1)">Забанить</button>
+                            <button type="button" tabindex="0" class="dropdown-item" @click="banDomain(null, 0)">Разбанить</button>
+                            <button type="button" tabindex="1" class="dropdown-item" @click="freezeDomain(null, 1)">Заморозить</button>
+                            <button type="button" tabindex="2" class="dropdown-item" @click="freezeDomain(null, 0)">Разморозить</button>
+                            <button type="button" tabindex="1" class="dropdown-item text-primary" @click="onEditDomain(data.item)">Редактировать</button>
+                            <button type="button" tabindex="2" class="dropdown-item" @click="deleteDomain(null)">Удалить</button>
                         </b-dropdown>
 
                     </template>
@@ -84,23 +111,26 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-auto">
-                            <b-dropdown dropup no-flip text="Действия над выбранными" class="mb-2 mr-2" variant="primary" ref="dropdown1" :disabled="checkedItemsCount==0" >
+                            <b-dropdown dropup no-flip text="Действия над выбранными" class="mb-2 mr-2" variant="primary" ref="dropdown0" :disabled="checkedItemsCount==0" >
                                 <div class="dropdown-menu-header">
                                     <div class="dropdown-menu-header-inner bg-secondary">
                                         <div class="menu-header-image opacity-5 dd-header-bg-2"></div>
                                         <div class="menu-header-content"><h6 class="menu-header-title">Действия</h6></div>
                                     </div>
                                 </div>
-                                <button type="button" tabindex="0" class="dropdown-item" @click="setProxiesStatus(null, 1)">Активировать</button>
-                                <button type="button" tabindex="1" class="dropdown-item" @click="setProxiesStatus(null, 0)">Деактивировать</button>
-                                <button type="button" tabindex="2" class="dropdown-item" @click="onDeleteProxies()">Удалить</button>
-                                <button type="button" tabindex="2" class="dropdown-item">Проверить</button>
+                                <button type="button" tabindex="0" class="dropdown-item" @click="activateDomain(null, 1)">Активировать</button>
+                                <button type="button" tabindex="1" class="dropdown-item" @click="activateDomain(null, 0)">Деактивировать</button>
+                                <button type="button" tabindex="2" class="dropdown-item" @click="banDomain(null, 1)">Забанить</button>
+                                <button type="button" tabindex="0" class="dropdown-item" @click="banDomain(null, 0)">Разбанить</button>
+                                <button type="button" tabindex="1" class="dropdown-item" @click="freezeDomain(null, 1)">Заморозить</button>
+                                <button type="button" tabindex="2" class="dropdown-item" @click="freezeDomain(null, 0)">Разморозить</button>
+                                <button type="button" tabindex="2" class="dropdown-item" @click="deleteDomain(null)">Удалить</button>
                             </b-dropdown>
                         </div>
                         <div class="col-md-auto">
-                            <button type="button" v-b-modal.modal-add-proxy class="btn-shadow d-inline-flex align-items-center btn btn-success">
+                            <button type="button" @click="showAddDomainModal=true" v-b-modal.modal-add-domain class="btn-shadow d-inline-flex align-items-center btn btn-success">
                                 <font-awesome-icon class="mr-2" icon="plus"/>
-                                Добавить прокси
+                                Добавить домен
                             </button>
                         </div>
                         <div class="col">
@@ -108,7 +138,7 @@
                         </div>
 
                         <div class="col-md-auto">
-                            <v-pagination v-model="page" @input="getProxies()" :length="pagesCount" :total-visible="10"></v-pagination>
+                            <v-pagination v-model="page" @input="getDomains()" :length="pagesCount" :total-visible="10"></v-pagination>
                         </div>
                     </div>
                 </div>
@@ -116,13 +146,9 @@
 
         </b-card>
 
-        <b-modal id="modal-add-proxy" hide-backdrop  title="Добавить прокси" >
-            <p class="my-4">Vertically centered modal!</p>
-            <b-form-group label="Individual radios">
-                <b-form-radio v-model="selected" name="some-radios" value="A">Option A</b-form-radio>
-                <b-form-radio v-model="selected" name="some-radios" value="B">Option B</b-form-radio>
-            </b-form-group>
-        </b-modal>
+        <add-domain-modal v-model="showAddDomainModal" @add-success="getDomains()"></add-domain-modal>
+        <edit-domain-modal v-model="showEditDomainModal" :domain="domainToEdit" @edit-success="getDomains()"></edit-domain-modal>
+
 
 
     </div>
@@ -137,14 +163,16 @@
     import { faStar, faPlus } from '@fortawesome/free-solid-svg-icons'
     import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
     library.add( faStar, faPlus );
-    import AddProxiesModal from "./modals/AddProxiesModal";
+    import AddDomainModal from "./modals/AddDomainModal";
+    import EditDomainModal from "./modals/EditDomainModal";
     export default {
         components: {
             PageTitle,
             VueElementLoading,
             vSelect,
             'font-awesome-icon': FontAwesomeIcon,
-            AddProxiesModal
+            AddDomainModal,
+            EditDomainModal
         },
         data: () => ({
             heading: 'Настройки',
@@ -180,7 +208,12 @@
             page: 1,
             pagesCount :1,
             itemsTotalCount : 0,
-            showAddProxiesModal: false
+            showAddDomainModal: false,
+            showEditDomainModal: false,
+            domainToEdit : {
+                id: null,
+                name: '',
+            }
         }),
         computed: {
             checkedItemsCount() {
@@ -188,7 +221,7 @@
             }
         },
         methods: {
-            getProxies()
+            getDomains()
             {
                 let vm = this;
                 this.allSelected = false;
@@ -202,8 +235,14 @@
                         new_items = response.data.data.items;
                         this.pagesCount = Math.ceil(response.data.data.stat.itemsCount / this.itemsPerPage);
                         vm.itemsTotalCount = response.data.data.stat.itemsCount;
-                        for (let i in  new_items )
+                        for (let i in  new_items ) {
                             new_items[i].checked = false;
+                            let dateTime = new_items[i].frozen_on.split(' ');
+                            new_items[i].frozen_on = dateTime[0]
+                            dateTime = new_items[i].created_at.split(' ');
+                            new_items[i].created_at = dateTime[0]
+                        }
+
                         vm.items = new_items;
                     }
                     vm.isLoading = false;
@@ -211,8 +250,20 @@
                     vm.isLoading = false;
                 });
             },
+            onEditDomain(domain){
+                this.domainToEdit = domain;
 
-            setProxiesStatus(id = null, status = null)
+                console.log( 'edit', this.domainToEdit );
+                this.showEditDomainModal = true;
+            },
+            banDomain(id = null, status = null){
+
+            },
+            freezeDomain(id= null, status = null){
+
+            },
+
+            activateDomain(id = null, status = null)
             {
                 this.hideDropDown(id);
                 this.isLoading = true;
@@ -235,7 +286,7 @@
                 axios.patch(url,data).then( response => {
                     if (!response.data.errorCode )
                     {
-                        this.getProxies();
+                        this.getDomains();
                     } else
                         this.isLoading = false;
                 }).catch( responce => {
@@ -260,7 +311,7 @@
                 for (let i in  this.items )
                     this.items[i].checked = this.allSelected;
             },
-            deleteProxies(id = null)
+            deleteDomain(id = null)
             {
                 this.hideDropDown(id);
                 this.isLoading = true;
@@ -284,7 +335,7 @@
                     if (!response.data.errorCode )
                     {
                         this.page = 1;
-                        this.getProxies();
+                        this.getDomains();
                     } else
                         this.isLoading = false;
                 }).catch( responce => {
@@ -293,7 +344,7 @@
             },
             onDeleteProxies(id = null)
             {
-                let title = !id ? 'Вы уверены в том что хотите удалить выделенные прокси?' : 'Вы уверены в том что хотите удалить прокси?';
+                let title = !id ? 'Вы уверены в том что хотите удалить выделенные домен?' : 'Вы уверены в том что хотите удалить домен?';
                 this.$bvModal.msgBoxConfirm(title, {
                     title: 'Потвердите',
                     size: 'sm',
@@ -314,6 +365,7 @@
 
                     })
             },
+
             showMsgBoxTwo() {
 
             },
@@ -339,7 +391,7 @@
             let itemsPerPage = this.$cookies.get('proxies_list_per_page');
             if (itemsPerPage && parseInt(itemsPerPage)>0)
                 this.itemsPerPage = itemsPerPage;
-            this.getProxies();
+            this.getDomains();
         }
     }
 </script>
