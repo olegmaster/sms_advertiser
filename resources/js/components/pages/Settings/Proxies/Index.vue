@@ -48,6 +48,10 @@
                 <b-form-checkbox v-model="data.item.checked"></b-form-checkbox>
             </template>
 
+              <template v-slot:cell(type)="data">
+                <div>{{proxyTypes[data.item.type]}}</div>
+            </template>
+
             <template v-slot:cell(status)="data">
                 <div v-show="data.item.status==1" class="text-success">Да</div>
                 <div v-show="data.item.status==0" class="text-danger">Нет</div>
@@ -200,7 +204,8 @@
             login: '',
             password:'',
             type:0
-        }
+        },
+        proxyTypes:['HTTP','Socks4', 'Socks5']
     }),
     computed: {
           checkedItemsCount() {

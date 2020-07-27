@@ -115,15 +115,6 @@
   import VueElementLoading from 'vue-element-loading'
   import { validationMixin } from "vuelidate";
   import { required, requiredIf, helpers, minLength, ipAddress, numeric, between } from "vuelidate/lib/validators";
-  const validProxyRegExp = new RegExp(/^(?:(http|socks4|socks5):\/\/)?(?:[\w_-][\w\d_-]*:[\w-_][\w\d-_]*@)?(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?):\d{2,5}$/i);
-  const validFileName = new RegExp(/\.txt$/i);
-  const validProxy = (proxy) => validProxyRegExp.test(proxy.trim());
-  const checkProxy = (proxies) =>(proxies.split('\n').map( v => (v.trim().length > 0) ? validProxy(v.trim()) : true )).indexOf(false);
-
-  //Валидаторы
-  const proxyValidator = (proxies) => !helpers.req(proxies) || (checkProxy(proxies) == -1);
-  const fileValidator = (file) => !helpers.req(file) || validFileName.test(file.name);
-
 
 export default {
     name: 'EditProxyModal',
