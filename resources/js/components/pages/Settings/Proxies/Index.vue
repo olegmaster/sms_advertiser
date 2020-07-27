@@ -49,7 +49,7 @@
             </template>
 
               <template v-slot:cell(type)="data">
-                <div class="text-success">{{proxyTypes[data.item.type]}}</div>
+                <div>{{proxyTypes[data.item.type]}}</div>
             </template>
 
             <template v-slot:cell(status)="data">
