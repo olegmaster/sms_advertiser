@@ -220,8 +220,10 @@ export default {
             axios.put(url, data).then( response => {
                 if (!response.data.errorCode )
                 {
+                    this.$toast('Прокси успешно обновлен!');
                     this.$emit('edit-success');
-                }
+                } else
+                    this.$toast(response.data.message, 'danger');
                 vm.isLoading = false;
                 this.showModal = false;
             }).catch( responce => {

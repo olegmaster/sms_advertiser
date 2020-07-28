@@ -37,8 +37,10 @@ import './plugins/vuetify';
 import router from './router';
 import Vuelidate from 'vuelidate'
 
+import toastPlugin from './plugins/toast';
 
 import BootstrapVue from "bootstrap-vue";
+import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 
 import App from './App.vue';
@@ -49,6 +51,18 @@ import Apps from './Layout/Wrappers/appLayout.vue';
 
 Vue.config.productionTip = false;
 
+//Миксины
+/*
+window.componentsCount = 0;
+Vue.mixin({
+    mounted(){
+        window.componentsCount++;
+        console.log('Количество компонентов', window.componentsCount );
+    }
+});
+*/
+
+Vue.use(toastPlugin);
 Vue.use(Vuelidate);
 Vue.use(BootstrapVue);
 Vue.use(require('vue-cookies'));
@@ -56,6 +70,7 @@ Vue.use(require('vue-cookies'));
 Vue.component('default-layout', Default);
 Vue.component('userpages-layout', Pages);
 Vue.component('apps-layout', Apps);
+
 
 const app = new Vue({
     el: '#app',

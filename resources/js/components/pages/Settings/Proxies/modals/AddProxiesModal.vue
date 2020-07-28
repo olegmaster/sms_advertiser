@@ -209,8 +209,10 @@ export default {
             }).then( response => {
                 if (!response.data.errorCode )
                 {
+                    this.$toast('Прокси успешно добавлен!');
                     this.$emit('add-success');
-                }
+                } else
+                    this.$toast(response.data.message, 'danger');
                 vm.isLoading = false;
                 this.showModal = false;
             }).catch( responce => {

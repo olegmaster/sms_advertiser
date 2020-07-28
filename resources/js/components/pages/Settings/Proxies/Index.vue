@@ -82,7 +82,8 @@
 
 
             <template v-slot:table-colgroup="scope">
-                <col :style="{ width: '25px'}">
+                <col style="width: 30px">
+                <col style="width: 50px">
                 <col>
                 <col>
                 <col>
@@ -91,8 +92,7 @@
                 <col>
                 <col>
                 <col>
-                <col>
-                <col :style="{ width: '120px'}">
+                <col style="width: 120px">
             </template>
 
           </b-table>
@@ -247,21 +247,24 @@
             };
 
             if (id)
-            {
                 url = '/api/settings/proxies/' + id + '/status/';
-            }
             else
-                {
-                    url = '/api/settings/proxies/status/';
-                    data.ids = this.items.filter(v=>v.checked).map(v=>v.id);
-                }
+            {
+                url = '/api/settings/proxies/status/';
+                data.ids = this.items.filter(v=>v.checked).map(v=>v.id);
+            }
 
             axios.patch(url,data).then( response => {
                 if (!response.data.errorCode )
                 {
+                    this.$toast('Прокси успешно ' + (status ? 'активирован' : 'деактивирован') );
                     this.getProxies();
-                } else
+
+                } else {
                     this.isLoading = false;
+                    this.$toast(response.data.message, 'danger');
+                }
+
             }).catch( responce => {
                 this.isLoading = false;
             });
@@ -295,9 +298,7 @@
             };
 
             if (id)
-            {
                 url = '/api/settings/proxies/' + id + '/';
-            }
             else
             {
                 url = '/api/settings/proxies/';
@@ -308,11 +309,16 @@
                 if (!response.data.errorCode )
                 {
                     this.page = 1;
+                    this.$toast('Прокси успешно удален!');
                     this.getProxies();
-                } else
+                } else {
+                    this.$toast(response.data.message, 'danger');
                     this.isLoading = false;
+                }
+
             }).catch( responce => {
                 this.isLoading = false;
+                this.$toast('При удалении возникли пробелмы', 'danger');
             });
         },
         onDeleteProxies(id = null)
@@ -341,15 +347,7 @@
         },
         onEditProxy(proxy)
         {
-            this.proxyToEdit = proxy;/*
-            this.proxyToEdit.id = proxy.id;
-            this.proxyToEdit.ip = proxy.ip;
-            this.proxyToEdit.port = proxy.port;
-            this.proxyToEdit.login = proxy.login;
-            this.proxyToEdit.password = proxy.password;
-            this.proxyToEdit.type = proxy.type; */
-
-            console.log( 'edit', this.proxyToEdit );
+            this.proxyToEdit = proxy;
             this.showEditProxyModal = true;
         }
     },
