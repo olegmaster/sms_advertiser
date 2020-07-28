@@ -69,6 +69,7 @@
             VueElementLoading
         },
         props: {
+            value : false,
             domain: {
                 domain: '',
                 freeze_hours: 0,
@@ -139,7 +140,7 @@
                 axios.patch(url, data).then( response => {
                     if (!response.data.errorCode )
                     {
-                        this.$emit('add-success');
+                        this.$emit('edit-success');
                     }
                     vm.isLoading = false;
                     this.showModal = false;
