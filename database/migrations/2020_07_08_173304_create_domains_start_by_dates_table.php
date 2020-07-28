@@ -24,7 +24,7 @@ class CreateDomainsStartByDatesTable extends Migration
             $table->unsignedBigInteger('domain_id');
             $table->timestamps();
 
-            $table->foreign('domain_id')->references('id')->on('domains');
+            $table->foreign('domain_id')->references('id')->on('domains')->onDelete('cascade');
         });
     }
 

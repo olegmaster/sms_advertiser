@@ -40,8 +40,6 @@
                             ></b-form-input>
                         </b-form-group>
 
-
-
                 </div>
 
 
@@ -124,28 +122,21 @@ export default {
         },
         handleSubmit()
         {
-            this.$v.form.$touch();
-            if (this.$v.form.$anyError) {
-                return;
-            }
-
-            this.addProxies();
+            // this.$v.form.$touch();
+            // if (this.$v.form.$anyError) {
+            //     console.log($v.form.$error())
+            //     return;
+            // }
+            this.addDomain();
         },
-        addProxies()
+        addDomain()
         {
             let vm = this;
             this.isLoading = true;
-            let formData = new FormData();
-            if ( !this.form.source_type )
-                formData.append('file', this.form.file, this.form.file.name );
-            formData.append('proxies', JSON.stringify(this.form) );
 
-            let url = '/api/settings/proxies/';
-            axios.post(url, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }).then( response => {
+            let url = '/api/settings/domains';
+            console.log(this.form)
+            axios.post(url, this.form).then( response => {
                 if (!response.data.errorCode )
                 {
                     this.$emit('add-success');
