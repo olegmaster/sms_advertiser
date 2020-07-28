@@ -32,15 +32,15 @@ class RedirectDomainSeeder extends Seeder
                 'updated_at' => \Illuminate\Support\Carbon::now()->toDateTimeString(),
             ];
 
-            for($j = 0; $j < rand(0, 300); $j++){
+            for($j = 0; $j < 30; $j++){
                 $date = \Illuminate\Support\Carbon::now()->subDays($j);
                 $domainDateStat[] = [
                     'domain_id' => $i + 1,
                     'date' => $date->toDateTimeString(),
-                    'day' => 1,
-                    'week' => 1,
-                    'month' => 1,
-                    'year' => 1,
+                    'day' => $date->dayOfWeek,
+                    'week' => $date->weekOfYear,
+                    'month' => $date->month,
+                    'year' => $date->year,
                     'sent_count' => rand(0, 40000),
                     'created_at' => $date->toDateTimeString(),
                     'updated_at' => $date->toDateTimeString(),
