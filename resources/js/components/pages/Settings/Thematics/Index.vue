@@ -1,145 +1,133 @@
 <template>
-
     <div>
-
-        <b-modal hide-backdrop content-class="shadow" ok-title="Создать" cancel-title="Отмена" id="add-thematics"
-                 title="Создать тематику" >
-
-            <div class="d-block text-center">
-                <b-alert v-if="validation_status === 'success'" show variant="success">{{thematic_validation}}</b-alert>
-                <b-alert v-if="validation_status === 'error'" show variant="danger">{{thematic_validation}}</b-alert>
-
-                <h5 v-if="!validation_status">Название тематики</h5>
-                <b-form-input v-model="new_thematics_name" autofocus/>
-            </div>
-            <template v-slot:modal-footer>
-                <div class="w-100">
-                    <b-button v-if="validation_status === 'success'"
-                        variant="primary"
-                        size="sm"
-                        class="float-right"
-                        @click="closeCreateThematicsModal"
-                    >
-                        Закрыть
-                    </b-button>
-                    <b-button v-if="validation_status !== 'success'"
-                        variant="primary"
-                        size="sm"
-                        class="float-right"
-                        @click="addThematics"
-                    >
-                        Создать
-                    </b-button>
-                </div>
-            </template>
-        </b-modal>
         <page-title :heading=heading :subheading=subheading :icon=icon></page-title>
 
-        <div>
-            <b-card title="" class="main-card mb-4">
+        <b-card title="" class="main-card mb-4">
+            <div>
+                <VueElementLoading :active="isLoading" spinner="bar-fade-scale" color="var(--primary)"/>
+
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col">
+                        <div class="col-sm-auto">
                             <b-button size="sm" class="mr-2 mb-2 btn-shadow btn-hover-shine btn-transition"
                                       variant="primary" @click="selectAll()">
                                 Выбрать все
                             </b-button>
-                            <b-dropdown dropup no-flip text="Операции с выбранными" class="mb-2 mr-2" variant="primary">
+                            <b-dropdown dropup no-flip text="Действия над выбранными" class="mb-2 mr-2"
+                                        variant="primary" ref="dropdown0" :disabled="checkedItemsCount==0">
                                 <div class="dropdown-menu-header">
                                     <div class="dropdown-menu-header-inner bg-secondary">
                                         <div class="menu-header-image opacity-5 dd-header-bg-2"></div>
-                                        <div class="menu-header-content"><h6 class="menu-header-title">Операции</h6>
+                                        <div class="menu-header-content"><h6 class="menu-header-title">Действия</h6>
                                         </div>
                                     </div>
                                 </div>
-                                <button type="button" tabindex="0" class="dropdown-item" v-on:click="edit('activate')">
-                                    Активировать
+                                <button type="button" tabindex="0" class="dropdown-item"
+                                        @click="activateThematics(null, 1)">Активировать
                                 </button>
                                 <button type="button" tabindex="1" class="dropdown-item"
-                                        v-on:click="edit('deactivate')">Деактивировать
+                                        @click="activateThematics(null, 0)">Деактивировать
                                 </button>
-                                <button type="button" tabindex="2" class="dropdown-item" v-on:click="deleteItems()">
+                                <button type="button" tabindex="2" class="dropdown-item" @click="onDeleteDomains(null)">
+                                    Удалить
+                                </button>
+                            </b-dropdown>
+                        </div>
+                        <div class="col" align="left">
+                            <div>
+                                <h5>Количество записей: {{itemsTotalCount}}</h5>
+                            </div>
+                        </div>
+                        <div class="col-md-auto">
+                            <button type="button" @click="showAddDomainModal=true"
+                                    class="btn-shadow d-inline-flex align-items-center btn btn-success">
+                                <font-awesome-icon class="mr-2" icon="plus"/>
+                                Добавить тематику
+                            </button>
+                        </div>
+                        <div class="col-md-auto">
+                            <b-form-select v-model="itemsPerPage" :options="itemsPerPageOptions"
+                                           @change="page = 1; getThematics()"></b-form-select>
+                        </div>
+                    </div>
+                </div>
+                <b-table striped bordered outlined hover fixed :items="items" :fields="fields">
+
+                    <template v-slot:cell(checkbox_field)="data">
+                        <b-form-checkbox v-model="data.item.checked"></b-form-checkbox>
+                    </template>
+
+                    <template v-slot:cell(status)="data">
+                        <div v-show="data.item.status==1" class="text-success">Да</div>
+                        <div v-show="data.item.status==0" class="text-danger">Нет</div>
+                    </template>
+
+                    <template v-slot:cell(operations)="data">
+
+                        <b-dropdown dropup no-flip text="Действия" class="mb-2 mr-2" variant="primary" ref="dropdown0">
+                            <div class="dropdown-menu-header">
+                                <div class="dropdown-menu-header-inner bg-secondary">
+                                    <div class="menu-header-image opacity-5 dd-header-bg-2"></div>
+                                    <div class="menu-header-content"><h6 class="menu-header-title">Действия</h6></div>
+                                </div>
+                            </div>
+                            <button type="button" tabindex="0" class="dropdown-item" @click="activateThematics(data.item.id, 1)">
+                                Активировать
+                            </button>
+                            <button type="button" tabindex="1" class="dropdown-item" @click="activateThematics(data.item.id, 0)">
+                                Деактивировать
+                            </button>
+                            <button type="button" tabindex="1" class="dropdown-item text-primary"
+                                    @click="onEditThematics(data.item)">Редактировать
+                            </button>
+                            <button type="button" tabindex="2" class="dropdown-item text-danger" @click="onDeleteDomains(data.item.id)">
+                                Удалить
+                            </button>
+                        </b-dropdown>
+
+                    </template>
+
+
+                    <template v-slot:table-colgroup="scope">
+                        <col :style="{ width: '25px'}">
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col :style="{ width: '120px'}">
+                    </template>
+
+                </b-table>
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-auto">
+                            <b-dropdown dropup no-flip text="Действия над выбранными" class="mb-2 mr-2"
+                                        variant="primary" ref="dropdown0" :disabled="checkedItemsCount==0">
+                                <div class="dropdown-menu-header">
+                                    <div class="dropdown-menu-header-inner bg-secondary">
+                                        <div class="menu-header-image opacity-5 dd-header-bg-2"></div>
+                                        <div class="menu-header-content"><h6 class="menu-header-title">Действия</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" tabindex="0" class="dropdown-item"
+                                        @click="activateThematics(null, 1)">Активировать
+                                </button>
+                                <button type="button" tabindex="1" class="dropdown-item"
+                                        @click="activateThematics(null, 0)">Деактивировать
+                                </button>
+                                <button type="button" tabindex="2" class="dropdown-item" @click="onDeleteThematics(null)">
                                     Удалить
                                 </button>
                             </b-dropdown>
                         </div>
                         <div class="col-md-auto">
-                            <b-row v-if="totalRows > perPage">
-                                <b-col md="6" class="my-1">
-                                    <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="currentPage"
-                                                  v-on:change="unselect" class="my-0"/>
-                                </b-col>
-                            </b-row>
-                        </div>
-                        <div class="col-md-auto">
-                            <button type="button" v-b-modal.add-thematics
-                                    class="btn-shadow d-inline-flex align-items-center btn btn-success">
-                                <font-awesome-icon class="mr-2" icon="plus"/>
-                                Добавить тематику
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Main table element -->
-                <b-table striped hover show-empty bordered
-                         stacked="md"
-                         :items="thematics"
-                         :fields="fields"
-                         :current-page="currentPage"
-                         :per-page="perPage"
-                         :filter="filter"
-                         :sort-by.sync="sortBy"
-                         :sort-desc.sync="sortDesc"
-                         :sort-direction="sortDirection"
-                         @filtered="onFiltered"
-                         :busy="tableIsBusy"
-                >
-                    <template v-slot:cell(checkbox_field)="data">
-                        <b-form-checkbox v-model="data.item.checked"></b-form-checkbox>
-                    </template>
-                    <template slot:table-busy>
-                        <div class="text-center text-danger my-2">
-                            <b-spinner class="align-middle"></b-spinner>
-                            <strong>Загрузка...</strong>
-                        </div>
-                    </template>
-                    <template slot="id" slot-scope="row">{{row.id}}</template>
-                    <template slot="name" slot-scope="row"><b>{{row.name}}</b></template>
-                    <template slot="created_at" slot-scope="row">{{row.created_at}}</template>
-                    <template slot="status" slot-scope="row">Hello World</template>
-                    <template slot="username" slot-scope="row">{{row.username}}</template>
-                    <template slot="actions" slot-scope="row">
-                        <b-button variant="success">Редактировать</b-button>
-                        <b-button variant="danger">Удалить</b-button>
-                    </template>
-
-                </b-table>
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-auto">
-                            <b-button size="sm" class="mr-2 mb-2 btn-shadow btn-hover-shine btn-transition"
-                                      variant="primary" @click="selectAll()">
-                                Выбрать все
-                            </b-button>
-                            <b-dropdown dropup no-flip text="Операции с выбранными" class="mb-2 mr-2" variant="primary">
-                                <div class="dropdown-menu-header">
-                                    <div class="dropdown-menu-header-inner bg-secondary">
-                                        <div class="menu-header-image opacity-5 dd-header-bg-2"></div>
-                                        <div class="menu-header-content"><h6 class="menu-header-title">Операции</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button type="button" tabindex="0" class="dropdown-item" v-on:click="edit('activate')">
-                                    Активировать
-                                </button>
-                                <button type="button" tabindex="1" class="dropdown-item">Деактивировать</button>
-                                <button type="button" tabindex="2" class="dropdown-item">Удалить</button>
-                            </b-dropdown>
-
-                        </div>
-
-                        <div class="col-md-auto">
-                            <button type="button" v-b-modal.add-thematics
+                            <button type="button" @click="showAddDomainModal=true" v-b-modal.modal-add-domain
                                     class="btn-shadow d-inline-flex align-items-center btn btn-success">
                                 <font-awesome-icon class="mr-2" icon="plus"/>
                                 Добавить тематику
@@ -148,21 +136,21 @@
                         <div class="col">
 
                         </div>
-                        <div class="col-md-auto">
-                            <b-row v-if="totalRows > perPage">
-                                <b-col md="6" class="my-1">
-                                    <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="currentPage"
-                                                  v-on:change="unselect" class="my-0"/>
-                                </b-col>
-                            </b-row>
-                        </div>
 
+                        <div class="col-md-auto">
+                            <v-pagination v-model="page" @input="getThematics()" :length="pagesCount"
+                                          :total-visible="10"></v-pagination>
+                        </div>
                     </div>
                 </div>
+            </div>
 
+        </b-card>
 
-            </b-card>
-        </div>
+        <add-domain-modal v-model="showAddDomainModal" @add-success="getThematics()"></add-domain-modal>
+        <edit-domain-modal v-model="showEditDomainModal" :form="thematicsToEdit"
+                           @edit-success="getThematics()"></edit-domain-modal>
+
 
     </div>
 </template>
@@ -170,207 +158,227 @@
 <script>
 
     import PageTitle from "../../../../Layout/Components/PageTitle.vue";
+    import VueElementLoading from 'vue-element-loading'
+    import vSelect from 'vue-select'
+    import {library} from '@fortawesome/fontawesome-svg-core'
     import {faStar, faPlus} from '@fortawesome/free-solid-svg-icons'
     import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
+
+    library.add(faStar, faPlus);
+    import AddDomainModal from "./modals/AddThematicsModal";
+    import EditDomainModal from "./modals/EditThematicsModal";
 
     export default {
         components: {
             PageTitle,
+            VueElementLoading,
+            vSelect,
             'font-awesome-icon': FontAwesomeIcon,
+            AddDomainModal,
+            EditDomainModal
         },
         data: () => ({
-            heading: 'Настройка',
-            subheading: 'Тематика',
+            heading: 'Настройки',
+            subheading: 'Тематики',
             icon: 'pe-7s-home icon-gradient bg-warm-flame',
-            text: `Тематика`,
-            new_thematics_name: '',
-            thematics: [],
-            totalRows: 0,
-            tableIsBusy: true,
-            thematic_validation: '',
-            validation_status: '',
             fields: [
                 {key: 'checkbox_field', label: ''},
                 {key: 'id', label: 'ID'},
-                {
-                    key: 'name',
-                    label: 'Название тематики',
-                    sortable: true,
-                    'class': 'text-center font-weight-bold',
-                },
+                {key: 'name', label: 'Название тематики'},
                 {key: 'created_at', label: 'Дата создания'},
-                {
-                    key: 'status', label: 'Активен', formatter: value => {
-                        return value === 1 ? 'Да' : 'Нет'
-                    }
-                },
+                {key: 'status', label: 'Активен'},
                 {key: 'username', label: 'Автор'},
+                {key: 'operations', label: 'Операции'},
             ],
-            currentPage: 1,
-            perPage: 20,
-            pageOptions: [5, 10, 15],
-            sortBy: null,
-            sortDesc: false,
-            sortDirection: 'asc',
-            filter: null,
-            modalInfo: {title: '', content: ''},
+            itemsPerPageOptions: [
+                {text: 'Показать по 10', value: '10'},
+                {text: 'Показать по 25', value: '25'},
+                {text: 'Показать по 50', value: '50'},
+                {text: 'Показать по 100', value: '100'},
+                {text: 'Показать по 150', value: '150'},
+                {text: 'Показать по 250', value: '250'},
+                {text: 'Показать по 500', value: '500'}
+            ],
+            items: [],
+            itemsPerPage: 25,
             allSelected: false,
+            isLoading: false,
+            page: 1,
+            pagesCount: 1,
+            itemsTotalCount: 0,
+            showAddDomainModal: false,
+            showEditDomainModal: false,
+            thematicsToEdit: {
+                id: null,
+                name: '',
+                username: '',
+                status: 1,
+                created_at: '',
+            }
         }),
-        mounted() {
-            this.thematics = this.fetchThematics();
-            this.$root.$on('bv::modal::show', (bvEvent, modalId) => {
-                this.thematic_validation = ''
-                this.validation_status = ''
-                this.new_thematics_name = ''
-            })
+        computed: {
+            checkedItemsCount() {
+                return this.items.filter(v => v.checked).length;
+            }
         },
         methods: {
-            addThematics() {
-                axios.post('/api/settings/thematics', {
-                    name: this.new_thematics_name,
-                }).then(function (response) {
-                    if (response.data.status === true) {
-                        this.thematics.push(response.data.data)
-                        this.totalRows += 1;
-                        this.validation_status = 'success'
-                        this.thematic_validation = response.data.message
-                        setTimeout(() => {
-                            this.$bvModal.hide('add-thematics');
-                        }, 5000)
-                    } else {
-                        this.validation_status = 'error'
+            getThematics() {
+                let vm = this;
+                this.allSelected = false;
+                this.isLoading = true;
+                let new_items = [];
+                let url = '/api/settings/thematics/?page=' + this.page + '&itemsPerPage=' + this.itemsPerPage;
+                axios.get(url).then(response => {
+                   // console.log(response);
+                    if (!response.data.errorCode) {
+                        new_items = response.data.data.items;
+                        console.log(new_items)
+                        this.pagesCount = Math.ceil(response.data.data.stat.itemsCount / this.itemsPerPage);
+                        this.itemsTotalCount = response.data.data.stat.itemsCount;
+                        for (let i in new_items) {
+                            new_items[i].checked = false;
+                            let dateTime = new_items[i].created_at.split(' ');
+                            new_items[i].created_at = dateTime[0]
+                            console.log(1)
+                        }
+                        vm.items = new_items;
                     }
-                    console.log(response);
-
-                }.bind(this)).catch(function (error) {
-                    if(error.response){
-                        // laravel automatically returns errors json with errors
-                        // in the case of validation failed in the object extending Illuminate\Foundation\Http\FormRequest
-                        // we get the errors array from the response
-                        const errors = error.response.data.errors
-                        // we can have errors from different DB table fields
-                        // here we get first error of the first field
-                        this.thematic_validation = errors[Object.keys(errors)[0]][0]
-                        // set validation status for the setting alert type of error or success or other
-                        this.validation_status = 'error'
-                    }
-
-                }.bind(this))
-            },
-            fetchThematics() {
-                return axios.get('/api/settings/thematics/').then(result => {
-
-                    let gotten_thematics = result.data.data
-
-                    for (let i in gotten_thematics){
-                        gotten_thematics[i].checked = false;
-                        let dateTime = gotten_thematics[i].created_at.split(' ');
-                        gotten_thematics[i].created_at = dateTime[0]
-                    }
-
-                    this.thematics = gotten_thematics;
-
-                    console.log(this.thematics)
-
-                    this.totalRows = this.thematics.length
-                    this.tableIsBusy = false
+                    vm.isLoading = false;
+                }).catch(responce => {
+                    vm.isLoading = false;
                 });
             },
-            edit(type) {
-                if (type === 'activate') {
-                    for (let i in this.thematics) {
+            onEditThematics(domain) {
+                console.log(domain)
+                this.thematicsToEdit.id = domain.id;
+                this.thematicsToEdit.domain = domain.domain;
+                this.thematicsToEdit.freeze_hours = domain.freeze_hours;
+                this.thematicsToEdit.spam_limit = domain.spam_limit;
+                console.log('edit', this.thematicsToEdit);
+                this.showEditDomainModal = true;
+            },
 
-                        if (this.thematics[i].checked && this.thematics[i].status === 0) {
-                            this.tableIsBusy= true
-                            this.updateItem(this.thematics[i].id, {
-                                'status': 1
-                            }).then(result => {
-                                if (result.data.status === true) {
-                                    this.thematics[i].status = 1;
-                                }
+            activateThematics(id = null, status = null) {
+                if (status === 1)
+                    this.updateThematics(id, 1);
+                else
+                    this.updateThematics(id, 2);
+            },
 
-                            });
-                        }
-                    }
-                    this.tableIsBusy= false
-                    this.allSelected= false
+            updateThematics(id = null, action = null) {
+                this.hideDropDown(id);
+                this.isLoading = true;
+                let vm = this;
+                let url;
+                let data = {
+                    value: action
+                };
+
+                url = '/api/settings/thematics/' + action;
+
+                if (id) {
+                    data.ids = [id]
+                } else {
+
+                    data.ids = this.items.filter(v => v.checked).map(v => v.id);
                 }
-                if (type === 'deactivate') {
 
-                    for (let i in this.thematics) {
+                axios.patch(url, data).then(response => {
+                    if (!response.data.errorCode) {
+                        this.getThematics();
+                        this.$toast('Тематика обновлена успешно');
+                    } else
+                        this.isLoading = false;
+                }).catch(responce => {
+                    this.isLoading = false;
+                });
+            },
 
-                        if (this.thematics[i].checked && this.thematics[i].status === 1) {
-                            this.tableIsBusy= true
-                            this.updateItem(this.thematics[i].id, {
-                                'status': 0
-                            }).then(result => {
-                                if (result.data.status === true) {
-                                    this.thematics[i].status = 0;
-                                }
+            hideDropDown(id = null) {
+                // if (id)
+                //     this.$refs['dropdown_'+id].hide(true);
+                // else {
+                //     this.$refs['dropdown0'].hide(true);
+                //     this.$refs['dropdown1'].hide(true);
+                // }
 
-                            });
-                        }
-                    }
-                    this.tableIsBusy= false
-                    this.allSelected = false
-                }
             },
-            updateItem(id, data) {
-                return axios.put('/api/settings/thematics/' + id, data);
-            },
-            deleteItems() {
 
-                for (let i in this.thematics) {
-                    if (this.thematics[i].checked) {
-                        this.tableIsBusy= true
-                        this.deleteItem(this.thematics[i].id).then(result => {
-                            if(result.data.status === true)
-                            {
-                                this.thematics = this.thematics.filter(item => !item.checked)
-                            }
-                            this.tableIsBusy = false
-                        });
-                    }
-                }
-                this.allSelected = false;
-            },
-            deleteItem(id) {
-                return axios.delete('/api/settings/thematics/' + id);
-            },
-            info(item, index, button) {
-                this.modalInfo.title = `Row index: ${index}`
-                this.modalInfo.content = JSON.stringify(item, null, 2)
-                this.$root.$emit('bv::show::modal', 'modalInfo', button)
-            },
-            resetModal() {
-                this.modalInfo.title = ''
-                this.modalInfo.content = ''
-            },
-            onFiltered(filteredItems) {
-                // Trigger pagination to update the number of buttons/pages due to filtering
-                this.totalRows = filteredItems.length
-                this.currentPage = 1
-            },
             selectAll() {
                 this.allSelected = !this.allSelected;
-                let start = (this.currentPage - 1) * this.perPage;
-                for (let i in this.thematics)
-                    this.thematics[i].checked = false;
-                for (let i = start; i < start + this.perPage; i++) {
-                    this.thematics[i].checked = this.allSelected;
+                for (let i in this.items)
+                    this.items[i].checked = this.allSelected;
+            },
+            deleteThematics(id = null) {
+                this.hideDropDown(id);
+                this.isLoading = true;
+                let vm = this;
+                let url;
+                let data = {
+                    value: 1
+                };
+
+
+                if (id) {
+                    data.ids = [id]
+                } else {
+                    data.ids = this.items.filter(v => v.checked).map(v => v.id);
                 }
 
-                console.log(this.thematics)
+                console.log(data)
+
+
+
+                for(id of data.ids){
+                    url = '/api/settings/thematics/' + id;
+                    axios.delete(url, {data}).then(response => {
+                        if (!response.data.errorCode) {
+                            this.page = 1;
+                            this.getThematics();
+                            this.$toast('Тематика удалена', 'danger');
+
+                        } else
+                            this.isLoading = false;
+                    }).catch(responce => {
+                        this.isLoading = false;
+                    });
+                }
+
+
             },
-            unselect() {
-                this.allSelected = false;
-                for (let i in this.thematics)
-                    this.thematics[i].checked = false;
-                console.log(22)
+            onDeleteThematics(id = null) {
+                let title = !id ? 'Вы уверены в том что хотите удалить выделенные тематики?' : 'Вы уверены в том что хотите удалить тематику?';
+                this.$bvModal.msgBoxConfirm(title, {
+                    title: 'Потвердите',
+                    size: 'sm',
+                    buttonSize: 'sm',
+                    okVariant: 'danger',
+                    okTitle: 'Да',
+                    cancelTitle: 'Нет',
+                    headerClass: 'p-2 border-bottom-0',
+                    footerClass: 'p-2 border-top-0',
+                    centered: false,
+                    hideBackdrop: true
+                })
+                    .then(value => {
+                        if (value)
+                            this.deleteThematics(id);
+                    })
+                    .catch(err => {
+
+                    })
             },
-            closeCreateThematicsModal(){
-                this.$bvModal.hide('add-thematics')
+        },
+        watch: {
+            itemsPerPage: function (val) {
+                this.$cookies.set('thematics_list_per_page', val, '31d');
             }
+        },
+        mounted() {
+            let itemsPerPage = this.$cookies.get('thematics_list_per_page');
+            if (itemsPerPage && parseInt(itemsPerPage) > 0)
+                this.itemsPerPage = itemsPerPage;
+            this.getThematics();
         }
     }
 </script>

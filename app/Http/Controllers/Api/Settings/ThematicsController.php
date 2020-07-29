@@ -17,10 +17,21 @@ class ThematicsController extends BaseController
      * @param ThematicsRepository $repository
      * @return JsonResponse
      */
-    public function index(ThematicsRepository $repository)
+    public function index(ThematicsRepository $repository, Request $request)
     {
-        $result = $repository->getAllWithPaginate();
-        return response()->json($result);
+        $itemsPerPage = $request->has('itemsPerPage') ? $request->get('itemsPerPage') : 25;
+
+        $data = $repository->getAllWithPaginate($itemsPerPage);
+
+        $return = [];
+        $return['errorCode'] = 0;
+        $return['message'] = '';
+        $return['data'] = array(
+            'stat' => ['itemsCount' => $data->total()],
+            'items' => $data->items()
+        );
+
+        return response()->json($return);
     }
 
 
@@ -37,16 +48,16 @@ class ThematicsController extends BaseController
         $item = (new Thematic())->create($data);
 
         if ($item) {
-            return response()->json(['status' => true, 'data' => [
+            return response()->json(['errorCode' => 0, 'data' => [
                 'id' => $item->id,
                 'name' => $item->name,
                 'status' => $item->status,
                 'created_at' => $item->created_at
             ],
-                'message' => __('messages.thematics_created')
+                'message' => __('messages.domain_created')
             ]);
         } else {
-            return response()->json(['status' => false, 'message' => __('messages.thematics_creation_failed')]);
+            return response()->json(['errorCode' => 1, 'message' => __('messages.domain_creation_failed')]);
         }
     }
 

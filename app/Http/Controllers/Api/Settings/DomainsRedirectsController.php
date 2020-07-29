@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Settings;
 use App\Http\Controllers\Controller;
 use App\Models\DomainsRedirects\Domain;
 use App\Repositories\DomainsRedirectsRepository;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class DomainsRedirectsController extends Controller
@@ -13,8 +14,8 @@ class DomainsRedirectsController extends Controller
      * Display a listing of the resource.
      *
      * @param DomainsRedirectsRepository $domainsRedirectsRepository
-     * @param int $itemsPerPage
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return JsonResponse
      */
     public function index(DomainsRedirectsRepository $domainsRedirectsRepository, Request $request)
     {
@@ -47,7 +48,7 @@ class DomainsRedirectsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(Request $request)
     {
@@ -58,9 +59,6 @@ class DomainsRedirectsController extends Controller
         if ($item) {
             return response()->json(['errorCode' => 0, 'data' => [
                 'id' => $item->id,
-                'name' => $item->name,
-                'status' => $item->status,
-                'created_at' => $item->created_at
             ],
                 'message' => __('messages.domain_created')
             ]);
@@ -96,7 +94,7 @@ class DomainsRedirectsController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param int $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(Request $request)
     {
@@ -167,7 +165,7 @@ class DomainsRedirectsController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function destroy($id)
     {
