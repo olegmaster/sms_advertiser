@@ -54,7 +54,7 @@ export default {
             showModal : false,
             isLoading : false,
             form: {
-                domain : '',
+                name : '',
                 spam_limit : 30000,
                 freeze_hours: 24,
             }
@@ -87,14 +87,14 @@ export default {
                 console.log($v.form.$error())
                 return;
             }
-            this.addDomain();
+            this.addThematics();
         },
-        addDomain()
+        addThematics()
         {
             let vm = this;
             this.isLoading = true;
 
-            let url = '/api/settings/domains';
+            let url = '/api/settings/thematics';
             console.log(this.form)
             axios.post(url, this.form).then( response => {
                 if (!response.data.errorCode )

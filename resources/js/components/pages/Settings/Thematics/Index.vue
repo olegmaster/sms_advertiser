@@ -28,7 +28,7 @@
                                 <button type="button" tabindex="1" class="dropdown-item"
                                         @click="activateThematics(null, 0)">Деактивировать
                                 </button>
-                                <button type="button" tabindex="2" class="dropdown-item" @click="onDeleteDomains(null)">
+                                <button type="button" tabindex="2" class="dropdown-item" @click="onDeleteThematics(null)">
                                     Удалить
                                 </button>
                             </b-dropdown>
@@ -39,7 +39,7 @@
                             </div>
                         </div>
                         <div class="col-md-auto">
-                            <button type="button" @click="showAddDomainModal=true"
+                            <button type="button" @click="showaddThematicsModal=true"
                                     class="btn-shadow d-inline-flex align-items-center btn btn-success">
                                 <font-awesome-icon class="mr-2" icon="plus"/>
                                 Добавить тематику
@@ -80,7 +80,7 @@
                             <button type="button" tabindex="1" class="dropdown-item text-primary"
                                     @click="onEditThematics(data.item)">Редактировать
                             </button>
-                            <button type="button" tabindex="2" class="dropdown-item text-danger" @click="onDeleteDomains(data.item.id)">
+                            <button type="button" tabindex="2" class="dropdown-item text-danger" @click="onDeleteThematics(data.item.id)">
                                 Удалить
                             </button>
                         </b-dropdown>
@@ -127,7 +127,7 @@
                             </b-dropdown>
                         </div>
                         <div class="col-md-auto">
-                            <button type="button" @click="showAddDomainModal=true" v-b-modal.modal-add-domain
+                            <button type="button" @click="showaddThematicsModal=true" v-b-modal.modal-add-domain
                                     class="btn-shadow d-inline-flex align-items-center btn btn-success">
                                 <font-awesome-icon class="mr-2" icon="plus"/>
                                 Добавить тематику
@@ -147,9 +147,9 @@
 
         </b-card>
 
-        <add-domain-modal v-model="showAddDomainModal" @add-success="getThematics()"></add-domain-modal>
-        <edit-domain-modal v-model="showEditDomainModal" :form="thematicsToEdit"
-                           @edit-success="getThematics()"></edit-domain-modal>
+        <add-thematics-modal v-model="showaddThematicsModal" @add-success="getThematics()"></add-thematics-modal>
+        <edit-thematics-modal v-model="showeditThematicsModal" :form="thematicsToEdit"
+                           @edit-success="getThematics()"></edit-thematics-modal>
 
 
     </div>
@@ -165,8 +165,8 @@
     import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 
     library.add(faStar, faPlus);
-    import AddDomainModal from "./modals/AddThematicsModal";
-    import EditDomainModal from "./modals/EditThematicsModal";
+    import AddThematicsModal from "./modals/AddThematicsModal";
+    import EditThematicsModal from "./modals/EditThematicsModal";
 
     export default {
         components: {
@@ -174,8 +174,8 @@
             VueElementLoading,
             vSelect,
             'font-awesome-icon': FontAwesomeIcon,
-            AddDomainModal,
-            EditDomainModal
+            AddThematicsModal,
+            EditThematicsModal
         },
         data: () => ({
             heading: 'Настройки',
@@ -206,14 +206,11 @@
             page: 1,
             pagesCount: 1,
             itemsTotalCount: 0,
-            showAddDomainModal: false,
-            showEditDomainModal: false,
+            showaddThematicsModal: false,
+            showeditThematicsModal: false,
             thematicsToEdit: {
                 id: null,
                 name: '',
-                username: '',
-                status: 1,
-                created_at: '',
             }
         }),
         computed: {
@@ -248,14 +245,10 @@
                     vm.isLoading = false;
                 });
             },
-            onEditThematics(domain) {
-                console.log(domain)
-                this.thematicsToEdit.id = domain.id;
-                this.thematicsToEdit.domain = domain.domain;
-                this.thematicsToEdit.freeze_hours = domain.freeze_hours;
-                this.thematicsToEdit.spam_limit = domain.spam_limit;
-                console.log('edit', this.thematicsToEdit);
-                this.showEditDomainModal = true;
+            onEditThematics(thematics) {
+                this.thematicsToEdit.id = thematics.id;
+                this.thematicsToEdit.name = thematics.name;
+                this.showeditThematicsModal = true;
             },
 
             activateThematics(id = null, status = null) {
@@ -279,7 +272,6 @@
                 if (id) {
                     data.ids = [id]
                 } else {
-
                     data.ids = this.items.filter(v => v.checked).map(v => v.id);
                 }
 

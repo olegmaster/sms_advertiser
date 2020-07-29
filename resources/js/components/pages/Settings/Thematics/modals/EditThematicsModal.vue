@@ -46,16 +46,14 @@
 
 
     export default {
-        name : 'EditDomainModal',
+        name : 'EditThematicsModal',
         components: {
             VueElementLoading
         },
         props: {
             value : false,
             form: {
-                domain: '',
-                freeze_hours: 0,
-                spam_limit: 0,
+                name: '',
             }
         },
         data: function () {
@@ -96,18 +94,18 @@
                     console.log($v.form.$error())
                     return;
                 }
-                this.editDomain();
+                this.editThematics();
             },
-            editDomain()
+            editThematics()
             {
                 let vm = this;
                 this.isLoading = true;
 
-                let url = '/api/settings/domains/7';
+                let url = '/api/settings/thematics/3';
                 console.log('submit')
                 console.log(this.form)
                 let data = this.form
-                data.value = 7
+                data.value = 3
                 data.ids = [this.form.id]
                 axios.patch(url, data).then( response => {
                     if (!response.data.errorCode )
