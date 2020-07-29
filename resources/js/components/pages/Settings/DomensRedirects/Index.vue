@@ -108,7 +108,7 @@
                                     </tr>
                                     <tr role="row">
                                         <td>Текущее количество отправленных до лимита</td>
-                                        <td>{{data.itme.spam_limit - data.item.all_send_count}}</td>
+                                        <td>{{data.item.spam_limit - data.item.all_send_count}}</td>
                                     </tr>
                                     <tr role="row">
                                         <td>лимит</td>
@@ -158,7 +158,7 @@
                             <button type="button" tabindex="1" class="dropdown-item text-primary"
                                     @click="onEditDomain(data.item)">Редактировать
                             </button>
-                            <button type="button" tabindex="2" class="dropdown-item" @click="onDeleteDomains(data.item.id)">
+                            <button type="button" tabindex="2" class="dropdown-item text-danger" @click="onDeleteDomains(data.item.id)">
                                 Удалить
                             </button>
                         </b-dropdown>
@@ -238,7 +238,7 @@
         </b-card>
 
         <add-domain-modal v-model="showAddDomainModal" @add-success="getDomains()"></add-domain-modal>
-        <edit-domain-modal v-model="showEditDomainModal" :domain="domainToEdit"
+        <edit-domain-modal v-model="showEditDomainModal" :form="domainToEdit"
                            @edit-success="getDomains()"></edit-domain-modal>
 
 
@@ -306,8 +306,8 @@
             domainToEdit: {
                 id: null,
                 domain: '',
-                spam_limit: 0,
-                freeze_hours: 0,
+                spam_limit: 32000,
+                freeze_hours: 24,
             }
         }),
         computed: {
@@ -344,6 +344,7 @@
                 });
             },
             onEditDomain(domain) {
+                console.log(domain)
                 this.domainToEdit.id = domain.id;
                 this.domainToEdit.domain = domain.domain;
                 this.domainToEdit.freeze_hours = domain.freeze_hours;
@@ -392,6 +393,7 @@
                 axios.patch(url, data).then(response => {
                     if (!response.data.errorCode) {
                         this.getDomains();
+                        this.$toast('Домен обновлен успешно');
                     } else
                         this.isLoading = false;
                 }).catch(responce => {
@@ -440,6 +442,7 @@
                         if (!response.data.errorCode) {
                             this.page = 1;
                             this.getDomains();
+                            this.$toast('Домен удален', 'danger');
 
                         } else
                             this.isLoading = false;

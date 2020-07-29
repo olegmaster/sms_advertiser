@@ -4,7 +4,6 @@
         hide-backdrop
         no-close-on-backdrop
         title="Редактировать домен"
-        @show="resetModal"
         @hidden="resetModal"
         @ok="handleOk"
 
@@ -19,26 +18,31 @@
             <VueElementLoading :active="isLoading" spinner="bar-fade-scale" color="var(--primary)"/>
             <div class="container-fluid">
                 <div class="row">
-
-                    <b-form-group label="Название домена">
-                        <b-form-input type="text"
-                                      v-model="domain.domain"
-                        ></b-form-input>
-                    </b-form-group>
-                    <br>
-
-                    <b-form-group label="Лимит">
-                        <b-form-input type="number"
-                                      v-model="domain.spam_limit"
-                        ></b-form-input>
-                    </b-form-group>
-
-                    <br>
-                    <b-form-group label="Время заморозки в часах">
-                        <b-form-input type="number"
-                                      v-model="domain.freeze_hours"
-                        ></b-form-input>
-                    </b-form-group>
+                    <div class="col-sm-auto">
+                        <b-form-group
+                            label="Название домена"
+                            invalid-feedback="Введите название домена"
+                            :state="!$v.form.domain.$dirty ? null :  !$v.form.domain.$invalid"
+                        >
+                            <b-form-input type="text"
+                                          v-model="$v.form.domain.$model"
+                            ></b-form-input>
+                        </b-form-group>
+                    </div>
+                    <div class="col-sm-auto">
+                        <b-form-group label="Лимит">
+                            <b-form-input type="number"
+                                          v-model="$v.form.spam_limit.$model"
+                            ></b-form-input>
+                        </b-form-group>
+                    </div>
+                    <div class="col-sm-auto">
+                        <b-form-group label="Время заморозки в часах">
+                            <b-form-input type="number"
+                                          v-model="$v.form.freeze_hours.$model"
+                            ></b-form-input>
+                        </b-form-group>
+                    </div>
 
                 </div>
 
@@ -53,14 +57,6 @@
     import VueElementLoading from 'vue-element-loading'
     import { validationMixin } from "vuelidate";
     import { required, requiredIf, helpers, minLength } from "vuelidate/lib/validators";
-    const validProxyRegExp = new RegExp(/^(?:(http|socks4|socks5):\/\/)?(?:[\w_-][\w\d_-]*:[\w-_][\w\d-_]*@)?(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?):\d{2,5}$/i);
-    const validFileName = new RegExp(/\.txt$/i);
-    const validProxy = (proxy) => validProxyRegExp.test(proxy.trim());
-    const checkProxy = (proxies) =>(proxies.split('\n').map( v => (v.trim().length > 0) ? validProxy(v.trim()) : true )).indexOf(false);
-
-    //Валидаторы
-    const proxyValidator = (proxies) => !helpers.req(proxies) || (checkProxy(proxies) == -1);
-    const fileValidator = (file) => !helpers.req(file) || validFileName.test(file.name);
 
 
     export default {
@@ -70,7 +66,7 @@
         },
         props: {
             value : false,
-            domain: {
+            form: {
                 domain: '',
                 freeze_hours: 0,
                 spam_limit: 0,
@@ -89,7 +85,7 @@
         },
         validations: {
             form: {
-                name: {
+                domain: {
                     required
                 },
                 spam_limit: {
@@ -108,7 +104,7 @@
         methods: {
             resetModal()
             {
-                this.form.name = '';
+                this.form.domain = '';
                 this.form.spam_limit = 0;
                 this.form.freeze_hours = 0;
                 this.$v.$reset();
@@ -120,11 +116,11 @@
             },
             handleSubmit()
             {
-                // this.$v.form.$touch();
-                // if (this.$v.form.$anyError) {
-                //     console.log($v.form.$error())
-                //     return;
-                // }
+                this.$v.form.$touch();
+                if (this.$v.form.$anyError) {
+                    console.log($v.form.$error())
+                    return;
+                }
                 this.editDomain();
             },
             editDomain()
@@ -132,11 +128,12 @@
                 let vm = this;
                 this.isLoading = true;
 
-                let url = '/api/settings/domains';
+                let url = '/api/settings/domains/7';
                 console.log('submit')
                 console.log(this.form)
                 let data = this.form
                 data.value = 7
+                data.ids = [this.form.id]
                 axios.patch(url, data).then( response => {
                     if (!response.data.errorCode )
                     {

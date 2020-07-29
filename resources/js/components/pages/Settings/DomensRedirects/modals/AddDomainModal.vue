@@ -19,30 +19,32 @@
             <VueElementLoading :active="isLoading" spinner="bar-fade-scale" color="var(--primary)"/>
             <div class="container-fluid">
                 <div class="row">
-
-                        <b-form-group label="Название домена">
+                    <div class="col-sm-auto">
+                        <b-form-group
+                            label="Название домена"
+                            invalid-feedback="Введите название домена"
+                            :state="!$v.form.domain.$dirty ? null :  !$v.form.domain.$invalid"
+                        >
                             <b-form-input type="text"
-                                v-model="form.domain"
+                                          v-model="$v.form.domain.$model"
                             ></b-form-input>
                         </b-form-group>
-                    <br>
-
+                    </div>
+                    <div class="col-sm-auto">
                         <b-form-group label="Лимит">
                             <b-form-input type="number"
-                                          v-model="form.spam_limit"
+                                          v-model="$v.form.spam_limit.$model"
                             ></b-form-input>
                         </b-form-group>
-
-                    <br>
+                    </div>
+                    <div class="col-sm-auto">
                         <b-form-group label="Время заморозки в часах">
                             <b-form-input type="number"
-                                          v-model="form.freeze_hours"
+                                          v-model="$v.form.freeze_hours.$model"
                             ></b-form-input>
                         </b-form-group>
-
+                    </div>
                 </div>
-
-
             </div>
         </form>
     </b-modal>
@@ -53,14 +55,6 @@
   import VueElementLoading from 'vue-element-loading'
   import { validationMixin } from "vuelidate";
   import { required, requiredIf, helpers, minLength } from "vuelidate/lib/validators";
-  const validProxyRegExp = new RegExp(/^(?:(http|socks4|socks5):\/\/)?(?:[\w_-][\w\d_-]*:[\w-_][\w\d-_]*@)?(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?):\d{2,5}$/i);
-  const validFileName = new RegExp(/\.txt$/i);
-  const validProxy = (proxy) => validProxyRegExp.test(proxy.trim());
-  const checkProxy = (proxies) =>(proxies.split('\n').map( v => (v.trim().length > 0) ? validProxy(v.trim()) : true )).indexOf(false);
-
-  //Валидаторы
-  const proxyValidator = (proxies) => !helpers.req(proxies) || (checkProxy(proxies) == -1);
-  const fileValidator = (file) => !helpers.req(file) || validFileName.test(file.name);
 
 
 export default {
@@ -75,15 +69,16 @@ export default {
             isLoading : false,
             form: {
                 domain : '',
-                spam_limit : 0,
-                freeze_hours: 0,
+                spam_limit : 30000,
+                freeze_hours: 24,
             }
         };
     },
     validations: {
         form: {
-            name: {
-                required
+            domain: {
+                required,
+                minLength: 5
             },
             spam_limit: {
                 required,
@@ -91,28 +86,15 @@ export default {
             freeze_hours: {
                 required
             },
-
         }
     },
-    computed: {
-        invalidFeedback() {
-            if (this.form.source_type != 1 )
-                return '';
 
-            if (this.form.proxies.trim().length > 0)
-            {
-                let wrongProxyRow = checkProxy(this.form.proxies);
-                return 'Заполните список домен в правильном формате' + (wrongProxyRow >= 0 ? ', ошибка в строке ' + (wrongProxyRow +1 ) : '');
-            } else
-                return 'Заполните список домен'
-        }
-    },
     methods: {
         resetModal()
         {
             this.form.name = '';
-            this.form.spam_limit = 0;
-            this.form.freeze_hours = 0;
+            this.form.spam_limit = 32000;
+            this.form.freeze_hours = 24;
             this.$v.$reset();
         },
         handleOk(bvModalEvt)
@@ -122,11 +104,11 @@ export default {
         },
         handleSubmit()
         {
-            // this.$v.form.$touch();
-            // if (this.$v.form.$anyError) {
-            //     console.log($v.form.$error())
-            //     return;
-            // }
+            this.$v.form.$touch();
+            if (this.$v.form.$anyError) {
+                console.log($v.form.$error())
+                return;
+            }
             this.addDomain();
         },
         addDomain()
@@ -140,6 +122,7 @@ export default {
                 if (!response.data.errorCode )
                 {
                     this.$emit('add-success');
+                    this.resetModal()
                 }
                 vm.isLoading = false;
                 this.showModal = false;
