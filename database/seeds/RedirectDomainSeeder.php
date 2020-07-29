@@ -24,23 +24,23 @@ class RedirectDomainSeeder extends Seeder
                 'is_frozen' => rand(0, 10) == 1 ? 0 : 1,
                 'frozen_on' => \Illuminate\Support\Carbon::now()->toDateTimeString(),
                 'freeze_hours' => rand(1, 10),
-                'spam_limit' => rand(10000, 30000),
-                'current_send_count' => rand(0, 50000),
-                'all_send_count' => rand(0, 500000),
+                'spam_limit' => rand(30000, 50000),
+                'current_send_count' => rand(0, 20000),
+                'all_send_count' => rand(0, 20000),
                 'deleted_at' => rand(0, 100) == 1 ? \Illuminate\Support\Carbon::now()->toDateTimeString() : null,
                 'created_at' => \Illuminate\Support\Carbon::now()->toDateTimeString(),
                 'updated_at' => \Illuminate\Support\Carbon::now()->toDateTimeString(),
             ];
 
-            for($j = 0; $j < rand(0, 300); $j++){
+            for($j = 0; $j < 30; $j++){
                 $date = \Illuminate\Support\Carbon::now()->subDays($j);
                 $domainDateStat[] = [
                     'domain_id' => $i + 1,
                     'date' => $date->toDateTimeString(),
-                    'day' => 1,
-                    'week' => 1,
-                    'month' => 1,
-                    'year' => 1,
+                    'day' => $date->dayOfWeek,
+                    'week' => $date->weekOfYear,
+                    'month' => $date->month,
+                    'year' => $date->year,
                     'sent_count' => rand(0, 40000),
                     'created_at' => $date->toDateTimeString(),
                     'updated_at' => $date->toDateTimeString(),

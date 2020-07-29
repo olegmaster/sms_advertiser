@@ -85,6 +85,44 @@
                         <div v-show="data.item.is_frozen==0" class="text-danger">Нет</div>
                     </template>
 
+                    <template v-slot:cell(statistics)="data">
+                        <b-button :id="`popover-1-${data.item.id}`" variant="primary">Инфо</b-button>
+                        <b-popover :target="`popover-1-${data.item.id}`" triggers="hover focus">
+                            <template v-slot:title>
+                                <table class="table b-table table-striped table-hover table-bordered border b-table-fixed">
+                                    <tr role="row">
+                                        <td>Общее количество отправленных SMS</td>
+                                        <td>{{data.item.all_send_count}}</td>
+                                    </tr >
+                                    <tr role="row">
+                                        <td>Количество отправленных за день</td>
+                                        <td>{{data.item.cur_day_count}}</td>
+                                    </tr>
+                                    <tr role="row">
+                                        <td>Количество отправленных за неделю</td>
+                                        <td>{{data.item.cur_week_count}}</td>
+                                    </tr>
+                                    <tr role="row">
+                                        <td>Количество отправленных за месяц</td>
+                                        <td>{{data.item.cur_month_count}}</td>
+                                    </tr>
+                                    <tr role="row">
+                                        <td>Текущее количество отправленных до лимита</td>
+                                        <td>{{data.itme.spam_limit - data.item.all_send_count}}</td>
+                                    </tr>
+                                    <tr role="row">
+                                        <td>лимит</td>
+                                        <td>{{data.item.spam_limit}}</td>
+                                    </tr>
+                                    <tr role="row">
+                                        <td>Количество часов заморозки</td>
+                                        <td>{{data.item.freeze_hours}}</td>
+                                    </tr>
+                                </table>
+                            </template>
+                        </b-popover>
+                    </template>
+
                     <template v-slot:cell(frozen_on)="data">
                         <div v-show="data.item.is_frozen==1">{{data.item.frozen_on}}</div>
                     </template>
@@ -307,6 +345,7 @@
             },
             onEditDomain(domain) {
                 this.domainToEdit.id = domain.id;
+                this.domainToEdit.domain = domain.domain;
                 this.domainToEdit.freeze_hours = domain.freeze_hours;
                 this.domainToEdit.spam_limit = domain.spam_limit;
                 console.log('edit', this.domainToEdit);
