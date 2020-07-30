@@ -81,13 +81,13 @@
                     </template>
 
                     <template v-slot:cell(status)="data">
-                        <div v-show="data.item.status==1" class="text-success">Да</div>
-                        <div v-show="data.item.status==0" class="text-danger">Нет</div>
+                        <div v-show="data.item.status==1" class="text-danger">Да</div>
+                        <div v-show="data.item.status==0" class="text-success">Нет</div>
                     </template>
 
                     <template v-slot:cell(is_frozen)="data">
-                        <div v-show="data.item.is_frozen==1" class="text-success">Заморожен</div>
-                        <div v-show="data.item.is_frozen==0" class="text-danger">Не заморожен</div>
+                        <div v-show="data.item.is_frozen==1" class="text-danger">Заморожен</div>
+                        <div v-show="data.item.is_frozen==0" class="text-success">Не заморожен</div>
                     </template>
 
                     <template v-slot:cell(statistics)="data">

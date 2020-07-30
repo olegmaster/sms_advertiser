@@ -71,10 +71,10 @@
                                     <div class="menu-header-content"><h6 class="menu-header-title">Действия</h6></div>
                                 </div>
                             </div>
-                            <button type="button" tabindex="0" class="dropdown-item" @click="activateThematics(data.item.id, 1)">
+                            <button type="button" v-if="data.item.status === 0" tabindex="0" class="dropdown-item" @click="activateThematics(data.item.id, 1)">
                                 Активировать
                             </button>
-                            <button type="button" tabindex="1" class="dropdown-item" @click="activateThematics(data.item.id, 0)">
+                            <button type="button" v-if="data.item.status === 1" tabindex="1" class="dropdown-item" @click="activateThematics(data.item.id, 0)">
                                 Деактивировать
                             </button>
                             <button type="button" tabindex="1" class="dropdown-item text-primary"
