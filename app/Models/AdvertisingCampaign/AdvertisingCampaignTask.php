@@ -25,14 +25,11 @@ class AdvertisingCampaignTask extends Model
     public function thematics()
     {
         return $this->belongsTo('App\Models\AdvertisingCampaign\Thematic', 'thematics_id' );
-
     }
 
     public function user()
     {
         return $this->belongsTo('App\Models\User', 'creator_user_id' );
-
     }
-
 
 }
