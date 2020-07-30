@@ -15,10 +15,15 @@ return [
 
     // advertising campaigns
 
-    'advertisingCampaignsCount' => env('SEED_ADVERTISING_CAMPAIGNS_COUNT', 5),
+    'advertisingCampaignsCount' => env('SEED_ADVERTISING_CAMPAIGNS_COUNT', 100),
 
     //Settings
-    'proxiesCount' => 250,
+    'proxiesCount' => env('SEED_PROXIES_COUNT', 250),
     'domainsCount' => env('SEED_DOMAINS_COUNT', 100),
+
+    //Messages
+    'smsMmsMessagesCount' => env('SEED_SMS_MMS_MESSAGES_COUNT', 750),
+
+
 
 ];

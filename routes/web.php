@@ -67,7 +67,35 @@ Route::group( ['namespace' => 'Api', 'prefix' => 'api'],function () {
         Route::resource('domains', 'DomainsRedirectsController' )
             ->except(['create', 'show', 'edit'])
             ->names('api.settings.domains');
+
     });
+
+    //Работа с сообщениями
+    Route::group(['namespace' => 'Messages','prefix' => 'sms-mms-messages/sms/'], function () {
+
+        //Получение списка проксей /api/settings/proxies/
+        Route::get('/', 'SmsMmsMessagesController@index' );
+
+        //Активация деактивация прокси /api/settings/proxies/{id}/status/
+        Route::patch('/{id}/status/', 'ProxiesController@setStatus' )->where('id', '[1-9][0-9]*');
+
+        //Активация деактивация многих проксей /api/settings/proxies/status/
+        Route::patch('/status/', 'ProxiesController@setMultiplyStatuses' );
+
+        //Удаление прокси /api/settings/proxies/{id}/
+        Route::delete('/{id}/', 'ProxiesController@destroy' )->where('id', '[1-9][0-9]*');
+
+        //Удаление проксей /api/settings/proxies/
+        Route::delete('/', 'ProxiesController@destroyMultiply' );
+
+        //Добавление проксей /api/settings/proxies/
+        Route::post('/', 'ProxiesController@store' );
+
+        //Обновление прокси /api/settings/proxies/{id}/
+        Route::put('/{id}/', 'ProxiesController@update' )->where('id', '[1-9][0-9]*');
+
+    });
+
 });
 
 
