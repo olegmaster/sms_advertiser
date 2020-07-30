@@ -41,5 +41,10 @@ class DatabaseSeeder extends Seeder
 
 //        factory(\App\Models\AdvertisingCampaign\Simcard::class, 100)->create();
 //        factory(\App\Models\DomainsRedirects\Domain::class, 50)->create();
+
+        //Messages
+        $this->call(SmsMmsMessagesTableSeeder::class);
+        $this->call(MmsMediaFilesGroupsTableSeeder::class);
+        $this->call(MmsMediaFilesTableSeeder::class);
     }
 }
