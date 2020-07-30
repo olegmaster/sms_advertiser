@@ -22,4 +22,17 @@ class AdvertisingCampaignTask extends Model
         return $this->hasMany('App\Models\Message\SmsMmsMessage', 'advertising_campaigns_tasks_id');
     }
 
+    public function thematics()
+    {
+        return $this->belongsTo('App\Models\AdvertisingCampaign\Thematic', 'thematics_id' );
+
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User', 'creator_user_id' );
+
+    }
+
+
 }

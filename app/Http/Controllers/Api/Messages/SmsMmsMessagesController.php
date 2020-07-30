@@ -34,7 +34,7 @@ class SmsMmsMessagesController extends Controller
         $page = $request->has('page') ? $request->get('page') : 1;
 
         $proxies = SmsMmsMessage::addPagination($itemsPerPage, $page);
-        $data  = $proxies->with('mediaFielsGroup.mmsMediaFiles', 'advertisingCampaign')->get();
+        $data  = $proxies->with('mediaFielsGroup.mmsMediaFiles', 'advertisingCampaign.thematics')->get();
         $return = array();
         $return['errorCode'] = 0;
         $return['message'] = '';
