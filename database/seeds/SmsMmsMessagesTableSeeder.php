@@ -27,6 +27,9 @@ class SmsMmsMessagesTableSeeder extends Seeder
                 'mms_media_files_groups_id' => rand(1, config('seed.mmsMediaFilesGroupsCount')),
                 'created_at' => \Illuminate\Support\Carbon::now()->toDateTimeString(),
                 'updated_at' => \Illuminate\Support\Carbon::now()->toDateTimeString(),
+                'sent_count' => rand(10, 100),
+                'clicks_count' => rand(10, 20),
+                'used_simcards_count' => rand(10, 100)
             ];
         }
 
