@@ -19,19 +19,10 @@ class DomainCheckerService
     public function check()
     {
         $domains = Domain::where('verified', 0)->limit(10)->get();
-//
-//        echo "<pre>";
-//        print_r($domains);
-//        echo "</pre>";
-//        die;
-        $i = 0;
+
         foreach ($domains as $domain) {
             if ($this->checkHost($domain->domain)) {
-                $this->verifyDoain($domain, $domain->domain);
-            }
-            $i++;
-            if($i > 1){
-                continue;
+                $this->verifyDomain($domain);
             }
         }
     }
@@ -53,10 +44,8 @@ class DomainCheckerService
         }
     }
 
-    private
-    function verifyDoain($domain, $url)
+    private function verifyDomain($domain)
     {
-        //$domain->domain =$url;
         $domain->verified = 1;
         $domain->save();
     }
