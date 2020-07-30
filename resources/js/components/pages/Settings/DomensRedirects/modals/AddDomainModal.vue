@@ -56,6 +56,9 @@
   import { validationMixin } from "vuelidate";
   import { required, requiredIf, helpers, minLength } from "vuelidate/lib/validators";
 
+  const validDomainRegExp = new RegExp(/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/i);
+  const domainValidator = (domain) => validDomainRegExp.test(domain.trim());
+
 
 export default {
     name : 'AddDomainModal',
@@ -78,7 +81,8 @@ export default {
         form: {
             domain: {
                 required,
-                minLength: 5
+                minLength: 5,
+                domainValidator,
             },
             spam_limit: {
                 required,

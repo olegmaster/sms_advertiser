@@ -36,9 +36,9 @@ class CreateAdvertisingCampaignTasksTable extends Migration
 
             $table->softDeletes();
 
-            $table->foreign('thematics_id')->references('id')->on('thematics');
-            $table->foreign('simcard_group_id')->references('id')->on('simcard_groups');
-            $table->foreign('creator_user_id')->references('id')->on('users');
+            $table->foreign('thematics_id')->references('id')->on('thematics')->onDelete('cascade');
+            $table->foreign('simcard_group_id')->references('id')->on('simcard_groups')->onDelete('cascade');
+            $table->foreign('creator_user_id')->references('id')->on('users')->onDelete('cascade');
 
 
         });

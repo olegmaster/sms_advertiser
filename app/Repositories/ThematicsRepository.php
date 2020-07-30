@@ -19,6 +19,7 @@ class ThematicsRepository extends CoreRepository
             ->leftJoin('users', 'thematics.user_id', '=', 'users.id')
             ->select('thematics.*',
                 'users.name as username')
+            ->orderBy('id', 'DESC')
             ->paginate($pageSize);
     }
 

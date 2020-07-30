@@ -28,7 +28,7 @@
                                 <button type="button" tabindex="1" class="dropdown-item"
                                         @click="activateThematics(null, 0)">Деактивировать
                                 </button>
-                                <button type="button" tabindex="2" class="dropdown-item" @click="onDeleteThematics(null)">
+                                <button type="button" tabindex="2" class="dropdown-item text-danger" @click="onDeleteThematics(null)">
                                     Удалить
                                 </button>
                             </b-dropdown>
@@ -51,7 +51,7 @@
                         </div>
                     </div>
                 </div>
-                <b-table striped bordered outlined hover fixed :items="items" :fields="fields">
+                <b-table striped bordered outlined hover :items="items" :fields="fields">
 
                     <template v-slot:cell(checkbox_field)="data">
                         <b-form-checkbox v-model="data.item.checked"></b-form-checkbox>
@@ -121,7 +121,7 @@
                                 <button type="button" tabindex="1" class="dropdown-item"
                                         @click="activateThematics(null, 0)">Деактивировать
                                 </button>
-                                <button type="button" tabindex="2" class="dropdown-item" @click="onDeleteThematics(null)">
+                                <button type="button" tabindex="2" class="dropdown-item text-danger" @click="onDeleteThematics(null)">
                                     Удалить
                                 </button>
                             </b-dropdown>
