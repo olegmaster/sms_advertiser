@@ -75,6 +75,11 @@
                         <div v-show="data.item.is_banned==0" class="text-danger">Нет</div>
                     </template>
 
+                    <template v-slot:cell(verified)="data">
+                        <div v-show="data.item.verified==1" class="text-success">Да</div>
+                        <div v-show="data.item.verified==0" class="text-danger">Нет</div>
+                    </template>
+
                     <template v-slot:cell(status)="data">
                         <div v-show="data.item.status==1" class="text-success">Да</div>
                         <div v-show="data.item.status==0" class="text-danger">Нет</div>
@@ -278,6 +283,7 @@
                 {key: 'is_banned', label: 'Забанен'},
                 {key: 'status', label: 'Активный'},
                 {key: 'is_frozen', label: 'Заморожен'},
+                {key: 'verified', label: 'Подтвержден'},
                 {key: 'frozen_on', label: 'Дата разморозки'},
                 {key: 'spam_limit', label: 'Лимит по рассылкам'},
                 {key: 'current_send_count', label: 'Кол. тек. отпр. SMS до лимита'},
