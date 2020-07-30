@@ -17,4 +17,9 @@ class AdvertisingCampaignTask extends Model
         return new BuilderWithPagination($query);
     }
 
+    public function smsMmsMessages()
+    {
+        return $this->hasMany('App\Models\Message\SmsMmsMessage', 'advertising_campaign_task_id');
+    }
+
 }

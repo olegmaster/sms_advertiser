@@ -17,4 +17,15 @@ class SmsMmsMessage extends Model
         return new BuilderWithPagination($query);
     }
 
+    public function mediaFielsGroup()
+    {
+        return $this->belongsTo('App\Models\Message\MmsMediaFilesGroup', 'mms_media_files_groups_id' );
+
+    }
+
+    public function advertisingCampaign()
+    {
+        return $this->belongsTo('App\Models\AdvertisingCampaign\AdvertisingCampaignTask', 'advertising_campaign_task_id' );
+    }
+
 }
