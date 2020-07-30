@@ -23,8 +23,8 @@ class SmsMmsMessagesTableSeeder extends Seeder
                 'include_name' => rand(0, 1),
                 'parent_id' => 0,
                 'sort_order' => 0,
-                'advertising_campaign_task_id' => rand(1, 100),
-                'mms_media_files_groups_id' => rand(1, 200),
+                'advertising_campaign_task_id' => rand(1, config('seed.advertisingCampaignsCount')),
+                'mms_media_files_groups_id' => rand(1, config('seed.mmsMediaFilesGroupsCount')),
                 'created_at' => \Illuminate\Support\Carbon::now()->toDateTimeString(),
                 'updated_at' => \Illuminate\Support\Carbon::now()->toDateTimeString(),
             ];
