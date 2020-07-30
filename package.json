@@ -49,6 +49,7 @@
         "countup.js": "^2.0.5",
         "es6-promise": "^4.2.6",
         "increase-memory-limit": "^1.0.6",
+        "ladda": "^1.0.0",
         "leaflet": "^1.4.0",
         "linearicons": "^1.0.1",
         "material-design-icons-iconfont": "^4.0.5",
