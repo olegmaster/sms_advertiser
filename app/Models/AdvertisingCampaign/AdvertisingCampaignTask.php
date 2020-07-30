@@ -19,7 +19,7 @@ class AdvertisingCampaignTask extends Model
 
     public function smsMmsMessages()
     {
-        return $this->hasMany('App\Models\Message\SmsMmsMessage', 'advertising_campaign_task_id');
+        return $this->hasMany('App\Models\Message\SmsMmsMessage', 'advertising_campaigns_tasks_id');
     }
 
 }
