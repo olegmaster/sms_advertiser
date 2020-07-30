@@ -3,7 +3,7 @@
 return [
     'countriesCount' => env('SEED_COUNTRIES_COUT', 3),
     'usersCount' => env('SEED_USERS_COUNT', 10),
-    'thematicsCount' => env('SEED_THEMATICS_COUNT', 2000),
+    'thematicsCount' => env('SEED_THEMATICS_COUNT', 100),
 
     // sim
     'simbanksCount' => env('SEED_SIMBANKS_COUNT', 4),

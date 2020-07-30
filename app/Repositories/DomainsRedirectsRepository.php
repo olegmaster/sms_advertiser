@@ -43,6 +43,7 @@ class DomainsRedirectsRepository extends CoreRepository
         $result = DB::table('domains')
             ->selectRaw($cols)
             ->leftJoin('domains_stat_by_dates', 'domains.id', '=', 'domains_stat_by_dates.domain_id')
+            ->orderBy('domains.id', 'DESC')
             ->groupBy('domains.id')
             ->paginate($perPage);
         return $result;

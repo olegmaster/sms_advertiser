@@ -40,7 +40,7 @@
                                 <button type="button" tabindex="2" class="dropdown-item" @click="freezeDomain(null, 0)">
                                     Разморозить
                                 </button>
-                                <button type="button" tabindex="2" class="dropdown-item" @click="onDeleteDomains(null)">
+                                <button type="button" tabindex="2" class="dropdown-item text-danger" @click="onDeleteDomains(null)">
                                     Удалить
                                 </button>
                             </b-dropdown>
@@ -71,13 +71,13 @@
                     </template>
 
                     <template v-slot:cell(is_banned)="data">
-                        <div v-show="data.item.is_banned==1" class="text-success">Да</div>
-                        <div v-show="data.item.is_banned==0" class="text-danger">Нет</div>
+                        <div v-show="data.item.is_banned==1" class="text-danger">Забанен</div>
+                        <div v-show="data.item.is_banned==0" class="text-success">Не забанен</div>
                     </template>
 
                     <template v-slot:cell(verified)="data">
-                        <div v-show="data.item.verified==1" class="text-success">Да</div>
-                        <div v-show="data.item.verified==0" class="text-danger">Нет</div>
+                        <div v-show="data.item.verified==1" class="text-success">Доступен из интернета</div>
+                        <div v-show="data.item.verified==0" class="text-danger">Не доступен</div>
                     </template>
 
                     <template v-slot:cell(status)="data">
@@ -86,8 +86,8 @@
                     </template>
 
                     <template v-slot:cell(is_frozen)="data">
-                        <div v-show="data.item.is_frozen==1" class="text-success">Да</div>
-                        <div v-show="data.item.is_frozen==0" class="text-danger">Нет</div>
+                        <div v-show="data.item.is_frozen==1" class="text-success">Заморожен</div>
+                        <div v-show="data.item.is_frozen==0" class="text-danger">Не заморожен</div>
                     </template>
 
                     <template v-slot:cell(statistics)="data">
@@ -142,22 +142,22 @@
                                     <div class="menu-header-content"><h6 class="menu-header-title">Действия</h6></div>
                                 </div>
                             </div>
-                            <button type="button" tabindex="0" class="dropdown-item" @click="activateDomain(data.item.id, 1)">
+                            <button type="button" tabindex="0" v-if="!data.item.active" class="dropdown-item" @click="activateDomain(data.item.id, 1)">
                                 Активировать
                             </button>
-                            <button type="button" tabindex="1" class="dropdown-item" @click="activateDomain(data.item.id, 0)">
+                            <button type="button" tabindex="1" v-if="data.item.active" class="dropdown-item" @click="activateDomain(data.item.id, 0)">
                                 Деактивировать
                             </button>
-                            <button type="button" tabindex="2" class="dropdown-item" @click="banDomain(data.item.id, 1)">
+                            <button type="button" tabindex="2" v-if="!data.item.is_banned" class="dropdown-item" @click="banDomain(data.item.id, 1)">
                                 Забанить
                             </button>
-                            <button type="button" tabindex="0" class="dropdown-item" @click="banDomain(data.item.id, 0)">
+                            <button type="button" tabindex="0" v-if="data.item.is_banned" class="dropdown-item" @click="banDomain(data.item.id, 0)">
                                 Разбанить
                             </button>
-                            <button type="button" tabindex="1" class="dropdown-item" @click="freezeDomain(data.item.id, 1)">
+                            <button type="button" tabindex="1" v-if="!data.item.is_frozen" class="dropdown-item" @click="freezeDomain(data.item.id, 1)">
                                 Заморозить
                             </button>
-                            <button type="button" tabindex="2" class="dropdown-item" @click="freezeDomain(data.item.id, 0)">
+                            <button type="button" tabindex="2" v-if="data.item.is_frozen" class="dropdown-item" @click="freezeDomain(data.item.id, 0)">
                                 Разморозить
                             </button>
                             <button type="button" tabindex="1" class="dropdown-item text-primary"
@@ -216,7 +216,7 @@
                                 <button type="button" tabindex="2" class="dropdown-item" @click="freezeDomain(null, 0)">
                                     Разморозить
                                 </button>
-                                <button type="button" tabindex="2" class="dropdown-item" @click="onDeleteDomains(null)">
+                                <button type="button" tabindex="2" class="dropdown-item text-danger" @click="onDeleteDomains(null)">
                                     Удалить
                                 </button>
                             </b-dropdown>

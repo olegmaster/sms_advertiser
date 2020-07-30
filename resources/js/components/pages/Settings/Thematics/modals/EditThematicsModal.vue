@@ -3,7 +3,7 @@
         v-model="showModal"
         hide-backdrop
         no-close-on-backdrop
-        title="Редактировать тематику"
+        :title="modalTitle"
         @hidden="resetModal"
         @ok="handleOk"
 
@@ -73,7 +73,9 @@
             }
         },
         computed: {
-
+            modalTitle(){
+                return "Редактировать тематику \"" + this.form.name + "\""
+            }
 
         },
         methods: {
