@@ -123,6 +123,7 @@ export default {
                 {
                     this.$emit('add-success');
                     this.resetModal()
+                    this.$toast('Домен добавлен');
                 }
                 vm.isLoading = false;
                 this.showModal = false;

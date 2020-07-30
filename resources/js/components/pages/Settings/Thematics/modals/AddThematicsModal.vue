@@ -100,6 +100,7 @@ export default {
                 if (!response.data.errorCode )
                 {
                     this.$emit('add-success');
+                    this.$toast('Тематика добавлена');
                     this.resetModal()
                 }
                 vm.isLoading = false;

@@ -317,9 +317,6 @@
                     data.ids = this.items.filter(v => v.checked).map(v => v.id);
                 }
 
-                console.log(data)
-
-
 
                 for(id of data.ids){
                     url = '/api/settings/thematics/' + id;
@@ -327,7 +324,7 @@
                         if (!response.data.errorCode) {
                             this.page = 1;
                             this.getThematics();
-                            this.$toast('Тематика удалена', 'danger');
+
 
                         } else
                             this.isLoading = false;
@@ -335,6 +332,7 @@
                         this.isLoading = false;
                     });
                 }
+                setTimeout(this.$toast('Операция удаления прошла успешно', 'danger'), 3000);
 
 
             },

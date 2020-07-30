@@ -442,7 +442,7 @@
                         if (!response.data.errorCode) {
                             this.page = 1;
                             this.getDomains();
-                            this.$toast('Домен удален', 'danger');
+
 
                         } else
                             this.isLoading = false;
@@ -450,7 +450,7 @@
                         this.isLoading = false;
                     });
                 }
-
+                setTimeout(this.$toast('Операция удаления прошла успешно', 'danger'), 3000);
 
             },
             onDeleteDomains(id = null) {
@@ -475,17 +475,6 @@
 
                     })
             },
-
-            showMsgBoxTwo() {
-
-            },
-            onDeleteCancel() {
-
-            },
-            onDeleteOK() {
-
-            }
-
 
         },
         watch: {

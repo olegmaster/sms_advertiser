@@ -138,6 +138,7 @@
                     if (!response.data.errorCode )
                     {
                         this.$emit('edit-success');
+                        this.$toast('Домен отредактирован');
                     }
                     vm.isLoading = false;
                     this.showModal = false;
