@@ -24,6 +24,7 @@ return [
     //Messages
     'smsMmsMessagesCount' => env('SEED_SMS_MMS_MESSAGES_COUNT', 750),
     'mmsMediaFilesGroupsCount' => env('SEED_MMS_MEDIA_FILES_GROUPS_COUNT', 200),
+    'mmsMediaFilesCount' => env('SEED_MMS_MEDIA_FILES_COUNT', 800),
 
 
 
