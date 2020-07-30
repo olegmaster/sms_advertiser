@@ -3,7 +3,7 @@
         v-model="showModal"
         hide-backdrop
         no-close-on-backdrop
-        title="Редактировать домен"
+        title="Редактировать тематику"
         @hidden="resetModal"
         @ok="handleOk"
 
@@ -20,26 +20,12 @@
                 <div class="row">
                     <div class="col-sm-auto">
                         <b-form-group
-                            label="Название домена"
-                            invalid-feedback="Введите название домена"
-                            :state="!$v.form.domain.$dirty ? null :  !$v.form.domain.$invalid"
+                            label="Название тематики"
+                            invalid-feedback="Введите название тематики"
+                            :state="!$v.form.name.$dirty ? null :  !$v.form.name.$invalid"
                         >
                             <b-form-input type="text"
-                                          v-model="$v.form.domain.$model"
-                            ></b-form-input>
-                        </b-form-group>
-                    </div>
-                    <div class="col-sm-auto">
-                        <b-form-group label="Лимит">
-                            <b-form-input type="number"
-                                          v-model="$v.form.spam_limit.$model"
-                            ></b-form-input>
-                        </b-form-group>
-                    </div>
-                    <div class="col-sm-auto">
-                        <b-form-group label="Время заморозки в часах">
-                            <b-form-input type="number"
-                                          v-model="$v.form.freeze_hours.$model"
+                                          v-model="$v.form.name.$model"
                             ></b-form-input>
                         </b-form-group>
                     </div>
@@ -60,16 +46,14 @@
 
 
     export default {
-        name : 'EditDomainModal',
+        name : 'EditThematicsModal',
         components: {
             VueElementLoading
         },
         props: {
             value : false,
             form: {
-                domain: '',
-                freeze_hours: 0,
-                spam_limit: 0,
+                name: '',
             }
         },
         data: function () {
@@ -77,24 +61,15 @@
                 showModal : false,
                 isLoading : false,
                 form: {
-                    domain : '',
-                    spam_limit : 0,
-                    freeze_hours: 0,
+                    name : '',
                 }
             };
         },
         validations: {
             form: {
-                domain: {
+                name: {
                     required
                 },
-                spam_limit: {
-                    required,
-                },
-                freeze_hours: {
-                    required
-                },
-
             }
         },
         computed: {
@@ -104,9 +79,7 @@
         methods: {
             resetModal()
             {
-                this.form.domain = '';
-                this.form.spam_limit = 0;
-                this.form.freeze_hours = 0;
+                this.form.name = '';
                 this.$v.$reset();
             },
             handleOk(bvModalEvt)
@@ -121,24 +94,23 @@
                     console.log($v.form.$error())
                     return;
                 }
-                this.editDomain();
+                this.editThematics();
             },
-            editDomain()
+            editThematics()
             {
                 let vm = this;
                 this.isLoading = true;
 
-                let url = '/api/settings/domains/7';
+                let url = '/api/settings/thematics/3';
                 console.log('submit')
                 console.log(this.form)
                 let data = this.form
-                data.value = 7
+                data.value = 3
                 data.ids = [this.form.id]
                 axios.patch(url, data).then( response => {
                     if (!response.data.errorCode )
                     {
                         this.$emit('edit-success');
-                        this.$toast('Домен отредактирован');
                     }
                     vm.isLoading = false;
                     this.showModal = false;

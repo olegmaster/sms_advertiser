@@ -21,6 +21,7 @@ class CreateDomainsTable extends Migration
             $table->boolean('is_frozen')->default(0);
             $table->timestamp('frozen_on')->default(\Illuminate\Support\Facades\DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('freeze_hours')->default(20);
+            $table->tinyInteger('verified')->default(0);
             $table->integer('spam_limit')->default(20000);
             $table->integer('current_send_count')->default(0);
             $table->integer('all_send_count')->default(0);

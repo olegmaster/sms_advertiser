@@ -3,7 +3,7 @@
             v-model="showModal"
             hide-backdrop
             no-close-on-backdrop
-            title="Добавить домен"
+            title="Добавить тематику"
             @show="resetModal"
             @hidden="resetModal"
             @ok="handleOk"
@@ -21,26 +21,12 @@
                 <div class="row">
                     <div class="col-sm-auto">
                         <b-form-group
-                            label="Название домена"
-                            invalid-feedback="Введите название домена"
-                            :state="!$v.form.domain.$dirty ? null :  !$v.form.domain.$invalid"
+                            label="Название тематики"
+                            invalid-feedback="Введите название тематики"
+                            :state="!$v.form.name.$dirty ? null :  !$v.form.name.$invalid"
                         >
                             <b-form-input type="text"
-                                          v-model="$v.form.domain.$model"
-                            ></b-form-input>
-                        </b-form-group>
-                    </div>
-                    <div class="col-sm-auto">
-                        <b-form-group label="Лимит">
-                            <b-form-input type="number"
-                                          v-model="$v.form.spam_limit.$model"
-                            ></b-form-input>
-                        </b-form-group>
-                    </div>
-                    <div class="col-sm-auto">
-                        <b-form-group label="Время заморозки в часах">
-                            <b-form-input type="number"
-                                          v-model="$v.form.freeze_hours.$model"
+                                          v-model="$v.form.name.$model"
                             ></b-form-input>
                         </b-form-group>
                     </div>
@@ -58,7 +44,7 @@
 
 
 export default {
-    name : 'AddDomainModal',
+    name : 'AddThematicsModal',
     components: {
           VueElementLoading
     },
@@ -68,7 +54,7 @@ export default {
             showModal : false,
             isLoading : false,
             form: {
-                domain : '',
+                name : '',
                 spam_limit : 30000,
                 freeze_hours: 24,
             }
@@ -76,15 +62,9 @@ export default {
     },
     validations: {
         form: {
-            domain: {
+            name: {
                 required,
                 minLength: 5
-            },
-            spam_limit: {
-                required,
-            },
-            freeze_hours: {
-                required
             },
         }
     },
@@ -93,8 +73,6 @@ export default {
         resetModal()
         {
             this.form.name = '';
-            this.form.spam_limit = 32000;
-            this.form.freeze_hours = 24;
             this.$v.$reset();
         },
         handleOk(bvModalEvt)
@@ -109,21 +87,21 @@ export default {
                 console.log($v.form.$error())
                 return;
             }
-            this.addDomain();
+            this.addThematics();
         },
-        addDomain()
+        addThematics()
         {
             let vm = this;
             this.isLoading = true;
 
-            let url = '/api/settings/domains';
+            let url = '/api/settings/thematics';
             console.log(this.form)
             axios.post(url, this.form).then( response => {
                 if (!response.data.errorCode )
                 {
                     this.$emit('add-success');
+                    this.$toast('Тематика добавлена');
                     this.resetModal()
-                    this.$toast('Домен добавлен');
                 }
                 vm.isLoading = false;
                 this.showModal = false;

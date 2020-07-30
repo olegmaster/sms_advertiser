@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\service\TelegramNotificationSender;
+use App\Services\DomainCheckerService;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -24,7 +26,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->call(function () {
+            $domainChecker = new DomainCheckerService();
+            $domainChecker->check();
+        })->everyThirtyMinutes();
     }
 
     /**

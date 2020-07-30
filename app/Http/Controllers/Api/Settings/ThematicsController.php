@@ -17,10 +17,21 @@ class ThematicsController extends BaseController
      * @param ThematicsRepository $repository
      * @return JsonResponse
      */
-    public function index(ThematicsRepository $repository)
+    public function index(ThematicsRepository $repository, Request $request)
     {
-        $result = $repository->getAllWithPaginate();
-        return response()->json($result);
+        $itemsPerPage = $request->has('itemsPerPage') ? $request->get('itemsPerPage') : 25;
+
+        $data = $repository->getAllWithPaginate($itemsPerPage);
+
+        $return = [];
+        $return['errorCode'] = 0;
+        $return['message'] = '';
+        $return['data'] = array(
+            'stat' => ['itemsCount' => $data->total()],
+            'items' => $data->items()
+        );
+
+        return response()->json($return);
     }
 
 
@@ -37,16 +48,16 @@ class ThematicsController extends BaseController
         $item = (new Thematic())->create($data);
 
         if ($item) {
-            return response()->json(['status' => true, 'data' => [
+            return response()->json(['errorCode' => 0, 'data' => [
                 'id' => $item->id,
                 'name' => $item->name,
                 'status' => $item->status,
                 'created_at' => $item->created_at
             ],
-                'message' => __('messages.thematics_created')
+                'message' => __('messages.domain_created')
             ]);
         } else {
-            return response()->json(['status' => false, 'message' => __('messages.thematics_creation_failed')]);
+            return response()->json(['errorCode' => 1, 'message' => __('messages.domain_creation_failed')]);
         }
     }
 
@@ -60,20 +71,46 @@ class ThematicsController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        $item = Thematic::find($id);
+        $jsonData = $request->input();
 
-        if (empty($item)) {
-            return response()->json(['status' => false, 'message' => __('messages.thematics_updating_failed')]);
+        //print_r($jsonData);die;
+
+        switch ($jsonData['value']) {
+            case 1:
+                $data = [
+                    'status' => 1
+                ];
+                break;
+            case 2:
+                $data = [
+                    'status' => 0
+                ];
+                break;
+            case 3:
+
+                $data = [
+                    'name' => $jsonData['name'],
+                ];
+                break;
+            default:
+                $data = [];
         }
 
-        $data = $request->all();
-        //print_r($data);die;
-        $item
-            ->fill($data)
-            ->save();
+        $return = [];
+        $return['errorCode'] = 0;
+        $return['message'] = '';
+        $return['data'] = array();
 
-        return response()->json(['status' => true, 'message' => __('messages.thematics_updated_successfully')]);
-    }
+        if (!$jsonData || !isset($jsonData['value']) || !isset($jsonData['ids']) || !sizeof($jsonData['ids'])) {
+            $return['errorCode'] = 2;
+            $return['message'] = 'Не пераданны необходимые данные';
+        }
+
+        if (!$return['errorCode'])
+            Thematic::whereIn('id', $jsonData['ids'])->update($data);
+
+
+        return response()->json($return);  }
 
     /**
      * Remove the specified resource from storage.

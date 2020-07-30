@@ -27,6 +27,7 @@ class DomainsRedirectsRepository extends CoreRepository
             'is_banned',
             'status',
             'is_frozen',
+            'verified',
             'frozen_on',
             'freeze_hours',
             'spam_limit',
