@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             $domainChecker = new DomainCheckerService();
             $domainChecker->check();
-        })->everyThirtyMinutes();
+        })->everyMinute();
     }
 
     /**
