@@ -20,6 +20,7 @@ class DomainCheckerService
     {
         $domains = Domain::where('verified', 0)->get();
 
+
         foreach ($domains as $domain) {
             if ($this->checkHost($domain->domain)) {
                 $this->verifyDomain($domain);
@@ -37,9 +38,7 @@ class DomainCheckerService
                 return true;
             }
             return false;
-        } catch (ConnectException $e) {
-            return false;
-        } catch (ClientException $e){
+        } catch (\Exception $e) {
             return false;
         }
     }
