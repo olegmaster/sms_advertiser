@@ -18,7 +18,7 @@ class DomainCheckerService
 
     public function check()
     {
-        $domains = Domain::where('verified', 0)->limit(10)->get();
+        $domains = Domain::where('verified', 0)->get();
 
         foreach ($domains as $domain) {
             if ($this->checkHost($domain->domain)) {
