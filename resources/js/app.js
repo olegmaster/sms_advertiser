@@ -38,6 +38,7 @@ import router from './router';
 import Vuelidate from 'vuelidate'
 
 import toastPlugin from './plugins/toast';
+import commonFunctions from './plugins/common_functions';
 
 import BootstrapVue from "bootstrap-vue";
 import 'bootstrap-vue/dist/bootstrap-vue.css';
@@ -62,6 +63,8 @@ Vue.mixin({
 });
 */
 
+
+Vue.use(commonFunctions);
 Vue.use(toastPlugin);
 Vue.use(Vuelidate);
 Vue.use(BootstrapVue);
