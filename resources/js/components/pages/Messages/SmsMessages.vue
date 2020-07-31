@@ -3,20 +3,83 @@
     <page-title :heading=heading :subheading=subheading :icon=icon></page-title>
 
     <b-card title="" class="main-card mb-4">
-      <div>
-        <VueElementLoading :active="isLoading" spinner="bar-fade-scale" color="var(--primary)"/>
+      <b-card class="main-card"
+                header="Фильтр"
+                header-bg-variant="primary"
+                header-text-variant="white"
+                style="max-width: 950px;"
+                footer-bg-variant="light"
+                footer-border-variant="dark"
+                align="left"
+                :disabled="isLoading"
+        >
 
-        <b-card title="Фильтр" class="main-card mb-2">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-sm-2">
+                  <b-form-group
+                          label="Тип SMS"
+                          class="mb-0"
+                          :disabled="isLoading"
+                  >
+                    <b-form-radio-group
+                            v-model="filter.destination_type"
+                            :options="radioOptions1"
+                            name="radios-stacked"
+                            stacked
+                            size="sm"
 
-          <p>With supporting text below as a natural lead-in to additional content.</p>
-            <p class="mb-0">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.</p>
-          <div class="d-block text-right card-footer">
-            <b-button class="btn btn-shadow btn-hover-shine btn-transition btn-secondary" >Сбросить фильтр</b-button>
-            <vue-ladda data-style="zoom-out" button-class="btn btn-primary btn-shadow btn-hover-shine btn-transition" :loading="filterButton.loading" :progress="filterButton.progress" @click="filter()">Применить</vue-ladda>
-          </div>
+                    ></b-form-radio-group>
+                  </b-form-group>
+                </div>
+                <div class="col">
+                  <b-form-group
+                          class="mb-0"
+                          label="Текст SMS сообщения"
+                          :disabled="isLoading"
+                  >
+                    <b-form-input
+                            v-model="filter.text"
+                            id="ip"
+                            placeholder=""
+                            size="sm"
+                    ></b-form-input>
+                  </b-form-group>
+                </div>
+                <div class="col">
+                  <b-form-group
+                          class="mb-0"
+                          label="ID SMS сообщения"
+                          :disabled="isLoading"
+                  >
+                    <b-form-input
+                            v-model="filter.obj_id"
+                            placeholder=""
+                            size="sm"
+                    ></b-form-input>
+                  </b-form-group>
+                </div>
+                <div class="col">
+                  <b-form-group
+                          class="mb-0"
+                          label="Тематика"
+                          :disabled="isLoading"
+                  >
+                    <b-form-select v-model="filter.thematics_id" :options="thematicsOptions" size="sm"></b-form-select>
+                  </b-form-group>
+                </div>
+              </div>
+            </div>
+            <template v-slot:footer>
+              <div align="right" style="width: 100%" >
+                <b-button class="btn btn-shadow btn-hover-shine btn-transition btn-secondary" :disabled="isLoading" @click="resetFilter()" >Сбросить фильтр</b-button> &nbsp; &nbsp;
+                <vue-ladda data-style="zoom-out" button-class="btn btn-primary btn-shadow btn-hover-shine btn-transition" :disabled="isLoading" :loading="filterButton.loading" :progress="filterButton.progress" @click="doFilter()">Применить</vue-ladda>
+              </div>
+            </template>
         </b-card>
 
-
+      <div style="padding-top: 10px">
+        <VueElementLoading :active="isLoading" spinner="bar-fade-scale" color="var(--primary)"/>
         <div class="container-fluid">
           <div class="row">
             <div class="col" align="left">
@@ -32,7 +95,17 @@
           </div>
         </div>
 
+
+
+
         <b-table striped bordered outlined hover fixed :items="items" :fields="fields">
+
+          <template v-slot:cell(text)="data">
+            <div v-b-popover.hover.right="data.item.text" title="Полный текст сообщения">
+              {{data.item.text.split(' ').splice(0, 5).join(' ')}} <strong>...</strong>
+            </div>
+
+          </template>
 
           <template v-slot:cell(thematics_name)="data">
             {{data.item.advertising_campaign.thematics.name}}
@@ -47,7 +120,7 @@
           </template>
 
           <template v-slot:table-colgroup="scope">
-            <col style="width: 30px">
+            <col style="width: 40px">
             <col>
             <col>
             <col>
@@ -62,19 +135,14 @@
 
         <div class="container-fluid">
           <div class="row">
-            <div class="col-md-auto">
-            </div>
-            <div class="col-md-auto">
-            </div>
             <div class="col">
-
             </div>
-
-            <div class="col-md-auto">
+            <div class="col-md-auto" align="right">
               <v-pagination v-model="page" @input="getSmsList()" :length="pagesCount" :total-visible="10"></v-pagination>
             </div>
           </div>
         </div>
+
       </div>
 
     </b-card>
@@ -131,7 +199,6 @@
       ],
       items: [],
       itemsPerPage : 25,
-      allSelected: false,
       isLoading: false,
       page: 1,
       pagesCount :1,
@@ -139,18 +206,30 @@
       filterButton: {
         loading: false,
         progress: 0
-      }
+      },
+      withFilter: false,
+      filter: {
+        destination_type: 0,
+        text: '',
+        obj_id: '',
+        thematics_id : 0
+      },
+      radioOptions1 :[
+        { text: 'Рекламные SMS', value: 0 },
+        { text: 'Socks4', value: 1 },
+        { text: 'Socks5', value: 2 },
+      ],
+      thematicsOptions : [
+              {text: 'Не важно',  value: 0}
+              ]
+
     }),
     computed: {
-      checkedItemsCount() {
-        return this.items.filter(v=>v.checked).length;
-      }
     },
     methods: {
       getSmsList()
       {
         let vm = this;
-        this.allSelected = false;
         this.isLoading = true;
         let new_items = [];
         let url = '/api/sms-mms-messages/sms/?page=' + this.page + '&itemsPerPage=' + this.itemsPerPage;
@@ -160,8 +239,6 @@
             new_items = response.data.data.items;
             this.pagesCount = Math.ceil(response.data.data.stat.itemsCount / this.itemsPerPage);
             vm.itemsTotalCount = response.data.data.stat.itemsCount;
-            for (let i in  new_items )
-              new_items[i].checked = false;
             vm.items = new_items;
           }
           vm.isLoading = false;
@@ -169,19 +246,32 @@
           vm.isLoading = false;
         });
       },
-      filter()
+      resetFilter(){
+        this.withFilter = false;
+        this.filter.destination_type = 0;
+        this.filter.text = '';
+        this.filter.obj_id = '';
+        this.filter.thematics_id = 0;
+      },
+      doFilter()
       {
+        this.withFilter = true;
         this.filterButton.loading = true;
         updateButtonProgress(duration, this.filterButton);
         let vm = this;
         setTimeout(function () { vm.filterButton.loading = false;}, duration);
+        this.getSmsList();
       }
     },
-
     watch: {
       itemsPerPage : function(val)
       {
         this.$cookies.set('sms_messages_list_per_page', val, '31d');
+      },
+      isLoading: function(val)
+      {
+        if (this.withFilter)
+          this.filterButton.loading = val;
       }
     },
     mounted()
