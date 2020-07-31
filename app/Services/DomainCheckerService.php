@@ -4,8 +4,6 @@ namespace App\Services;
 
 use App\Models\DomainsRedirects\Domain;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ConnectException;
 
 class DomainCheckerService
 {
