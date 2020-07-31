@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class AdvertisingCampaignSeeder extends Seeder
 {
@@ -38,7 +39,17 @@ class AdvertisingCampaignSeeder extends Seeder
             ];
         }
 
-        \Illuminate\Support\Facades\DB::table('advertising_campaign_tasks')->insert($items);
+        $simbanksToAdvertisingCampaignsItems = [];
+
+        for ($i = 1; $i < config('seed.simbanksCount'); $i++) {
+            $simbanksToAdvertisingCampaignsItems[] = [
+                'simbank_id' => $i,
+                'advertising_campaign_task_id' => rand(1, config('seed.advertisingCampaignsCount'))
+            ];
+        }
+
+        DB::table('advertising_campaign_tasks')->insert($items);
+        DB::table('simbank_to_advertising_campaigns')->insert($simbanksToAdvertisingCampaignsItems);
 
     }
 }
