@@ -23,6 +23,7 @@ class SimbanksRepository extends CoreRepository
             'simbanks.all_sent_count as all_sent_count',
             'simbanks.all_sent_voice_call_count as all_sent_voice_call_count',
             'advertising_campaign_tasks.name as adc_name',
+            'simbanks.created_at as created_at'
         ]);
         $result = DB::table('simbanks')
             ->selectRaw($cols)
