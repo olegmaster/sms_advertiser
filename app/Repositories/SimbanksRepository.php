@@ -23,6 +23,7 @@ class SimbanksRepository extends CoreRepository
             'simbanks.all_sent_sms_count as all_sent_sms_count',
             'simbanks.all_sent_mms_count as all_sent_mms_count',
             'simbanks.all_sent_voice_call_count as all_sent_voice_call_count',
+            'simbanks.status as status',
             'advertising_campaign_tasks.name as adc_name',
             'simbanks.created_at as created_at'
         ]);
