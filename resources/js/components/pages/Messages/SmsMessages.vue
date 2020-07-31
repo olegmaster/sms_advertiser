@@ -224,18 +224,19 @@
       },
       withFilter: false,
       filter: {
-        destination_type: 0,
+        destination_type: -1,
         text: '',
         obj_id: '',
         thematics_id : 0
       },
       radioOptions1 :[
+        { text: 'Все', value: -1 },
         { text: 'Рекламные SMS', value: 0 },
         { text: 'SMS тон 1', value: 2 },
         { text: 'SMS автоответчик', value: 6 },
       ],
       thematicsOptions : [
-              {text: 'Не важно',  value: 0}
+              {text: 'Все',  value: 0}
               ]
 
     }),
@@ -260,6 +261,27 @@
     computed: {
     },
     methods: {
+      getThematics()
+      {
+        let vm = this;
+        let new_items = [];
+        let url = '/api/settings/thematics/?page=1&itemsPerPage=1000';
+        axios.get(url).then( response => {
+          if (!response.data.errorCode )
+          {
+            new_items = [];
+            new_items.push({text: 'Все',  value: 0});
+            for(let i in response.data.data.items)
+              new_items.push({
+                text: response.data.data.items[i].name,
+                value: response.data.data.items[i].id
+              });
+            vm.thematicsOptions = new_items;
+          }
+        }).catch( responce => {
+        });
+      },
+
       getSmsList()
       {
         let vm = this;
@@ -285,11 +307,12 @@
       },
       resetFilter(){
         this.withFilter = false;
-        this.filter.destination_type = 0;
+        this.filter.destination_type = -1;
         this.filter.text = '';
         this.filter.obj_id = '';
         this.filter.thematics_id = 0;
         this.$v.$reset();
+        this.getSmsList();
       },
       doFilter()
       {
@@ -323,6 +346,7 @@
       if (itemsPerPage && parseInt(itemsPerPage)>0)
         this.itemsPerPage = itemsPerPage;
       this.getSmsList();
+      this.getThematics();
     }
   }
 
