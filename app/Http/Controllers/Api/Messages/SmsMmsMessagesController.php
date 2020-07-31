@@ -32,6 +32,7 @@ class SmsMmsMessagesController extends Controller
     {
         $itemsPerPage = $request->has('itemsPerPage') ? $request->get('itemsPerPage') : 25;
         $page = $request->has('page') ? $request->get('page') : 1;
+        $filter = $request->has('filter') ? json_decode($request->get('filter'),true) : null;
 
         $proxies = SmsMmsMessage::addPagination($itemsPerPage, $page);
         $data  = $proxies->with('mediaFielsGroup.mmsMediaFiles', 'advertisingCampaign.thematics', 'advertisingCampaign.user')->get();
@@ -40,7 +41,8 @@ class SmsMmsMessagesController extends Controller
         $return['message'] = '';
         $return['data'] = array(
             'stat' => ['itemsCount' => $proxies->count()],
-            'items' => $data->toArray()
+            'items' => $data->toArray(),
+            'filter' => $filter
         );
 
         return response()->json($return);

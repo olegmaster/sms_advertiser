@@ -266,7 +266,11 @@
         this.isLoading = true;
         let new_items = [];
         let url = '/api/sms-mms-messages/sms/?page=' + this.page + '&itemsPerPage=' + this.itemsPerPage;
-        axios.get(url).then( response => {
+        let options = {};
+        if (this.withFilter)
+          options.params = {filter: JSON.stringify(this.filter)};
+
+        axios.get(url, options).then( response => {
           if (!response.data.errorCode )
           {
             new_items = response.data.data.items;
