@@ -68,6 +68,10 @@ Route::group( ['namespace' => 'Api', 'prefix' => 'api'],function () {
             ->except(['create', 'show', 'edit'])
             ->names('api.settings.domains');
 
+        Route::resource('simbanks', 'SimbanksController' )
+            ->except(['create', 'show', 'edit'])
+            ->names('api.settings.simbanks');
+
     });
 
     //Работа с сообщениями
