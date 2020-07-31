@@ -9,6 +9,10 @@ class Thematic extends Model
 {
     protected $fillable = ['name', 'status', 'user_id'];
 
+    public const ACTIVATE_THEMATICS_ACTION = 1;
+    public const DEACTIVATE_THEMATICS_ACTION = 2;
+    public const UPDATE_THEMATICS_ACTION = 3;
+
     protected static function boot()
     {
         parent::boot();

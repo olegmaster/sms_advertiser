@@ -73,20 +73,18 @@ class ThematicsController extends BaseController
     {
         $jsonData = $request->input();
 
-        //print_r($jsonData);die;
-
         switch ($jsonData['value']) {
-            case 1:
+            case Thematic::ACTIVATE_THEMATICS_ACTION:
                 $data = [
                     'status' => 1
                 ];
                 break;
-            case 2:
+            case Thematic::DEACTIVATE_THEMATICS_ACTION:
                 $data = [
                     'status' => 0
                 ];
                 break;
-            case 3:
+            case Thematic::UPDATE_THEMATICS_ACTION:
 
                 $data = [
                     'name' => $jsonData['name'],
