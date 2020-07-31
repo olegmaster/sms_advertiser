@@ -119,6 +119,11 @@
             {{data.item.advertising_campaign.user.name}}
           </template>
 
+          <template v-slot:cell(created_at)="data">
+            {{$getDateTime(data.item.created_at, true)}}
+          </template>
+
+
           <template v-slot:table-colgroup="scope">
             <col style="width: 40px">
             <col>

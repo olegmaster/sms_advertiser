@@ -17,7 +17,7 @@ commonFunctions.install = function (Vue, options) {
             'Декабрь',
         ];
         let date = new Date(Date.parse(dbDateTime));
-        return date.getDate() + ' ' + (withMonthText ? monthNames[(''+date.getMonth()).slice(-2)] : (''+date.getMonth()).slice(-2) ) + ' ' + date.getFullYear() + ( with_time ? ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds(): '' );
+        return date.getDate() + '-' + (withMonthText ? monthNames[(''+date.getMonth()).slice(-2)] : ('0'+date.getMonth()).slice(-2) ) + '-' + date.getFullYear() + ( with_time ? ' ' + date.getHours() + ':' + date.getMinutes() + ':' + ('0'+date.getSeconds()).slice(-2): '' );
         //return date.getDate() + '-' + ('0' + date.getMonth()).slice(-2) + '-' + date.getFullYear()
     }
 
