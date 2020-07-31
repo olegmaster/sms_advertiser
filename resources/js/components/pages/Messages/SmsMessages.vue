@@ -7,7 +7,7 @@
                 header="Фильтр"
                 header-bg-variant="primary"
                 header-text-variant="white"
-                style="max-width: 950px;"
+                style="max-width: 1024px;"
                 footer-bg-variant="light"
                 footer-border-variant="dark"
                 align="left"
@@ -16,7 +16,7 @@
 
             <div class="container-fluid">
               <div class="row">
-                <div class="col-sm-2">
+                <div class="col-md-2">
                   <b-form-group
                           label="Тип SMS"
                           class="mb-0"
@@ -28,7 +28,6 @@
                             name="radios-stacked"
                             stacked
                             size="sm"
-
                     ></b-form-radio-group>
                   </b-form-group>
                 </div>
@@ -37,12 +36,16 @@
                           class="mb-0"
                           label="Текст SMS сообщения"
                           :disabled="isLoading"
+                          :state="!$v.filter.text.$dirty || (!$v.filter.text.$invalid && !filter.text.trim()) ? null : !$v.filter.text.$invalid"
+                          invalid-feedback="Введите текст не менее 3х символов"
                   >
                     <b-form-input
-                            v-model="filter.text"
+                            v-model="$v.filter.text.$model"
+                            :state="!$v.filter.text.$dirty || (!$v.filter.text.$invalid && !filter.text.trim()) ? null : !$v.filter.text.$invalid"
                             id="ip"
-                            placeholder=""
+                            placeholder="Введите любой текст"
                             size="sm"
+
                     ></b-form-input>
                   </b-form-group>
                 </div>
@@ -51,11 +54,15 @@
                           class="mb-0"
                           label="ID SMS сообщения"
                           :disabled="isLoading"
+                          :state="!$v.filter.obj_id.$dirty || (!$v.filter.obj_id.$invalid && !filter.obj_id.trim()) ? null : !$v.filter.obj_id.$invalid"
+                          invalid-feedback="Введите целое число больше нулья"
                   >
                     <b-form-input
-                            v-model="filter.obj_id"
-                            placeholder=""
+                            v-model="$v.filter.obj_id.$model"
+                            :state="!$v.filter.obj_id.$dirty || (!$v.filter.obj_id.$invalid && !filter.obj_id.trim()) ? null : !$v.filter.obj_id.$invalid"
                             size="sm"
+                            placeholder="Введите целое число больше нулья"
+
                     ></b-form-input>
                   </b-form-group>
                 </div>
@@ -165,10 +172,13 @@
   import { faStar, faPlus } from '@fortawesome/free-solid-svg-icons'
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
   library.add( faStar, faPlus );
+  import { validationMixin } from "vuelidate";
+  import { required, requiredIf, helpers, minLength, ipAddress, numeric, between,minValue } from "vuelidate/lib/validators";
+
 
   import VueLadda from '../../../assets/components/ladda-loading/src/vue-ladda'
 
-  const duration = 2000;
+  const duration = 4000;
 
   export default {
     components: {
@@ -221,14 +231,32 @@
       },
       radioOptions1 :[
         { text: 'Рекламные SMS', value: 0 },
-        { text: 'Socks4', value: 1 },
-        { text: 'Socks5', value: 2 },
+        { text: 'SMS тон 1', value: 2 },
+        { text: 'SMS автоответчик', value: 6 },
       ],
       thematicsOptions : [
               {text: 'Не важно',  value: 0}
               ]
 
     }),
+    validations: {
+      filter: {
+        destination_type: {
+          required
+        },
+        text: {
+          minLength: minLength(3)
+        },
+        obj_id: {
+          numeric,
+          minValue: minValue(1)
+        },
+        thematics_id: {
+          required
+        }
+      }
+    },
+
     computed: {
     },
     methods: {
@@ -257,9 +285,15 @@
         this.filter.text = '';
         this.filter.obj_id = '';
         this.filter.thematics_id = 0;
+        this.$v.$reset();
       },
       doFilter()
       {
+        this.$v.filter.$touch();
+        if (this.$v.filter.$anyError) {
+          return;
+        }
+
         this.withFilter = true;
         this.filterButton.loading = true;
         updateButtonProgress(duration, this.filterButton);
