@@ -9,7 +9,7 @@
                 header-text-variant="white"
                 style="max-width: 1024px;"
                 footer-bg-variant="light"
-                footer-border-variant="dark"
+                footer-border-variant="secondary"
                 align="left"
                 :disabled="isLoading"
         >
@@ -109,7 +109,7 @@
 
           <template v-slot:cell(text)="data">
             <div v-b-popover.hover.right="data.item.text" title="Полный текст сообщения">
-              {{data.item.text.split(' ').splice(0, 5).join(' ')}} <strong>...</strong>
+              <i class="icon icon-lg pe-7s-info text-primary"/> &nbsp; {{data.item.text.split(' ').splice(0, 5).join(' ')}} <strong>...</strong>
             </div>
 
           </template>
