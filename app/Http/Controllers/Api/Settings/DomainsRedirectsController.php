@@ -69,8 +69,6 @@ class DomainsRedirectsController extends Controller
     {
         $jsonData = $request->input();
 
-        //print_r($jsonData);die;
-
         switch ($jsonData['value']) {
             case 1:
                 $data = [
