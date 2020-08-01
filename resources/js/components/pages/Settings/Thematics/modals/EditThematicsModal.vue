@@ -68,7 +68,8 @@
         validations: {
             form: {
                 name: {
-                    required
+                    required,
+                    minLength: minLength(5)
                 },
             }
         },
