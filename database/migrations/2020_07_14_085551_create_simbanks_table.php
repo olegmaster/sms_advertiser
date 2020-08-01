@@ -16,12 +16,12 @@ class CreateSimbanksTable extends Migration
         Schema::create('simbanks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('capacity');
-            $table->integer('all_sent_sms_count');
-            $table->integer('all_sent_mms_count');
-            $table->integer('all_sent_voice_call_count');
-            $table->tinyInteger('status');
-            $table->unsignedBigInteger('countries_id');
+            $table->integer('capacity')->default(0);
+            $table->integer('all_sent_sms_count')->default(0);
+            $table->integer('all_sent_mms_count')->default(0);
+            $table->integer('all_sent_voice_call_count')->default(0);
+            $table->tinyInteger('status')->default(0);
+            $table->unsignedBigInteger('countries_id')->default(1);
             $table->timestamps();
         });
     }
