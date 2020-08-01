@@ -114,9 +114,9 @@
           </template>
 
           <template v-slot:cell(media)="row">
-            <button type="button" @click="row.toggleDetails" class="btn btn-success btn-shadow btn-hover-shine btn-transition d-inline-flex align-items-center " size="sm" >
-              <font-awesome-icon class="" icon="photo-video"/>
-              Показать картинки
+            <button type="button" @click="row.toggleDetails" class="btn btn-success btn-shadow btn-hover-shine btn-transition d-inline-flex align-items-center" size="sm" >
+              <font-awesome-icon class="mr-2" icon="photo-video"/>
+              <div > {{ row.detailsShowing ? 'Скрыть' : 'Показать'}}</div>
             </button>
           </template>
 
