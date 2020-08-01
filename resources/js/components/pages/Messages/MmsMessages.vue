@@ -124,7 +124,7 @@
             <b-card>
               <slick ref="slick" :options="slickOptions">
                 <div v-for="(mms, index) in row.item.media_files_group.mms_media_files ">
-                  <div class="slider-item"><a :href="mms.file_path" target="_blank"><img :src="mms.file_path" style="border: 1px solid lightgray; width: 100%; height: auto; object-fit: contain"></a></div>
+                  <div class="slider-item" ><div align="center" style="width:100%; height:100%"><a :href="mms.file_path" target="_blank"><img :src="mms.file_path" style="border: 1px solid lightgray; max-width:100%; max-height:100%; height: auto;"></a></div></div>
                 </div>
                 <div v-if="!row.item.media_files_group.mms_media_files.length">
                   <div class="slider-item">Нет картинок</div>

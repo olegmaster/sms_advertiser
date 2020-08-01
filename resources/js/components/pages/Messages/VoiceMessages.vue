@@ -19,25 +19,7 @@
             <div class="col">
               <b-form-group
                       class="mb-0"
-                      label="Текст MMS сообщения"
-                      :disabled="isLoading"
-                      :state="!$v.filter.text.$dirty || (!$v.filter.text.$invalid && !filter.text.trim()) ? null : !$v.filter.text.$invalid"
-                      invalid-feedback="Введите текст не менее 3х символов"
-              >
-                <b-form-input
-                        v-model="$v.filter.text.$model"
-                        :state="!$v.filter.text.$dirty || (!$v.filter.text.$invalid && !filter.text.trim()) ? null : !$v.filter.text.$invalid"
-                        id="ip"
-                        placeholder="Введите любой текст"
-                        size="sm"
-
-                ></b-form-input>
-              </b-form-group>
-            </div>
-            <div class="col">
-              <b-form-group
-                      class="mb-0"
-                      label="ID MMS сообщения"
+                      label="ID голосового сообщения"
                       :disabled="isLoading"
                       :state="!$v.filter.obj_id.$dirty || (!$v.filter.obj_id.$invalid && !filter.obj_id.trim()) ? null : !$v.filter.obj_id.$invalid"
                       invalid-feedback="Введите целое число больше нулья"
@@ -227,16 +209,7 @@
       },
       thematicsOptions : [
         {text: 'Все',  value: 0}
-      ],
-      slickOptions: {
-        className: "center",
-        centerMode: false,
-        infinite: true,
-        centerPadding: "60px",
-        slidesToShow: 3,
-        speed: 500,
-        dots: true,
-      },
+      ]
 
     }),
     validations: {
