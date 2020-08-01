@@ -13,7 +13,7 @@ class Simbank extends Model
     public const ACTIVE_STATUS = 1;
     public const INACTIVE_STATUS = 0;
 
-
+    protected $fillable = ['name'];
 
 
 }

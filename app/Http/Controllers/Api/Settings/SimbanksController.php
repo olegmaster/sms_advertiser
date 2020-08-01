@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Settings;
 
+use App\Http\Requests\SimbankCreateRequest;
 use App\Models\AdvertisingCampaign\Simbank;
 use App\Repositories\SimbanksRepository;
 use App\Services\ApiResponseGenerator;
@@ -30,10 +31,10 @@ class SimbanksController extends BaseController
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
+     * @param SimbankCreateRequest $request
      * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(SimbankCreateRequest $request)
     {
         $data = $request->input();
 
@@ -51,11 +52,11 @@ class SimbanksController extends BaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param SimbankCreateRequest $request
      * @param int $id
      * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(SimbankCreateRequest $request, $id)
     {
         $jsonData = $request->input();
 
