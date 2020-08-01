@@ -19,8 +19,8 @@ class ApiResponseGenerator
         $return['errorCode'] = $errorCode;
         $return['message'] = $message;
         $return['data'] = array(
-            'stat' => ['itemsCount' => $data->total()],
-            'items' => $data->items()
+            'stat' => ['itemsCount' => ($data instanceof LengthAwarePaginator) ? $data->total() : 0 ],
+            'items' => ($data instanceof LengthAwarePaginator) ? $data->items() : 0
         );
         return $return;
     }
