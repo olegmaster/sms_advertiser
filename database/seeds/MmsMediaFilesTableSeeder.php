@@ -16,7 +16,7 @@ class MmsMediaFilesTableSeeder extends Seeder
         $endDate = \Illuminate\Support\Carbon::now()->addDays(200);
         for ($i = 0; $i < config('seed.mmsMediaFilesCount'); $i++) {
             $items[] = [
-                'file_path' => $faker->url,
+                'file_path' => '/media/mms/sample/' . rand(1, 10) . '.jpg',
                 'mms_media_files_groups_id' => rand(1, config('seed.mmsMediaFilesGroupsCount')),
                 'created_at' => \Illuminate\Support\Carbon::now()->toDateTimeString(),
                 'updated_at' => \Illuminate\Support\Carbon::now()->toDateTimeString(),

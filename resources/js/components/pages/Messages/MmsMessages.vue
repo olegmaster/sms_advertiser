@@ -18,7 +18,7 @@
           <div class="row">
             <div class="col">
               <b-form-group
-                      label="Тип SMS"
+                      label="Тип MMS"
                       class="mb-0"
                       :disabled="isLoading"
               >
@@ -35,7 +35,7 @@
             <div class="col">
               <b-form-group
                       class="mb-0"
-                      label="Текст SMS сообщения"
+                      label="Текст MMS сообщения"
                       :disabled="isLoading"
                       :state="!$v.filter.text.$dirty || (!$v.filter.text.$invalid && !filter.text.trim()) ? null : !$v.filter.text.$invalid"
                       invalid-feedback="Введите текст не менее 3х символов"
@@ -53,7 +53,7 @@
             <div class="col">
               <b-form-group
                       class="mb-0"
-                      label="ID SMS сообщения"
+                      label="ID MMS сообщения"
                       :disabled="isLoading"
                       :state="!$v.filter.obj_id.$dirty || (!$v.filter.obj_id.$invalid && !filter.obj_id.trim()) ? null : !$v.filter.obj_id.$invalid"
                       invalid-feedback="Введите целое число больше нулья"
@@ -232,10 +232,9 @@
       },
       radioOptions1 :[
         { text: 'Все', value: -1 },
-        { text: 'Рекламные SMS', value: 0 },
-        { text: 'SMS тон 1', value: 2 },
-        { text: 'SMS отправляемые после прослушивания голосового сообщения', value: 3 },
-        { text: 'SMS автоответчик', value: 6 },
+        { text: 'Рекламные MMS', value: 1 },
+        { text: 'MMS тон 1', value: 2 },
+        { text: 'MMS отправляемые после прослушивания голосового сообщения', value: 3 }
       ],
       thematicsOptions : [
         {text: 'Все',  value: 0}
