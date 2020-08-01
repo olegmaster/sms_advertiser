@@ -11,6 +11,18 @@ class VoiceMessageSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $items = [];
+
+        for ($i = 0; $i < config('seed.voiceMessagesCount'); $i++) {
+            $items[] = [
+                'file_path' => '/media/voice/sample/' . rand(1, 8) . '.mp3',
+                'advertising_campaigns_tasks_id' => rand(1, config('seed.advertisingCampaignsCount')),
+                'created_at' => \Illuminate\Support\Carbon::now()->toDateTimeString(),
+                'updated_at' => \Illuminate\Support\Carbon::now()->toDateTimeString(),
+            ];
+        }
+
+        \Illuminate\Support\Facades\DB::table('voice_messages')->insert($items);
+
     }
 }

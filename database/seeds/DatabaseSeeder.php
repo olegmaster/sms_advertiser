@@ -46,5 +46,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SmsMmsMessagesTableSeeder::class);
         $this->call(MmsMediaFilesGroupsTableSeeder::class);
         $this->call(MmsMediaFilesTableSeeder::class);
+        $this->call(VoiceMessageSeeder::class);
+
     }
 }
