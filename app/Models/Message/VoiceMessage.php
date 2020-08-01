@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model\Message;
+namespace App\Models\Message;
 
 use Illuminate\Database\Eloquent\Model,
     App\Traits\RealPagination;

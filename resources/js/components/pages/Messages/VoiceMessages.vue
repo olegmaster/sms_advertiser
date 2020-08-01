@@ -71,24 +71,11 @@
 
 
         <b-table striped bordered outlined hover fixed :items="items" :fields="fields">
-
-          <template v-slot:cell(text)="data">
-            <div v-b-popover.hover.right="data.item.text" title="Полный текст сообщения">
-              <i class="icon icon-lg pe-7s-info text-primary"/> &nbsp; {{data.item.text.split(' ').splice(0, 5).join(' ')}} <strong>...</strong>
-            </div>
-
-          </template>
-
           <template v-slot:cell(media)="row">
             <button type="button" @click="row.toggleDetails" class="btn btn-success btn-shadow btn-hover-shine btn-transition d-inline-flex align-items-center" size="sm" >
               <font-awesome-icon class="mr-2" icon="photo-video"/>
               <div > {{ row.detailsShowing ? 'Скрыть' : 'Показать'}}</div>
             </button>
-          </template>
-
-          <template v-slot:row-details="row">
-            <b-card>
-            </b-card>
           </template>
 
           <template v-slot:cell(thematics_name)="data">
@@ -110,7 +97,6 @@
 
           <template v-slot:table-colgroup="scope">
             <col style="width: 40px">
-            <col>
             <col>
             <col>
             <col>
@@ -173,12 +159,10 @@
       icon: 'pe-7s-home icon-gradient bg-warm-flame',
       fields: [
         {key:'id', label:'ID'},
-        {key:'text', label:'Текст сообщения'},
-        {key:'media', label:'Медиа'},
+        {key:'media', label:'Голосовое сообщение'},
         {key:'thematics_name', label:'Тематика'},
         {key:'advertising_campaign_name', label:'Рекламная компания'},
         {key:'sent_count', label:'Кол. отправленных'},
-        {key:'clicks_count', label:'Кол. переходов'},
         {key:'used_simcards_count', label:'Кол. исп. симкарт'},
         {key:'created_at', label:'Дата создания'},
         {key:'user_name', label:'Владелец'},
