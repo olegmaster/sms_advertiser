@@ -17,7 +17,7 @@ class MmsMediaFile extends Model
         return new BuilderWithPagination($query);
     }
 
-    public function mediaFielsGroup()
+    public function mediaFilesGroup()
     {
         return $this->belongsTo('App\Models\Message\MmsMediaFilesGroup', 'mms_media_files_groups_id' );
     }

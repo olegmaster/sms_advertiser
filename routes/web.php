@@ -71,10 +71,13 @@ Route::group( ['namespace' => 'Api', 'prefix' => 'api'],function () {
     });
 
     //Работа с сообщениями
-    Route::group(['namespace' => 'Messages','prefix' => 'sms-mms-messages/sms/'], function () {
+    Route::group(['namespace' => 'Messages','prefix' => 'sms-mms-messages/'], function () {
 
-        //Получение списка проксей /api/settings/proxies/
-        Route::get('/', 'SmsMmsMessagesController@index' );
+        //Получение списка sms сообщений /api/sms-mms-messages/sms/
+        Route::get('/sms/', 'SmsMmsMessagesController@index' );
+
+        //Получение списка mms сообщений /api/sms-mms-messages/mms/
+        Route::get('/mms/', 'SmsMmsMessagesController@mms' );
 
         //Активация деактивация прокси /api/settings/proxies/{id}/status/
         Route::patch('/{id}/status/', 'ProxiesController@setStatus' )->where('id', '[1-9][0-9]*');
