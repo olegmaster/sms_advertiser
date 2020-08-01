@@ -88,8 +88,7 @@ class SmsMmsMessagesController extends Controller
         $sms_destinations_types = array(
             SmsMmsMessage::DESTINATION_TYPE_SMS_ADD,
             SmsMmsMessage::DESTINATION_TYPE_SMS_MMS_TON_1,
-            SmsMmsMessage::DESTINATION_TYPE_SMS_MMS_AFTER_HEARD,
-            SmsMmsMessage::DESTINATION_TYPE_SMS_AUTOANSWER
+            SmsMmsMessage::DESTINATION_TYPE_SMS_MMS_AFTER_HEARD
         );
 
         $destination_type = $filter && isset($filter['destination_type']) && (intval($filter['destination_type']) >=0 ) ? $filter['destination_type'] : $sms_destinations_types;

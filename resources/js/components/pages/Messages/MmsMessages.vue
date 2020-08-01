@@ -113,11 +113,24 @@
 
           </template>
 
-          <template v-slot:cell(media)="data">
-            <button type="button" @click="" class="btn btn-success btn-shadow btn-hover-shine btn-transition d-inline-flex align-items-center " size="sm" >
+          <template v-slot:cell(media)="row">
+            <button type="button" @click="row.toggleDetails" class="btn btn-success btn-shadow btn-hover-shine btn-transition d-inline-flex align-items-center " size="sm" >
               <font-awesome-icon class="" icon="photo-video"/>
               Показать картинки
             </button>
+          </template>
+
+          <template v-slot:row-details="row">
+            <b-card>
+              <slick ref="slick" :options="slickOptions">
+                <div v-for="(mms, index) in row.item.media_files_group.mms_media_files ">
+                  <div class="slider-item"><a :href="mms.file_path" target="_blank"><img :src="mms.file_path" style="border: 1px solid lightgray; width: 100%; height: auto; object-fit: contain"></a></div>
+                </div>
+                <div v-if="!row.item.media_files_group.mms_media_files.length">
+                  <div class="slider-item">Нет картинок</div>
+                </div>
+              </slick>
+            </b-card>
           </template>
 
           <template v-slot:cell(thematics_name)="data">
@@ -180,6 +193,7 @@
   library.add( faStar, faPlus, faPhotoVideo );
   import { validationMixin } from "vuelidate";
   import { required, requiredIf, helpers, minLength, ipAddress, numeric, between,minValue } from "vuelidate/lib/validators";
+  import Slick from 'vue-slick';
 
 
   import VueLadda from '../../../assets/components/ladda-loading/src/vue-ladda'
@@ -192,7 +206,8 @@
       VueElementLoading,
       vSelect,
       'font-awesome-icon': FontAwesomeIcon,
-      VueLadda
+      VueLadda,
+      Slick
     },
     data: () => ({
       heading: 'База сообщений',
@@ -244,7 +259,17 @@
       ],
       thematicsOptions : [
         {text: 'Все',  value: 0}
-      ]
+      ],
+      slickOptions: {
+        className: "center",
+        centerMode: false,
+        infinite: true,
+        centerPadding: "60px",
+        slidesToShow: 3,
+        speed: 500,
+        dots: true,
+      },
+
     }),
     validations: {
       filter: {
@@ -333,7 +358,21 @@
         let vm = this;
         setTimeout(function () { vm.filterButton.loading = false;}, duration);
         this.getSmsList();
-      }
+      },
+      next() {
+        this.$refs.slick.next();
+      },
+
+      prev() {
+        this.$refs.slick.prev();
+      },
+
+      reInit() {
+        this.$nextTick(() => {
+          this.$refs.slick.reSlick();
+        });
+      },
+
     },
     watch: {
       itemsPerPage : function(val)
