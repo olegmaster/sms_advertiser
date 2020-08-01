@@ -122,6 +122,46 @@ class SmsMmsMessagesController extends Controller
         return response()->json($return);
     }
 
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
+    public function voice( Request $request)
+    {
+
+        $itemsPerPage = $request->has('itemsPerPage') ? $request->get('itemsPerPage') : 25;
+        $page = $request->has('page') ? $request->get('page') : 1;
+        $filter = $request->has('filter') ? json_decode($request->get('filter'),true) : null;
+
+        $obj_id = $filter && isset($filter['obj_id']) && !empty($filter['obj_id']) ? intval($filter['obj_id']) : null;
+        $thematics_id = $filter && isset($filter['thematics_id']) && (intval($filter['thematics_id']) > 0) ? intval($filter['thematics_id']) : null;
+
+        $messages = SmsMmsMessage::addPagination($itemsPerPage, $page);
+
+        $data = $messages
+            ->OfMessageType(1)
+            ->ById($obj_id)
+            ->with('advertisingCampaign.user','advertisingCampaign.thematics', 'mediaFilesGroup.mmsMediaFiles')
+            ->when(!is_null($thematics_id), function ($query) use($thematics_id) {
+                return $query->join('advertising_campaign_tasks', 'sms_mms_messages.advertising_campaigns_tasks_id', '=', 'advertising_campaign_tasks.id' )
+                    ->where('advertising_campaign_tasks.thematics_id', '=', $thematics_id);
+            })
+            ->select('sms_mms_messages.*')
+            ->get();
+
+        $return = array();
+        $return['errorCode'] = 0;
+        $return['message'] = '';
+        $return['data'] = array(
+            'stat' => ['itemsCount' => $messages->count()],
+            'items' => $data->toArray()
+        );
+
+        return response()->json($return);
+    }
+
     /**
      * Установка статуса у прокси
      *

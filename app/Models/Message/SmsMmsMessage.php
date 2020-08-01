@@ -3,10 +3,12 @@
 namespace App\Models\Message;
 
 use Illuminate\Database\Eloquent\Model,
-    App\Models\BuilderWithPagination;
+    App\Traits\RealPagination;
 
 class SmsMmsMessage extends Model
 {
+    use RealPagination;
+
     const SMS_TYPE = 0;
     const MMS_TYPE = 1;
     const DESTINATION_TYPE_SMS_ADD = 0;
@@ -20,11 +22,6 @@ class SmsMmsMessage extends Model
     protected $table = 'sms_mms_messages';
 
     public $timestamps = true;
-
-    public function newEloquentBuilder($query)
-    {
-        return new BuilderWithPagination($query);
-    }
 
     public function mediaFilesGroup()
     {
