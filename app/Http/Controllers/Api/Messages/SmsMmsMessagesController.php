@@ -142,14 +142,13 @@ class SmsMmsMessagesController extends Controller
         $messages = VoiceMessage::addPagination($itemsPerPage, $page);
 
         $data = $messages
-            ->OfMessageType(1)
             ->ById($obj_id)
             ->with('advertisingCampaign.user','advertisingCampaign.thematics')
             ->when(!is_null($thematics_id), function ($query) use($thematics_id) {
                 return $query->join('advertising_campaign_tasks', 'voice_messages.advertising_campaign_tasks_id', '=', 'advertising_campaign_tasks.id' )
                     ->where('advertising_campaign_tasks.thematics_id', '=', $thematics_id);
             })
-            ->select('sms_mms_messages.*')
+            ->select('voice_messages.*')
             ->get();
 
         $return = array();

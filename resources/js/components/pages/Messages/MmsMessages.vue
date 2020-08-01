@@ -98,7 +98,7 @@
             <div class="col-md-auto">
             </div>
             <div class="col-md-auto">
-              <b-form-select v-model="itemsPerPage" :options="itemsPerPageOptions" @change="page = 1; getSmsList()"></b-form-select>
+              <b-form-select v-model="itemsPerPage" :options="itemsPerPageOptions" @change="page = 1; getMmsList()"></b-form-select>
             </div>
           </div>
         </div>
@@ -169,7 +169,7 @@
             <div class="col">
             </div>
             <div class="col-md-auto" align="right">
-              <v-pagination v-model="page" @input="getSmsList()" :length="pagesCount" :total-visible="10"></v-pagination>
+              <v-pagination v-model="page" @input="getMmsList()" :length="pagesCount" :total-visible="10"></v-pagination>
             </div>
           </div>
         </div>
@@ -313,7 +313,7 @@
         });
       },
 
-      getSmsList()
+      getMmsList()
       {
         let vm = this;
         this.isLoading = true;
@@ -343,7 +343,7 @@
         this.filter.obj_id = '';
         this.filter.thematics_id = 0;
         this.$v.$reset();
-        this.getSmsList();
+        this.getMmsList();
       },
       doFilter()
       {
@@ -357,7 +357,7 @@
         updateButtonProgress(duration, this.filterButton);
         let vm = this;
         setTimeout(function () { vm.filterButton.loading = false;}, duration);
-        this.getSmsList();
+        this.getMmsList();
       },
       next() {
         this.$refs.slick.next();
@@ -390,7 +390,7 @@
       let itemsPerPage = this.$cookies.get('mms_messages_list_per_page');
       if (itemsPerPage && parseInt(itemsPerPage)>0)
         this.itemsPerPage = itemsPerPage;
-      this.getSmsList();
+      this.getMmsList();
       this.getThematics();
     }
   }

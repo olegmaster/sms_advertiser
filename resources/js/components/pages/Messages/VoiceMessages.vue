@@ -64,7 +64,7 @@
             <div class="col-md-auto">
             </div>
             <div class="col-md-auto">
-              <b-form-select v-model="itemsPerPage" :options="itemsPerPageOptions" @change="page = 1; getSmsList()"></b-form-select>
+              <b-form-select v-model="itemsPerPage" :options="itemsPerPageOptions" @change="page = 1; getVoiceList()"></b-form-select>
             </div>
           </div>
         </div>
@@ -127,7 +127,7 @@
             <div class="col">
             </div>
             <div class="col-md-auto" align="right">
-              <v-pagination v-model="page" @input="getSmsList()" :length="pagesCount" :total-visible="10"></v-pagination>
+              <v-pagination v-model="page" @input="getVoiceList()" :length="pagesCount" :total-visible="10"></v-pagination>
             </div>
           </div>
         </div>
@@ -254,12 +254,12 @@
         });
       },
 
-      getSmsList()
+      getVoiceList()
       {
         let vm = this;
         this.isLoading = true;
         let new_items = [];
-        let url = '/api/sms-mms-messages/mms/?page=' + this.page + '&itemsPerPage=' + this.itemsPerPage;
+        let url = '/api/sms-mms-messages/voice/?page=' + this.page + '&itemsPerPage=' + this.itemsPerPage;
         let options = {};
         if (this.withFilter)
           options.params = {filter: JSON.stringify(this.filter)};
@@ -284,7 +284,7 @@
         this.filter.obj_id = '';
         this.filter.thematics_id = 0;
         this.$v.$reset();
-        this.getSmsList();
+        this.getVoiceList();
       },
       doFilter()
       {
@@ -298,13 +298,13 @@
         updateButtonProgress(duration, this.filterButton);
         let vm = this;
         setTimeout(function () { vm.filterButton.loading = false;}, duration);
-        this.getSmsList();
+        this.getVoiceList();
       }
     },
     watch: {
       itemsPerPage : function(val)
       {
-        this.$cookies.set('sms_messages_list_per_page', val, '31d');
+        this.$cookies.set('voice_messages_list_per_page', val, '31d');
       },
       isLoading: function(val)
       {
@@ -314,10 +314,10 @@
     },
     mounted()
     {
-      let itemsPerPage = this.$cookies.get('sms_messages_list_per_page');
+      let itemsPerPage = this.$cookies.get('voice_messages_list_per_page');
       if (itemsPerPage && parseInt(itemsPerPage)>0)
         this.itemsPerPage = itemsPerPage;
-      this.getSmsList();
+      this.getVoiceList();
       this.getThematics();
     }
   }
