@@ -71,11 +71,14 @@
 
 
         <b-table striped bordered outlined hover fixed :items="items" :fields="fields">
+          <template v-slot:cell(file_name)="row">
+            {{ fileName(row.item.file_path) }}
+          </template>
+
           <template v-slot:cell(media)="row">
-            <button type="button" @click="row.toggleDetails" class="btn btn-success btn-shadow btn-hover-shine btn-transition d-inline-flex align-items-center" size="sm" >
-              <font-awesome-icon class="mr-2" icon="photo-video"/>
-              <div > {{ row.detailsShowing ? 'Скрыть' : 'Показать'}}</div>
-            </button>
+            <div style="width: 100%;">
+              <vuetify-audio :file="row.item.file_path"  downloadable></vuetify-audio>
+            </div>
           </template>
 
           <template v-slot:cell(thematics_name)="data">
@@ -97,6 +100,7 @@
 
           <template v-slot:table-colgroup="scope">
             <col style="width: 40px">
+            <col style="width: 250px">
             <col>
             <col>
             <col>
@@ -137,7 +141,8 @@
   library.add( faStar, faPlus, faPhotoVideo );
   import { validationMixin } from "vuelidate";
   import { required, requiredIf, helpers, minLength, ipAddress, numeric, between,minValue } from "vuelidate/lib/validators";
-  import Slick from 'vue-slick';
+
+  import VuetifyAudio from 'vuetify-audio'
 
 
   import VueLadda from '../../../assets/components/ladda-loading/src/vue-ladda'
@@ -151,7 +156,7 @@
       vSelect,
       'font-awesome-icon': FontAwesomeIcon,
       VueLadda,
-      Slick
+      VuetifyAudio
     },
     data: () => ({
       heading: 'База сообщений',
@@ -160,6 +165,7 @@
       fields: [
         {key:'id', label:'ID'},
         {key:'media', label:'Голосовое сообщение'},
+        {key:'file_name', label:'Название файла'},
         {key:'thematics_name', label:'Тематика'},
         {key:'advertising_campaign_name', label:'Рекламная компания'},
         {key:'sent_count', label:'Кол. отправленных'},
@@ -198,12 +204,6 @@
     }),
     validations: {
       filter: {
-        destination_type: {
-          required
-        },
-        text: {
-          minLength: minLength(3)
-        },
         obj_id: {
           numeric,
           minValue: minValue(1)
@@ -283,6 +283,10 @@
         let vm = this;
         setTimeout(function () { vm.filterButton.loading = false;}, duration);
         this.getVoiceList();
+      },
+      fileName(file)
+      {
+        return file.match(/.+\/([^\.]+\.\w{1,4})$/i)[1];
       }
     },
     watch: {
