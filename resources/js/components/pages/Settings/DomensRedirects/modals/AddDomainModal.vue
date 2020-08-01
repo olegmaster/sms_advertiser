@@ -81,7 +81,7 @@ export default {
         form: {
             domain: {
                 required,
-                minLength: 5,
+                minLength: minLength(5),
                 domainValidator,
             },
             spam_limit: {
