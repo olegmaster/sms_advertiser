@@ -16,7 +16,7 @@
 
             <div class="container-fluid">
               <div class="row">
-                <div class="col-md-2">
+                <div class="col">
                   <b-form-group
                           label="Тип SMS"
                           class="mb-0"
@@ -26,11 +26,12 @@
                             v-model="filter.destination_type"
                             :options="radioOptions1"
                             name="radios-stacked"
-                            stacked
                             size="sm"
                     ></b-form-radio-group>
                   </b-form-group>
                 </div>
+              </div>
+              <div class="row">
                 <div class="col">
                   <b-form-group
                           class="mb-0"
@@ -233,6 +234,7 @@
         { text: 'Все', value: -1 },
         { text: 'Рекламные SMS', value: 0 },
         { text: 'SMS тон 1', value: 2 },
+        { text: 'SMS отправляемые после прослушивания голосового сообщения', value: 3 },
         { text: 'SMS автоответчик', value: 6 },
       ],
       thematicsOptions : [

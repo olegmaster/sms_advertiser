@@ -38,6 +38,7 @@ class SmsMmsMessagesController extends Controller
         $sms_destinations_types = array(
             SmsMmsMessage::DESTINATION_TYPE_SMS_ADD,
             SmsMmsMessage::DESTINATION_TYPE_SMS_MMS_TON_1,
+            SmsMmsMessage::DESTINATION_TYPE_SMS_MMS_AFTER_HEARD,
             SmsMmsMessage::DESTINATION_TYPE_SMS_AUTOANSWER
         );
 
