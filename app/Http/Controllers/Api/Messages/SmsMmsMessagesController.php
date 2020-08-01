@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller,
     Illuminate\Http\Response,
     Illuminate\Database\Eloquent\Model,
     App\Models\Message\SmsMmsMessage,
+    App\Models\Message\VoiceMessage,
     Illuminate\Support\Facades\DB;
 
 
@@ -138,14 +139,14 @@ class SmsMmsMessagesController extends Controller
         $obj_id = $filter && isset($filter['obj_id']) && !empty($filter['obj_id']) ? intval($filter['obj_id']) : null;
         $thematics_id = $filter && isset($filter['thematics_id']) && (intval($filter['thematics_id']) > 0) ? intval($filter['thematics_id']) : null;
 
-        $messages = SmsMmsMessage::addPagination($itemsPerPage, $page);
+        $messages = VoiceMessage::addPagination($itemsPerPage, $page);
 
         $data = $messages
             ->OfMessageType(1)
             ->ById($obj_id)
-            ->with('advertisingCampaign.user','advertisingCampaign.thematics', 'mediaFilesGroup.mmsMediaFiles')
+            ->with('advertisingCampaign.user','advertisingCampaign.thematics')
             ->when(!is_null($thematics_id), function ($query) use($thematics_id) {
-                return $query->join('advertising_campaign_tasks', 'sms_mms_messages.advertising_campaigns_tasks_id', '=', 'advertising_campaign_tasks.id' )
+                return $query->join('advertising_campaign_tasks', 'voice_messages.advertising_campaigns_tasks_id', '=', 'advertising_campaign_tasks.id' )
                     ->where('advertising_campaign_tasks.thematics_id', '=', $thematics_id);
             })
             ->select('sms_mms_messages.*')

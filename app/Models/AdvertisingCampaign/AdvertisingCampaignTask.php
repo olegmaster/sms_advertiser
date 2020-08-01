@@ -32,4 +32,10 @@ class AdvertisingCampaignTask extends Model
         return $this->belongsTo('App\Models\User', 'creator_user_id' );
     }
 
+    public function voiceMessages()
+    {
+        return $this->hasMany('App\Models\Message\VoiceMessage', 'advertising_campaigns_tasks_id');
+    }
+
+
 }
