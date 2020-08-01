@@ -16,7 +16,7 @@ class VoiceMessage extends Model
 
     public function advertisingCampaign()
     {
-        return $this->belongsTo('App\Models\AdvertisingCampaign\AdvertisingCampaignTask', 'advertising_campaigns_tasks_id' );
+        return $this->belongsTo('App\Models\AdvertisingCampaign\AdvertisingCampaignTask', 'advertising_campaign_tasks_id' );
     }
 
     /**

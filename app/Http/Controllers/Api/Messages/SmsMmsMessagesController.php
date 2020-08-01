@@ -57,7 +57,7 @@ class SmsMmsMessagesController extends Controller
             ->OfDestinationType($destination_type)
             ->with('advertisingCampaign.user','advertisingCampaign.thematics')
             ->when(!is_null($thematics_id), function ($query) use($thematics_id) {
-                return $query->join('advertising_campaign_tasks', 'sms_mms_messages.advertising_campaigns_tasks_id', '=', 'advertising_campaign_tasks.id' )
+                return $query->join('advertising_campaign_tasks', 'sms_mms_messages.advertising_campaign_tasks_id', '=', 'advertising_campaign_tasks.id' )
                     ->where('advertising_campaign_tasks.thematics_id', '=', $thematics_id);
             })
             ->select('sms_mms_messages.*')
@@ -106,7 +106,7 @@ class SmsMmsMessagesController extends Controller
             ->OfDestinationType($destination_type)
             ->with('advertisingCampaign.user','advertisingCampaign.thematics', 'mediaFilesGroup.mmsMediaFiles')
             ->when(!is_null($thematics_id), function ($query) use($thematics_id) {
-                return $query->join('advertising_campaign_tasks', 'sms_mms_messages.advertising_campaigns_tasks_id', '=', 'advertising_campaign_tasks.id' )
+                return $query->join('advertising_campaign_tasks', 'sms_mms_messages.advertising_campaign_tasks_id', '=', 'advertising_campaign_tasks.id' )
                     ->where('advertising_campaign_tasks.thematics_id', '=', $thematics_id);
             })
             ->select('sms_mms_messages.*')
@@ -146,7 +146,7 @@ class SmsMmsMessagesController extends Controller
             ->ById($obj_id)
             ->with('advertisingCampaign.user','advertisingCampaign.thematics')
             ->when(!is_null($thematics_id), function ($query) use($thematics_id) {
-                return $query->join('advertising_campaign_tasks', 'voice_messages.advertising_campaigns_tasks_id', '=', 'advertising_campaign_tasks.id' )
+                return $query->join('advertising_campaign_tasks', 'voice_messages.advertising_campaign_tasks_id', '=', 'advertising_campaign_tasks.id' )
                     ->where('advertising_campaign_tasks.thematics_id', '=', $thematics_id);
             })
             ->select('sms_mms_messages.*')
