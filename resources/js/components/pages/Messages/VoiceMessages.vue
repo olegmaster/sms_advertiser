@@ -18,22 +18,6 @@
           <div class="row">
             <div class="col">
               <b-form-group
-                      label="Тип MMS"
-                      class="mb-0"
-                      :disabled="isLoading"
-              >
-                <b-form-radio-group
-                        v-model="filter.destination_type"
-                        :options="radioOptions1"
-                        name="radios-stacked"
-                        size="sm"
-                ></b-form-radio-group>
-              </b-form-group>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <b-form-group
                       class="mb-0"
                       label="Текст MMS сообщения"
                       :disabled="isLoading"
@@ -122,14 +106,6 @@
 
           <template v-slot:row-details="row">
             <b-card>
-              <slick ref="slick" :options="slickOptions">
-                <div v-for="(mms, index) in row.item.media_files_group.mms_media_files ">
-                  <div class="slider-item"><a :href="mms.file_path" target="_blank"><img :src="mms.file_path" style="border: 1px solid lightgray; width: 100%; height: auto; object-fit: contain"></a></div>
-                </div>
-                <div v-if="!row.item.media_files_group.mms_media_files.length">
-                  <div class="slider-item">Нет картинок</div>
-                </div>
-              </slick>
             </b-card>
           </template>
 
@@ -246,17 +222,9 @@
       },
       withFilter: false,
       filter: {
-        destination_type: -1,
-        text: '',
         obj_id: '',
         thematics_id : 0
       },
-      radioOptions1 :[
-        { text: 'Все', value: -1 },
-        { text: 'Рекламные MMS', value: 1 },
-        { text: 'MMS тон 1', value: 2 },
-        { text: 'MMS отправляемые после прослушивания голосового сообщения', value: 3 }
-      ],
       thematicsOptions : [
         {text: 'Все',  value: 0}
       ],
@@ -358,21 +326,7 @@
         let vm = this;
         setTimeout(function () { vm.filterButton.loading = false;}, duration);
         this.getSmsList();
-      },
-      next() {
-        this.$refs.slick.next();
-      },
-
-      prev() {
-        this.$refs.slick.prev();
-      },
-
-      reInit() {
-        this.$nextTick(() => {
-          this.$refs.slick.reSlick();
-        });
-      },
-
+      }
     },
     watch: {
       itemsPerPage : function(val)

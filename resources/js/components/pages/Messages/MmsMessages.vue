@@ -377,7 +377,7 @@
     watch: {
       itemsPerPage : function(val)
       {
-        this.$cookies.set('sms_messages_list_per_page', val, '31d');
+        this.$cookies.set('mms_messages_list_per_page', val, '31d');
       },
       isLoading: function(val)
       {
@@ -387,7 +387,7 @@
     },
     mounted()
     {
-      let itemsPerPage = this.$cookies.get('sms_messages_list_per_page');
+      let itemsPerPage = this.$cookies.get('mms_messages_list_per_page');
       if (itemsPerPage && parseInt(itemsPerPage)>0)
         this.itemsPerPage = itemsPerPage;
       this.getSmsList();
