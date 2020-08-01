@@ -104,8 +104,6 @@
         </div>
 
 
-
-
         <b-table striped bordered outlined hover fixed :items="items" :fields="fields">
 
           <template v-slot:cell(text)="data">
@@ -113,6 +111,13 @@
               <i class="icon icon-lg pe-7s-info text-primary"/> &nbsp; {{data.item.text.split(' ').splice(0, 5).join(' ')}} <strong>...</strong>
             </div>
 
+          </template>
+
+          <template v-slot:cell(media)="data">
+            <button type="button" @click="" class="btn btn-success btn-shadow btn-hover-shine btn-transition d-inline-flex align-items-center " size="sm" >
+              <font-awesome-icon class="" icon="photo-video"/>
+              Показать картинки
+            </button>
           </template>
 
           <template v-slot:cell(thematics_name)="data">
@@ -170,9 +175,9 @@
   import VueElementLoading from 'vue-element-loading'
   import vSelect from 'vue-select'
   import {library} from '@fortawesome/fontawesome-svg-core'
-  import { faStar, faPlus } from '@fortawesome/free-solid-svg-icons'
+  import { faStar, faPlus, faPhotoVideo } from '@fortawesome/free-solid-svg-icons'
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-  library.add( faStar, faPlus );
+  library.add( faStar, faPlus, faPhotoVideo );
   import { validationMixin } from "vuelidate";
   import { required, requiredIf, helpers, minLength, ipAddress, numeric, between,minValue } from "vuelidate/lib/validators";
 
@@ -196,6 +201,7 @@
       fields: [
         {key:'id', label:'ID'},
         {key:'text', label:'Текст сообщения'},
+        {key:'media', label:'Медиа'},
         {key:'thematics_name', label:'Тематика'},
         {key:'advertising_campaign_name', label:'Рекламная компания'},
         {key:'sent_count', label:'Кол. отправленных'},
