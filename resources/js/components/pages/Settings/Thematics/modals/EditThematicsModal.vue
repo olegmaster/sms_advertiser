@@ -25,6 +25,7 @@
                             :state="!$v.form.name.$dirty ? null :  !$v.form.name.$invalid"
                         >
                             <b-form-input type="text"
+                                          :state="!$v.form.name.$dirty ? null :  !$v.form.name.$invalid"
                                           v-model="$v.form.name.$model"
                             ></b-form-input>
                         </b-form-group>
