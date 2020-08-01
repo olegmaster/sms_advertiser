@@ -47,7 +47,7 @@ class SmsMmsMessage extends Model
     public function scopeByText($query, $text)
     {
         if (!is_null($text))
-            return $query->where('text','like', '%' . $text . '%' );
+            return $query->where($this->table . '.text','like', '%' . $text . '%' );
         else
             return $query;
     }
@@ -62,7 +62,7 @@ class SmsMmsMessage extends Model
     public function scopeById($query, $id)
     {
         if (!is_null($id))
-            return $query->where('id', $id);
+            return $query->where($this->table . '.id', $id);
         else
             return $query;
     }
@@ -77,7 +77,7 @@ class SmsMmsMessage extends Model
     public function scopeOfMessageType($query, $type)
     {
         if (!is_null($type))
-            return $query->where('message_type', $type);
+            return $query->where($this->table . '.message_type', $type);
         else
             return $query;
     }
@@ -92,9 +92,9 @@ class SmsMmsMessage extends Model
     public function scopeOfDestinationType($query, $destination_type)
     {
         if (!is_null($destination_type) && !is_array($destination_type))
-            return $query->where('destination_type', $destination_type);
+            return $query->where($this->table . '.destination_type', $destination_type);
         else if (is_array($destination_type))
-            return $query->whereIn('destination_type', $destination_type);
+            return $query->whereIn($this->table . '.destination_type', $destination_type);
         else
             return $query;
     }

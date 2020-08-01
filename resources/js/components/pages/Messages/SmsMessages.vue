@@ -238,7 +238,6 @@
       thematicsOptions : [
               {text: 'Все',  value: 0}
               ]
-
     }),
     validations: {
       filter: {

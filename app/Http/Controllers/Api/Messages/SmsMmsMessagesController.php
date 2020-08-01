@@ -46,32 +46,27 @@ class SmsMmsMessagesController extends Controller
         $obj_id = $filter && isset($filter['obj_id']) && !empty($filter['obj_id']) ? intval($filter['obj_id']) : null;
         $thematics_id = $filter && isset($filter['thematics_id']) && (intval($filter['thematics_id']) > 0) ? intval($filter['thematics_id']) : null;
 
-
-
         $messages = SmsMmsMessage::addPagination($itemsPerPage, $page);
 
-        $data  = $messages
+        $data = $messages
             ->OfMessageType(0)
             ->ById($obj_id)
             ->ByText($text)
             ->OfDestinationType($destination_type)
-            ->with(['advertisingCampaign.user','advertisingCampaign.thematics' => function($query) use ($thematics_id) {
-                if (!is_null($thematics_id))
-                    return $query->where('id', '=', $thematics_id );
-            }])->get();
+            ->with('advertisingCampaign.user','advertisingCampaign.thematics')
+            ->when(!is_null($thematics_id), function ($query) use($thematics_id) {
+                return $query->join('advertising_campaign_tasks', 'sms_mms_messages.advertising_campaigns_tasks_id', '=', 'advertising_campaign_tasks.id' )
+                    ->where('advertising_campaign_tasks.thematics_id', '=', $thematics_id);
+            })
+            ->select('sms_mms_messages.*')
+            ->get();
 
-        //$data = DB::table('sms_mms_messages');
-            //->join('advertising_campaign_tasks', 'sms_mms_messages.advertising_campaigns_tasks_id', '=', 'advertising_campaign_tasks.id' );
-        //$data = DB::table('sms_mms_messages');
         $return = array();
         $return['errorCode'] = 0;
         $return['message'] = '';
         $return['data'] = array(
             'stat' => ['itemsCount' => $messages->count()],
-            'items' => $data->toArray(),
-            'filter' => $filter,
-            'sql'=> $messages->toSql(),
-            'thematics_id' => $thematics_id
+            'items' => $data->toArray()
         );
 
         return response()->json($return);
