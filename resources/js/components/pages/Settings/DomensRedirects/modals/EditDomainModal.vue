@@ -86,7 +86,8 @@
         validations: {
             form: {
                 domain: {
-                    required
+                    required,
+                    minLength: minLength(5)
                 },
                 spam_limit: {
                     required,
