@@ -64,7 +64,7 @@ export default {
         form: {
             name: {
                 required,
-                minLength: 5
+                minLength: minLength(5)
             },
         }
     },
