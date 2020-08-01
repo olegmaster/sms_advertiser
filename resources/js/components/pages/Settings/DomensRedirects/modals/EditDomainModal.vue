@@ -118,7 +118,6 @@
             {
                 this.$v.form.$touch();
                 if (this.$v.form.$anyError) {
-                    console.log($v.form.$error())
                     return;
                 }
                 this.editDomain();
@@ -129,8 +128,6 @@
                 this.isLoading = true;
 
                 let url = '/api/settings/domains/7';
-                console.log('submit')
-                console.log(this.form)
                 let data = this.form
                 data.value = 7
                 data.ids = [this.form.id]

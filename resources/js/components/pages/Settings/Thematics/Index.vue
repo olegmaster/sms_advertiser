@@ -226,17 +226,14 @@
                 let new_items = [];
                 let url = '/api/settings/thematics/?page=' + this.page + '&itemsPerPage=' + this.itemsPerPage;
                 axios.get(url).then(response => {
-                   // console.log(response);
                     if (!response.data.errorCode) {
                         new_items = response.data.data.items;
-                        console.log(new_items)
                         this.pagesCount = Math.ceil(response.data.data.stat.itemsCount / this.itemsPerPage);
                         this.itemsTotalCount = response.data.data.stat.itemsCount;
                         for (let i in new_items) {
                             new_items[i].checked = false;
                             let dateTime = new_items[i].created_at.split(' ');
                             new_items[i].created_at = dateTime[0]
-                            console.log(1)
                         }
                         vm.items = new_items;
                     }

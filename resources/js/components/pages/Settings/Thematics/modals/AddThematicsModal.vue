@@ -84,7 +84,6 @@ export default {
         {
             this.$v.form.$touch();
             if (this.$v.form.$anyError) {
-                console.log($v.form.$error())
                 return;
             }
             this.addThematics();
@@ -95,7 +94,6 @@ export default {
             this.isLoading = true;
 
             let url = '/api/settings/thematics';
-            console.log(this.form)
             axios.post(url, this.form).then( response => {
                 if (!response.data.errorCode )
                 {

@@ -22,7 +22,7 @@
                     <div class="col-sm-auto">
                         <b-form-group
                             label="Название домена"
-                            invalid-feedback="Введите название домена"
+                            invalid-feedback="Введите название домена в формате http://example.com или https://example.com"
                             :state="!$v.form.domain.$dirty ? null :  !$v.form.domain.$invalid"
                         >
                             <b-form-input type="text"
@@ -110,7 +110,6 @@ export default {
         {
             this.$v.form.$touch();
             if (this.$v.form.$anyError) {
-                console.log($v.form.$error())
                 return;
             }
             this.addDomain();
@@ -121,7 +120,6 @@ export default {
             this.isLoading = true;
 
             let url = '/api/settings/domains';
-            console.log(this.form)
             axios.post(url, this.form).then( response => {
                 if (!response.data.errorCode )
                 {

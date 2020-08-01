@@ -69,20 +69,22 @@
                     <template v-slot:cell(checkbox_field)="data">
                         <b-form-checkbox v-model="data.item.checked"></b-form-checkbox>
                     </template>
-
+                    <template v-slot:cell(domain)="data">
+                        {{data.item.domain.replace(/https?:\/\/||/gi, '')}}
+                    </template>
                     <template v-slot:cell(is_banned)="data">
                         <div v-show="data.item.is_banned==1" class="text-danger">Забанен</div>
                         <div v-show="data.item.is_banned==0" class="text-success">Не забанен</div>
                     </template>
 
                     <template v-slot:cell(verified)="data">
-                        <div v-show="data.item.verified==1" class="text-success">Доступен из интернета</div>
+                        <div v-show="data.item.verified==1" class="text-success">Доступен</div>
                         <div v-show="data.item.verified==0" class="text-danger">Не доступен</div>
                     </template>
 
                     <template v-slot:cell(status)="data">
-                        <div v-show="data.item.status==1" class="text-danger">Да</div>
-                        <div v-show="data.item.status==0" class="text-success">Нет</div>
+                        <div v-show="data.item.status==1" class="text-success">Да</div>
+                        <div v-show="data.item.status==0" class="text-danger">Нет</div>
                     </template>
 
                     <template v-slot:cell(is_frozen)="data">
@@ -283,7 +285,7 @@
                 {key: 'is_banned', label: 'Забанен'},
                 {key: 'status', label: 'Активный'},
                 {key: 'is_frozen', label: 'Заморожен'},
-                {key: 'verified', label: 'Подтвержден'},
+                {key: 'verified', label: 'Доступен в интернете'},
                 {key: 'frozen_on', label: 'Дата разморозки'},
                 {key: 'spam_limit', label: 'Лимит по рассылкам'},
                 {key: 'current_send_count', label: 'Кол. тек. отпр. SMS до лимита'},
@@ -329,7 +331,6 @@
                 let new_items = [];
                 let url = '/api/settings/domains/?page=' + this.page + '&itemsPerPage=' + this.itemsPerPage;
                 axios.get(url).then(response => {
-                    console.log(response);
                     if (!response.data.errorCode) {
                         new_items = response.data.data.items;
                         this.pagesCount = Math.ceil(response.data.data.stat.itemsCount / this.itemsPerPage);
@@ -350,12 +351,10 @@
                 });
             },
             onEditDomain(domain) {
-                console.log(domain)
                 this.domainToEdit.id = domain.id;
                 this.domainToEdit.domain = domain.domain;
                 this.domainToEdit.freeze_hours = domain.freeze_hours;
                 this.domainToEdit.spam_limit = domain.spam_limit;
-                console.log('edit', this.domainToEdit);
                 this.showEditDomainModal = true;
             },
             banDomain(id = null, status = null) {
@@ -431,16 +430,11 @@
                     value: 1
                 };
 
-
                 if (id) {
                     data.ids = [id]
                 } else {
                     data.ids = this.items.filter(v => v.checked).map(v => v.id);
                 }
-
-                console.log(data)
-
-
 
                 for(id of data.ids){
                     url = '/api/settings/domains/' + id;
@@ -448,8 +442,6 @@
                         if (!response.data.errorCode) {
                             this.page = 1;
                             this.getDomains();
-
-
                         } else
                             this.isLoading = false;
                     }).catch(responce => {

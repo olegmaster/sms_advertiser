@@ -93,7 +93,6 @@
             {
                 this.$v.form.$touch();
                 if (this.$v.form.$anyError) {
-                    console.log($v.form.$error())
                     return;
                 }
                 this.editThematics();
@@ -104,8 +103,6 @@
                 this.isLoading = true;
 
                 let url = '/api/settings/thematics/3';
-                console.log('submit')
-                console.log(this.form)
                 let data = this.form
                 data.value = 3
                 data.ids = [this.form.id]
