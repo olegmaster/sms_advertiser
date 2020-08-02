@@ -3,9 +3,10 @@
         v-model="showModal"
         hide-backdrop
         no-close-on-backdrop
-        :title="modalTitle"
+        :title="thematicsName"
         @hidden="resetModal"
         @ok="handleOk"
+        id="edit-thematics-modal"
 
         ok-title='Редактировать'
         cancel-title="Отмена"
@@ -61,6 +62,7 @@
             return {
                 showModal : false,
                 isLoading : false,
+                thematicsName: '',
                 form: {
                     name : '',
                 }
@@ -133,7 +135,11 @@
         },
         mounted()
         {
-
+            this.$root.$on('bv::modal::show', (bvEvent, modalId) => {
+                if(modalId === 'edit-thematics-modal'){
+                    this.thematicsName = "Редактировать тематику \"" + this.form.name + "\""
+                }
+            })
         }
     }
 </script>
