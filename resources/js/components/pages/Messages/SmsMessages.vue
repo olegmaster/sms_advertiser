@@ -81,7 +81,7 @@
             <template v-slot:footer>
               <div align="right" style="width: 100%" >
                 <b-button class="btn btn-shadow btn-hover-shine btn-transition btn-secondary" :disabled="isLoading" @click="resetFilter()" >Сбросить фильтр</b-button> &nbsp; &nbsp;
-                <vue-ladda data-style="zoom-out" button-class="btn btn-primary btn-shadow btn-hover-shine btn-transition" :disabled="isLoading" :loading="filterButton.loading" :progress="filterButton.progress" @click="doFilter()">Применить</vue-ladda>
+                <vue-ladda data-style="zoom-out" button-class="btn btn-primary btn-shadow btn-hover-shine btn-transition" :disabled="isLoading" :loading="filterButton.loading" :progress="filterButton.progress" @click="page = 1;doFilter()">Применить</vue-ladda>
               </div>
             </template>
         </b-card>
@@ -312,6 +312,7 @@
         this.filter.text = '';
         this.filter.obj_id = '';
         this.filter.thematics_id = 0;
+        this.page = 1;
         this.$v.$reset();
         this.getSmsList();
       },
