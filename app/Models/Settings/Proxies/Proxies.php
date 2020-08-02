@@ -17,4 +17,10 @@ class Proxies extends Model
     protected $table = 'proxies';
     protected $fillable = ['ip', 'port', 'login', 'password', 'type', 'status'];
 
+    public function checkingStates()
+    {
+        return $this->hasMany('App\Models\Settings\Proxies\ProxyCheckingState', 'proxy_id');
+    }
+
+
 }

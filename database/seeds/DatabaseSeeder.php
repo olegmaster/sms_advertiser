@@ -16,7 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call(RegionSeeder::class);
         $this->call(CitySeeder::class);
 
-
         // Users seeding
         $this->call(PermissionsSeeder::class);
 
@@ -30,11 +29,15 @@ class DatabaseSeeder extends Seeder
         $this->call(ThematicsSeeder::class);
         $this->call(AdvertisingCampaignSeeder::class);
 
+        //Targeting
+        $this->call(BoardsTableSeeder::class);
+
+        //Proxies
         $this->call(ProxiesSeeder::class);
+        $this->call(ProxyCheckingStatesTableSeeder::class);
 
         // settings
         $this->call(RedirectDomainSeeder::class);
-
 
 
         //factory(\App\Models\User::class, 15)->create();
@@ -47,6 +50,8 @@ class DatabaseSeeder extends Seeder
         $this->call(MmsMediaFilesGroupsTableSeeder::class);
         $this->call(MmsMediaFilesTableSeeder::class);
         $this->call(VoiceMessageSeeder::class);
+
+
 
     }
 }
