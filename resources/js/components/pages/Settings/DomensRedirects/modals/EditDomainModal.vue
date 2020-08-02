@@ -3,10 +3,10 @@
         v-model="showModal"
         hide-backdrop
         no-close-on-backdrop
-        title="Редактировать домен"
+        :title="domainName"
         @hidden="resetModal"
         @ok="handleOk"
-
+        id="edit-domain-modal"
         ok-title='Редактировать'
         cancel-title="Отмена"
         :ok-disabled="isLoading"
@@ -77,6 +77,7 @@
             return {
                 showModal : false,
                 isLoading : false,
+                domainName: '',
                 form: {
                     domain : '',
                     spam_limit : 0,
@@ -159,7 +160,11 @@
         },
         mounted()
         {
-
+            this.$root.$on('bv::modal::show', (bvEvent, modalId) => {
+                if(modalId === 'edit-domain-modal'){
+                    this.domainName = "Редактировать домен \"" + this.form.domain + "\""
+                }
+            })
         }
     }
 </script>
