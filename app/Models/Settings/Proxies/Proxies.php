@@ -9,6 +9,10 @@ class Proxies extends Model
 {
     use RealPagination;
 
+    const NOT_BANNED = 0;
+    const PARTLY_BANNED = 1;
+    const BANNED = 2;
+
     const PROXY_TYPES = array(
         'http' => 0,
         'socks4' => 1,

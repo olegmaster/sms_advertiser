@@ -57,10 +57,43 @@
                 <div v-show="data.item.status==0" class="text-danger">Нет</div>
             </template>
 
-            <template v-slot:cell(is_banned)="data">
-                <div v-show="data.item.is_banned==1" class="text-danger">Да</div>
-                <div v-show="data.item.is_banned==0" class="text-success">Нет</div>
+            <template v-slot:cell(is_banned)="row">
+                <div style="width: 100%; clear: both" align="center">
+
+                    <button type="button" @click="row.toggleDetails" class="btn btn-success btn-shadow btn-hover-shine btn-transition d-inline-flex align-items-center" size="sm" >
+                        <font-awesome-icon class="mr-2" icon="table"/>
+                        <div > {{ row.detailsShowing ? 'Скрыть' : 'Показать'}}</div>
+                    </button>
+                    <strong>
+                        <div v-show="banState(row)==2" class="text-danger">Да</div>
+                        <div v-show="banState(row)==1" class="text-danger">Да, частично</div>
+                        <div v-show="banState(row)==0" class="text-success">Нет</div>
+                    </strong>
+
+                </div>
             </template>
+
+            <template v-slot:row-details="row">
+                <div style="width: 100%; height: 100%; " align="center">
+                    <div style=" width: 500px;" align="center">
+                        <b-card>
+                              <span v-if="getHeaders(row).length <= 1">
+                                  Прокси пока не проверен.
+                              </span>
+                              <b-table v-if="getHeaders(row).length > 1" :items="getRows(row)" :fields="getHeaders(row)" head-variant="light" table-variant="light">
+                                  <template v-for="field_name of getHeaders(row, false)" v-slot:[cellName(field_name)]="data1">
+                                      <div v-show="getRows(row,false)[field_name]==1" class="text-danger">Да</div>
+                                      <div v-show="getRows(row,false)[field_name]==0" class="text-success">Нет</div>
+                                  </template>
+                                  <template v-slot:table-colgroup="scope2">
+                                      <col v-for="field in scope2.fields" :key="field.key" style="width: 100px"/>
+                                  </template>
+                              </b-table>
+                        </b-card>
+                    </div>
+                </div>
+            </template>
+
 
             <template v-slot:cell(operations)="data">
 
@@ -148,9 +181,9 @@
   import VueElementLoading from 'vue-element-loading'
   import vSelect from 'vue-select'
   import {library} from '@fortawesome/fontawesome-svg-core'
-  import { faStar, faPlus } from '@fortawesome/free-solid-svg-icons'
+  import { faStar, faPlus, faPhotoVideo,faTable } from '@fortawesome/free-solid-svg-icons'
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-  library.add( faStar, faPlus );
+  library.add( faStar, faPlus, faPhotoVideo, faTable );
   import AddProxiesModal from "./modals/AddProxiesModal";
   import EditProxyModal from "./modals/EditProxyModal";
   export default {
@@ -349,6 +382,53 @@
         {
             this.proxyToEdit = proxy;
             this.showEditProxyModal = true;
+        },
+        getHeaders(data, all = true)
+        {
+            let fields = [];
+            if (all)
+                fields.push({key:'empty_field', label:''});
+            for (let state of data.item.checking_states )
+            {
+                fields.push({
+                    key: state.board.uid_name,
+                    label : state.board.name,
+                });
+            }
+            return all ? fields : fields.map(v=>v.key);
+        },
+        getRows(data, all = true)
+        {
+            let fields = this.getHeaders(data).map(v=>v.key);
+            let values = [];
+            let obj = {};
+            for (let i in fields)
+            {
+                if (i == 0) {
+                    if (all)
+                        obj[fields[i]] = 'Забанен?';
+                }
+                else
+                    obj[fields[i]] = data.item.checking_states[i-1].is_banned;// ? '<div class="text-danger">Да</div>' : '<div class="text-success">Нет</div>' ;
+            }
+            values.push(obj);
+            return all ? values : obj;
+        },
+        cellName(field)
+        {
+            return 'cell(' + field + ')';
+        },
+        banState(data)
+        {
+            if (!data.item.checking_states.length)
+                return 0;
+            let bannedCount = 0;
+            for (let state of data.item.checking_states )
+                bannedCount+= state.is_banned ? 1 :0;
+            if (bannedCount == data.item.checking_states.length )
+                return 2;
+            else
+                return bannedCount ? 1 : 0;
         }
     },
     watch: {
