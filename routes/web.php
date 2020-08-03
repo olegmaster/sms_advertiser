@@ -75,28 +75,16 @@ Route::group( ['namespace' => 'Api', 'prefix' => 'api'],function () {
     });
 
     //Работа с сообщениями
-    Route::group(['namespace' => 'Messages','prefix' => 'sms-mms-messages/sms/'], function () {
+    Route::group(['namespace' => 'Messages','prefix' => 'sms-mms-messages/'], function () {
 
-        //Получение списка проксей /api/settings/proxies/
-        Route::get('/', 'SmsMmsMessagesController@index' );
+        //Получение списка sms сообщений /api/sms-mms-messages/sms/
+        Route::get('/sms/', 'SmsMmsMessagesController@index' );
 
-        //Активация деактивация прокси /api/settings/proxies/{id}/status/
-        Route::patch('/{id}/status/', 'ProxiesController@setStatus' )->where('id', '[1-9][0-9]*');
+        //Получение списка mms сообщений /api/sms-mms-messages/mms/
+        Route::get('/mms/', 'SmsMmsMessagesController@mms' );
 
-        //Активация деактивация многих проксей /api/settings/proxies/status/
-        Route::patch('/status/', 'ProxiesController@setMultiplyStatuses' );
-
-        //Удаление прокси /api/settings/proxies/{id}/
-        Route::delete('/{id}/', 'ProxiesController@destroy' )->where('id', '[1-9][0-9]*');
-
-        //Удаление проксей /api/settings/proxies/
-        Route::delete('/', 'ProxiesController@destroyMultiply' );
-
-        //Добавление проксей /api/settings/proxies/
-        Route::post('/', 'ProxiesController@store' );
-
-        //Обновление прокси /api/settings/proxies/{id}/
-        Route::put('/{id}/', 'ProxiesController@update' )->where('id', '[1-9][0-9]*');
+        //Получение списка голосовых сообщений /api/sms-mms-messages/voice/
+        Route::get('/voice/', 'SmsMmsMessagesController@voice' );
 
     });
 

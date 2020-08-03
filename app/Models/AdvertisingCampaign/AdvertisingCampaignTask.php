@@ -19,7 +19,7 @@ class AdvertisingCampaignTask extends Model
 
     public function smsMmsMessages()
     {
-        return $this->hasMany('App\Models\Message\SmsMmsMessage', 'advertising_campaigns_tasks_id');
+        return $this->hasMany('App\Models\Message\SmsMmsMessage', 'advertising_campaign_tasks_id');
     }
 
     public function thematics()
@@ -31,5 +31,11 @@ class AdvertisingCampaignTask extends Model
     {
         return $this->belongsTo('App\Models\User', 'creator_user_id' );
     }
+
+    public function voiceMessages()
+    {
+        return $this->hasMany('App\Models\Message\VoiceMessage', 'advertising_campaign_tasks_id');
+    }
+
 
 }

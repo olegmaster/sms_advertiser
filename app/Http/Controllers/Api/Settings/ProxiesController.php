@@ -34,7 +34,7 @@ class ProxiesController extends Controller
         $page = $request->has('page') ? $request->get('page') : 1;
 
         $proxies = Proxies::addPagination($itemsPerPage, $page);
-        $data  = $proxies->get();
+        $data  = $proxies->with('checkingStates.board')->get();
         $return = array();
         $return['errorCode'] = 0;
         $return['message'] = '';

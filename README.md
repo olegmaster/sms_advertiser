@@ -6,7 +6,8 @@
 3. php artisan migrate
 4. php artisan db:seed
 5. npm install
-6. добавить в кронтаб команду * * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1 см https://laravel.com/docs/7.x/scheduling
+6. php artisan storage:link
+7. добавить в кронтаб команду * * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1 см https://laravel.com/docs/7.x/scheduling
 
 ## Создание билда и разработка 
 1. npm run prod - создание билда для продакшна

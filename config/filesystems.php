@@ -54,6 +54,24 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
+        'media' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/media'),
+            'url' => env('APP_URL').'/storage/media',
+            'visibility' => 'public',
+        ],
+        'mms' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/media/mms'),
+            'url' => env('APP_URL').'/storage/media/mms',
+            'visibility' => 'public',
+        ],
+        'voice' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/media/voice'),
+            'url' => env('APP_URL').'/storage/media/voice',
+            'visibility' => 'public',
+        ],
 
         's3' => [
             'driver' => 's3',
